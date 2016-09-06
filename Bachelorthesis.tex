@@ -108,7 +108,7 @@
 % Load and Configure Packages
 % **************************************************
 \usepackage[german]{babel}    		% Deutsche Sprache in automatisch generiertem
-\usepackage[							% use Bachelorthesis style
+\usepackage[							% use bachelorthesis style
 	figuresep=colon,%
 	sansserif=false,%
 	hangfigurecaption=false,%
@@ -116,12 +116,10 @@
 	hangsubsection=true,%
 	colorize=full,%
 	colortheme=bluemagenta,%
-% LLT: Use biber if using UTF8 encoding
-% 	bibsys=bibtex,%
-	bibsys=biber,%
+	bibsys=bibtex,%
 	bibfile=bib-refs,%
 	bibstyle=alphabetic,%
-]{Bachelorthesis}
+]{bachelorthesis}
 
 \hypersetup{								% setup the hyperref-package options
 	pdftitle={\thesisTitle},				% 	- title (PDF meta)
@@ -148,7 +146,9 @@
 \renewcaptionname{german}{\figurename}{Abb.}
 \renewcaptionname{german}{\tablename}{Tab.}
 \renewcommand\listingscaption{Code}
-\renewcommand\listoflistingscaption{Source-Code Verzeichnis}
+\renewcommand\listoflistingscaption{Sourcecode-Verzeichnis}
+\renewcaptionname{german}{\listfigurename}{Abbildungs-Verzeichnis}
+\renewcaptionname{german}{\listtablename}{Tabellen-Verzeichnis}
 
 % --------------------------
 % Front matter
@@ -170,7 +170,8 @@
 \setcounter{page}{1}					% set page counter
 \pagestyle{maincontentstyle} 		% fancy header and footer
 
-\input{content/chapter-fazit} 						% INCLUDE: fazit
+\input{content/chapter-einfuehrung} 						% INCLUDE: Einführung
+
 \cleardoublepage
 
 % --------------------------
@@ -182,22 +183,25 @@
 \setlength{\biblabelsep}{0pt}
 \setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
 \printbibliography[nottype=online]
-\printbibliography[heading=subbibliography,title={Online-Quellen},type=online,prefixnumbers={@}]
+\printbibliography[heading=subbibliography,title={Webseiten},type=online,prefixnumbers={@}]
 }
+\cleardoublepage
 
-\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+\addcontentsline{toc}{chapter}{Abbildungs-Verzeichnis}
+\renewcommand{\cftlottitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
+\renewcommand{\cftloftitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 \listoffigures
 \cleardoublepage
-\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+
+\addcontentsline{toc}{chapter}{Tabellen-Verzeichnis}
 \listoftables
 \cleardoublepage
+
 \listoflistings
 \cleardoublepage
 
-\input{content/declaration}
 %\clearpage
 %\newpage
-\mbox{}
 
 % **************************************************
 % End of Document CONTENT
