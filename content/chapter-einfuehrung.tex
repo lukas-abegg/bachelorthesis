@@ -6,37 +6,60 @@
 \chapter{Einführung}
 \label{sec:Einfuehrung}
 
-Springer Nature ist ein weltweit führender Verlag für Forschungs-, Bildungs- und Fachliteratur mit einer breiten Palette an angesehenen und bekannten Marken. Die Verlagsgruppe bietet qualitativ hochwertige Produkte und Dienstleistungen. Springer Nature ist zudem der größte Verlag für Wissenschaftsbücher. Für Springer Nature ist es darum wichtig, auf ihren Web-Applikationen eine Suche anbieten zu können, die Suchintentionen erkennt und möglichst schnell zum gesuchten Content leitet. Die Suche wird vor allem als Hilfsmittel zur Navigation und Suche nach Literatur und Dienstleistungen genutzt. Durch die vielen von Springer Nature publizierten Zeitschriften und Querverweise in Artikeln, wird sie aber auch oft zur Suche nach Issues\footnote{Nummer der Zeitschriftenausgabe, in der sich der Artikel befindet.} und Artikeln verwendet sowie als Hilfestellung um Diagnosen zu Krankheitsbilder stellen zu können.
+Springer Nature ist ein weltweit führender Verlag für Forschungs-, Bildungs- und Fachliteratur mit einer breiten Palette an angesehenen und bekannten Marken und zudem der größte Verlag für Wissenschaftsbücher. Für Springer Nature ist es darum wichtig, auf ihren Web-Applikationen eine Suche anbieten zu können, die Suchintentionen erkennt und möglichst schnell zum gesuchten Content leitet. Die Suche wird vor allem als Hilfsmittel zur Navigation und Suche nach Literatur und Dienstleistungen genutzt. Durch die vielen von Springer Nature publizierten Zeitschriften und Querverweise in Artikeln, wird sie aber auch oft zur Suche nach Issues\footnote{Nummer der Zeitschriftenausgabe, in der sich der Artikel befindet.} und Artikeln verwendet sowie als Hilfestellung um Diagnosen zu Krankheitsbilder stellen zu können.
+\\
+\\
+Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über das Verhalten der User auf ihrer Suche, lässt dieses Wissen jedoch nicht in ihre Suche einfließen. In dieser Arbeit wird untersucht, wie mithilfe dieses Wissens, die Suche optimiert werden kann.
 
 \section{Aufbau der Suche bei Springer Nature}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature}
 
+\subsubsection{White Label Applikation mit Solr-Suche}
+\label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche}
+
 Damit die verschiedenen Verlage und Zeitschriften der Verlagsgruppe Springer Nature ihre Produkte und Dienstleistungen online anbieten können nutzt Springer Nature eine inhouse entwickelte White Label Applikation\footnote{\glqq weißes Etikett\grqq{} - eine nicht beschriftete Applikation, welche von anderen Firmen unter deren Namen verwendet werden kann}. Die White Label Applikation verwendet \textit{Apache Solr} als Suchplattform. Die Solr dient hierbei als eine der Schnittstellen zwischen dem Content-Pool von Springer und der Core-Applikation. Bei dem vom Content-Pool gelieferten Content, handelt es sich um vom Springer-Verlag publizierte Zeitschriften, Artikel, Bücher, Chapters und redaktionelle Inhalte.
-\\
-\\
-Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Springer das Analysetool Webtrekk. Die daraus resultierenden Reports bieten unter anderem die Möglichkeit, \textit{Suchquery-Logs} und \textit{Click-Trough-Rates}\footnote{Kennzahl um die Anzahl der Klicks auf Links im Verhältnis zu den gesamten Impressionen darzustellen} der User auszuwerten.
+
+\subsubsection{User-Tracking mit Webtrekk}
+\label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk}
+
+Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Springer das Analysetool Webtrekk\footnote{https://www.webtrekk.com}. Die daraus resultierenden Reports bieten unter anderem die Möglichkeit, \textit{Suchquery-Logs} und \textit{Click-Trough-Rates}\footnote{Kennzahl um die Anzahl der Klicks auf Links im Verhältnis zu den gesamten Impressionen darzustellen} der User auszuwerten.
+
+\pagebreak
+
+\subsubsection{Architektur}
+\label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:rchitektur}
+
+In Abb. \ref{fig:SucheSpringerNature} ist die Suche nochmals grafisch aufbereitet:
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\linewidth]{gfx/AufbauSucheSpringerNature}
 \caption[Aufbau der Suche bei Springer Nature]{Aufbau der Suche bei Springer Nature}
+\label{fig:SucheSpringerNature}
 \end{figure}
 
-\section{Problemstellung}
+\section{Das große Problem}
 \label{sec:Einfuehrung:Problemstellung}
 
-Eine konventionelle Volltextsuche ordnet Suchergebnisse danach an, wie \textit{prominent} die Suchwörter in den einzelnen Ergebnissen vorhanden sind. Diese Art von Suche funktioniert grundsätzlich gut, solange die Prominenz der Suchwörter für die relevantesten Dokumente am höchsten ist. \cite{Bast2013}
-\\
-\\
-Wird die Suche nun aber aus Usersicht beurteilt, fließen plötzlich ganz andere Faktoren in die Bewertung der Suchqualität ein, wie zum Beispiel: Welche Ergebnisse werden zu welchen Suchanfragen am meisten angeklickt? Oder, sind die Top-Suchergebnisse auch wirklich die für den User relevantesten Dokumente? Laut Studien kann unter Einbezug dieser User-Feedback Daten, die Sortierung der Top-Resultate in Suchmaschinen, signifikant beeinflusst werden. \cite{IWUSBI}
-\\
-\\
-\textit{Springermedizin.de} ist ein Fortbildungs- und Informationsportal für Ärzte. Diese suchen oft mit einschlägig, fundierten Fachbegriffen nach den neuesten und relevantesten Zeitschriften, Bücher oder Publikationen. Die zeitlich aktuellsten Suchtreffer zu finden ist für Springer kein Problem. Die für den User \textit{relevantesten} jedoch schon. 
+\subsubsection{Der Springer Nature Stakeholder Springermedizin setzt auf Webtrekk}
+\label{sec:Einfuehrung:Problemstellung:Springermedizin}
+
+Zu den Stakeholder\footnote{bezeichnet Springer-interne Kunden, die ein Interesse am Ergebnis der White Label Applikation haben} der in \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche} angesprochenen White Label Applikation gehört \textit{Springermedizin}\footnote{https://www.springermedizin.de/}. Springermedizin ist ein Fortbildungs- und Informationsportal für Ärzte. Mithilfe von Webanalysten und Webtrekk versucht Springermedizin das Marketing ihres Webauftrittes zu verbessern und ist sehr interessiert an neuen Ansätzen, um die gesammelten Tracking-Daten besser einzusetzen. In dieser Arbeit wird darum der Fokus auf die Suche von Springermedizin gesetzt. 
+
+\subsubsection{Keine Userrelevanz in der Suche}
+\label{sec:Einfuehrung:Problemstellung:Userrelevanz}
+
+Die User von Springermedizin suchen oft mit einschlägig, fundierten Fachbegriffen nach den neuesten und relevantesten Zeitschriften, Bücher oder Publikationen. Die zeitlich aktuellsten Suchtreffer zu finden ist für Springermedizin kein Problem. Die für den User \textit{relevantesten} jedoch schon. 
+
+\subsubsection{Der fast gläserne User}
+\label{sec:Einfuehrung:Problemstellung:Glaeserne-User}
+
+Springermedizin sammelt Tracking-Daten über jegliche Aktivitäten auf deren Applikationen und investiert Zeit und Geld in die Individualisierung der Analysedaten auf Webtrekk. Mittlerweile sind knapp 30 Custom-Parameter\footnote{Individuell erzeugte Parameter für Reports und Analysen} auf Webtrekk angelegt um genau die Daten zu tracken, die sie über das Verhalten der User auf ihrer Applikationen wissen wollen. Dadurch ensteht ein fast \glqq gläsernen User\grqq{}.
 
 \section{Ziel der Arbeit}
 \label{sec:Einfuehrung:ZielArbeit}
 
-Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über das Verhalten der User auf ihrer Suche, lässt dieses Wissen jedoch bisher nicht wirklich relevant in ihre Suche einfließen. Durch die \textit{Click-Trough-Rates} der Suchergebnisse auf den Suchterm bezogen, können die für die Nutzer der Suche relevanten Dokumente im Suchresultat bevorzugt werden. Diese Click-Trough-Rates können direkt aus Webtrekk gelesen werden. 
+Durch die \textit{Click-Trough-Rates} der Suchergebnisse auf den Suchterm bezogen, können die für die Nutzer der Suche relevanten Dokumente im Suchresultat bevorzugt werden. Diese Click-Trough-Rates können direkt aus Webtrekk gelesen werden. 
 \\
 \\
 Die Click-Trough-Rate als absoluten Wert für das \textit{Relevanzfeedback} zu nehmen, wäre jedoch falsch. Es muss davon ausgegangen werden, dass viele User der Qualität der Suchmaschine vertrauen und die Top-Suchresultate als die relevantesten Suchresultate betrachten. \cite{Joachims} Das Relevanzfeedback muss daher in Relation zu anderen Faktoren betrachtet werden um eine wirkliche Verbesserung der Suchergebnisqualität erzielen zu können. Ein interessanter Ansatz ist hierbei das \textit{position-based Model} (PBM). \cite{chuklin2015} Dieses geht davon aus, dass die Wahrscheinlichkeit, dass ein User ein Dokument wirklich genau analysiert bevor er es anklickt, davon abhängt wie \textit{schlecht} dieses Dokument im Suchresultat gerankt ist. Je \textit{schlechter} das Ranking des angeklickten Dokumentes ist, je \textit{höher} ist das Relevanzfeedback zu bewerten.
