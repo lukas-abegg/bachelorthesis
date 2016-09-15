@@ -17,12 +17,12 @@ Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über 
 \subsubsection{White Label Applikation mit Solr-Suche}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche}
 
-Damit die verschiedenen Verlage und Zeitschriften der Verlagsgruppe Springer Nature ihre Produkte und Dienstleistungen online anbieten können nutzt Springer Nature eine eigens entwickelte White Label Applikation\footnote{Eine White Label Applikation ist eine wiederverwendbare und agil erweiterbare Applikation}. Die White Label Applikation verwendet \textit{Apache Solr}\footnote{http://lucene.apache.org/solr} (im Folgenden "Solr" genannt) als Suchplattform. Die Solr dient hierbei als eine der Schnittstellen zwischen dem Content-Pool von Springer Nature und der White Label Applikation. Bei den vom Content-Pool gelieferten Inhalten, handelt es sich um von Springer Nature Verlag publizierte Zeitschriften, Artikel, Bücher und redaktionelle Inhalte.
+Damit die verschiedenen Verlage und Zeitschriften der Verlagsgruppe Springer Nature ihre Produkte und Dienstleistungen online anbieten können nutzt Springer Nature eine eigens entwickelte White Label Applikation\footnote{Eine White Label Applikation ist eine wiederverwendbare und agil erweiterbare Applikation}. Die White Label Applikation verwendet \textit{Apache Solr} (im Folgenden "Solr" genannt)~(siehe \cite{solr}) als Suchplattform. Die Solr dient hierbei als eine der Schnittstellen zwischen dem Content-Pool von Springer Nature und der White Label Applikation. Bei den vom Content-Pool gelieferten Inhalten, handelt es sich um von Springer Nature Verlag publizierte Zeitschriften, Artikel, Bücher und redaktionelle Inhalte.
 
 \subsubsection{User-Tracking mit Webtrekk}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk}
 
-Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Springer Nature das Analysetool Webtrekk\footnote{https://www.webtrekk.com}. Die daraus resultierenden Berichte bieten unter anderem die Möglichkeit, \textit{Suchquery-Logs}\footnote{Protokoll über alle ausgeführten Suchanfragen auf der Applikation} und \textit{Click-Trough-Rates} (CTR)\footnote{Kennzahl um die Anzahl der Klicks auf Links im Verhältnis zu den gesamten Impressionen darzustellen} der User auszuwerten.
+Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Springer Nature das Analysetool Webtrekk~(siehe \cite{webtrekk}). Die daraus resultierenden Berichte bieten unter anderem die Möglichkeit, \textit{Suchquery-Logs}\footnote{Protokoll über alle ausgeführten Suchanfragen auf der Applikation} und \textit{Click-Trough-Rates} (CTR)\footnote{Kennzahl um die Anzahl der Klicks auf Links im Verhältnis zu den gesamten Impressionen darzustellen} der User auszuwerten.
 
 \pagebreak
 
@@ -49,7 +49,7 @@ Die User von Springermedizin suchen oft mit einschlägig, fundierten Fachbegriff
 \subsubsection{Der Springer Nature Stakeholder: Springermedizin setzt auf Webtrekk}
 \label{sec:Einfuehrung:Problemstellung:Springermedizin}
 
-Zu den Stakeholder\footnote{Bezeichnet Springer Nature interne Kunden, die ein Interesse am Ergebnis der White Label Applikation haben} der in Kapitel \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche} angesprochenen White Label Applikation gehört \textit{Springermedizin}\footnote{https://www.springermedizin.de/}. Springermedizin ist ein Fortbildungs- und Informationsportal für Ärzte. Mithilfe von Webanalysten und Webtrekk versucht Springermedizin das Marketing seines Webauftrittes zu verbessern und ist sehr interessiert an neuen Ansätzen, um die gesammelten Tracking-Daten besser einzusetzen. In dieser Arbeit wird darum der Fokus auf die Verwendung von Tracking-Daten in der Suche von Springermedizin gesetzt. 
+Zu den Stakeholder\footnote{Bezeichnet Springer Nature interne Kunden, die ein Interesse am Ergebnis der White Label Applikation haben} der in Kapitel \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche} angesprochenen White Label Applikation gehört \textit{Springermedizin}~(siehe \cite{SMED}). Springermedizin ist ein Fortbildungs- und Informationsportal für Ärzte. Mithilfe von Webanalysten und Webtrekk versucht Springermedizin das Marketing seines Webauftrittes zu verbessern und ist sehr interessiert an neuen Ansätzen, um die gesammelten Tracking-Daten besser einzusetzen. In dieser Arbeit wird darum der Fokus auf die Verwendung von Tracking-Daten in der Suche von Springermedizin gesetzt. 
  
 
 \subsubsection{Der fast gläserne User}
@@ -81,7 +81,7 @@ Die Analyse von User-Tracking-Daten bietet viel Potential bezogen auf Userreleva
 \subsubsection{Bekanntes und wirkungsvolles Information Retrieval Verfahren}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:InformationRetrievalVerfahren}
 
-Suchoptimierung mittels Userrelevanz ist ein bekanntes und nicht triviales, aber relativ wirkungsvolles Information Retrieval Verfahren (siehe \cite{IWUSBI}). Seit Mitte der 2000er Jahre wird mithilfe dieses Verfahrens versucht, Suchmaschinen zu verbessern. Aus dieser Zeit stammen auch die ersten Ansätze um mithilfe von Click-Trough-Daten die Userrelevanz der Suchergebnisse zu berechnen (siehe \cite{Joachims}).
+Suchoptimierung mittels Userrelevanz ist ein bekanntes und nicht triviales, aber relativ wirkungsvolles Information Retrieval Verfahren~(siehe \cite{IWUSBI}). Seit Mitte der 2000er Jahre wird mithilfe dieses Verfahrens versucht, Suchmaschinen zu verbessern. Aus dieser Zeit stammen auch die ersten Ansätze um mithilfe von Click-Trough-Daten die Userrelevanz der Suchergebnisse zu berechnen~(siehe \cite{Joachims}).
 
 \subsubsection{Lösungsansatz basierend auf Click-Trough-Daten aus Webtrekk}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Loesungsansatz}
@@ -127,7 +127,7 @@ Als Wissensbasis zur Berechnung der Click-Trough-Daten dienen die Webtrekk-Analy
 Ein Suchterm kann aus mehr als einem Wort bestehen. Wir müssen darum davon ausgehen, dass möglicherweise jedes Wort des Suchterms in unterschiedlichen Suchanfragen verwendet wird. Außerdem kann auch nach Synonymen eines Wortes gesucht werden. Der Suchterm muss darum semantisch aufgeschlüsselt werden, um alle relevanten Click-Trough-Daten berechnen zu können. Die Click-Trough-Daten sind dann relevant, wenn mindestens ein Wort des aufgeschlüsselten Suchterms in Relation zu diesen Daten steht. Von einer Gewichtung der Relation wird abgesehen.
 \\
 \\
-Die Auftrennung des Suchterms in die einzelne Worte können wir mithilfe einer Segmentierung\footnote{Bezeichnet die Aufteilung in Abschnitte, in diesem Fall in einzelne Worte} durchführen. Hier könnten wir uns überlegen, zusätzlich mit Stoppwörtern\footnote{Stoppwörter sind Wörter, die sehr häufig auftreten und für gewöhnlich keine Relevanz für den Dokumentinhalt besitzen} nicht relevante Wörter aus dem Suchterm zu entfernen. Dieses Verfahren macht aber im Springermedizin-Kontext keinen sein. Wie in Kapitel \ref{sec:Einfuehrung:Problemstellung:Userrelevanz} angesprochen, suchen die User der Springermedizin-Applikation oft mit einschlägig, fundierten Fachbegriffen. Wir gehen darum davon aus, dass alle Wörter des verwendeten Suchterms für das Suchergebnis relevant sind. Diese Erkenntnis basiert auf Aussagen der Redakteure von Springermedizin und Webtrekk-Analysen der meist gesuchtesten Suchtermen der letzten Monate. Auch sind Stoppwörter veraltet und werden in modernen Information Retrieval Verfahren nicht mehr eingesetzt. Wir verzichten darum auf den Einstatz von Stoppwörtern.
+Die Auftrennung des Suchterms in die einzelne Worte können wir mithilfe einer Segmentierung\footnote{Bezeichnet die Aufteilung in Abschnitte, in diesem Fall in einzelne Worte} durchführen. Hier könnten wir uns überlegen, zusätzlich mit Stoppwörtern\footnote{Stoppwörter sind Wörter, die sehr häufig auftreten und für gewöhnlich keine Relevanz für den Dokumentinhalt besitzen} nicht relevante Wörter aus dem Suchterm zu entfernen. Dieses Verfahren macht aber im Springermedizin-Kontext keinen Sinn. Wie in Kapitel \ref{sec:Einfuehrung:Problemstellung:Userrelevanz} angesprochen, suchen die User der Springermedizin-Applikation oft mit einschlägig, fundierten Fachbegriffen. Wir gehen darum davon aus, dass alle Wörter des verwendeten Suchterms für das Suchergebnis relevant sind. Diese Erkenntnis basiert auf Aussagen der Redakteure von Springermedizin und Webtrekk-Analysen der meist gesuchtesten Suchtermen der letzten Monate. Auch sind Stoppwörter veraltet und werden in modernen Information Retrieval Verfahren nicht mehr eingesetzt. Wir verzichten darum auf den Einstatz von Stoppwörtern.
 
 \subsubsection{Suchterm semantisch erweitern mittels Thesaurus}
 \label{sec:Einfuehrung:Methodik:Click-Trough-Daten:SuchtermThesaurus}
@@ -135,7 +135,7 @@ Die Auftrennung des Suchterms in die einzelne Worte können wir mithilfe einer S
 Für die semantische Erweiterung eines Suchwortes wird ein Thesaurus\footnote{Als Thesaurus wird ein strukturiertes Verzeichnis von Begriffen, welche allesamt in irgendeiner Beziehung stehen bezeichnet} benötigt. Die Erweiterung umfasst zum Suchterm gleichbedeutende Begriffe (Synonyme), sehr ähnliche Begriffe (Narrow Terms), ähnliche Begriffe im weiteren Sinne (Broader Terms) und verwandte Begriffe (Related Terms).
 \\
 \\
-Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{Unified Medical Language System}\footnote{https://www.nlm.nih.gov/research/umls/} (UMLS) zugegriffen werden kann. 
+Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{Unified Medical Language System} (UMLS)~(siehe \cite{UMLS}) zugegriffen werden kann. 
 
 \subsubsection{Komplexe Auswertungen der Click-Trough-Daten nicht möglich}
 \label{sec:Einfuehrung:Methodik:Click-Trough-Daten:Click-Trough-DatenAuswertungen}
@@ -155,7 +155,7 @@ Es gibt drei mögliche Eingriffspunkte während des Suchprozesses, um Userreleva
 \subsubsection{Ansatz: Suchindex-Erweiterung in der Solr-Suche}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden:SolrSuche}
 
-Um die Userrelevanzen direkt in die Solr einzubeziehen gibt es zwei Varianten. Wir können das Schema des Suchindexes über die Schema API\footnote{https://cwiki.apache.org/confluence/display/solr/Schema+API} erweitern und alle Einträge neu indexieren, oder wir ergänzen den Index um ein externes Feld\footnote{https://lucene.apache.org/solr/5\_4\_1/solr-core/org/apache/solr/schema/ExternalFileField.html} (ExternalFileField).
+Um die Userrelevanzen direkt in die Solr einzubeziehen gibt es zwei Varianten. Wir können das Schema des Suchindexes über die Schema API~(siehe \cite{SchemaAPISolr}) erweitern und alle Einträge neu indexieren, oder wir ergänzen den Index um ein externes Feld (ExternalFileField)~(siehe \cite{ExtFieldSolr}).
 \\
 \\
 Beide Lösungsansätze ergeben nur bei der Speicherung einer einfachen Click-Count Popularität\footnote{Kennzahl für alle Klicks auf ein Dokument unabhängig des Suchterms} Sinn. Diese genügen allerdings den hier gegebenen Anforderungen nicht, da die Click-Trough-Rate abhängig vom Suchterm ist. Der erste Lösungsansatz ist zudem besonders heikel, weil bei jeder Änderung des Click-Count-Wertes, das Dokument in der Solr neu indexiert werden.
@@ -163,18 +163,18 @@ Beide Lösungsansätze ergeben nur bei der Speicherung einer einfachen Click-Cou
 \subsubsection{Ansatz: Aufbereitung der Suchanfrage}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden:Suchanfrage}
 
-Die Solr-Suche bietet eine Boost-Funktion namens \textit{DisMax Query Parser}\footnote{https://cwiki.apache.org/confluence/display/solr/The+DisMax+Query+Parser}.  Mit dieser können basierend auf Feldwerten, einzelne Dokumente besser im Suchergebnis positioniert werden. Die Boost-Funktion müssten wir in den Aufbau der Suchanfrage für die Suche auf der Springermedizin-Applikation einbauen. Dieser Ansatz beinhaltet einige Gefahren die wir beachten müssen.
+Die Solr-Suche bietet eine Boost-Funktion namens \textit{DisMax Query Parser}~(siehe \cite{DisMax}). Mit dieser können basierend auf Feldwerten, einzelne Dokumente besser im Suchergebnis positioniert werden. Die Boost-Funktion müssten wir in den Aufbau der Suchanfrage für die Suche auf der Springermedizin-Applikation einbauen. Dieser Ansatz beinhaltet einige Gefahren die wir beachten müssen.
 \\
 \\
-Dazu zählen beispielsweise die Abhängigkeiten von anderen Boost-Faktoren\footnote{Die Solr besitzt eine Boosting-Funktion, mit welcher bestimmte Wertübereinstimmungen in der Suche höher gewichtet werden können}. Alle Boost-Faktoren hängen voneinander ab und müssten bei jeder Ergänzung um neue Faktoren normalisiert werden, um kein \glqq über-Boosting\grqq{}\footnote{Bezeichnet die über-priorisierte Bewertung einzelner Faktoren} einzelner Faktoren zu riskieren. Zudem besteht die Gefahr des \glqq blinden Boosting\grqq{} von Dokumenten. Die Solr-Relevanzberechnung ist komplex und der Einfluss des \glqq Boosting\grqq{} in die Solr-Relevanzberechnung schwer erkennbar. Auch hat Springermedizin bereits sehr schlechte Erfahrungen mit \glqq Boosting\grqq{} gemacht und bevorzugt einen Lösungsansatz ohne \glqq Boosting\grqq{}.
+Dazu zählen beispielsweise die Abhängigkeiten von anderen Boost-Faktoren\footnote{Die Solr besitzt eine Boosting-Funktion, um bestimmte Wertübereinstimmungen in der Suche höher gewichtet zu können}. Alle Boost-Faktoren hängen voneinander ab und müssten bei jeder Ergänzung um neue Faktoren normalisiert werden, um kein \glqq über-Boosting\grqq{}\footnote{Bezeichnet die über-priorisierte Bewertung einzelner Faktoren} einzelner Faktoren zu riskieren. Zudem besteht die Gefahr des \glqq blinden Boosting\grqq{} von Dokumenten. Die Solr-Relevanzberechnung ist komplex und der Einfluss des \glqq Boosting\grqq{} in die Solr-Relevanzberechnung schwer erkennbar. Auch hat Springermedizin bereits sehr schlechte Erfahrungen mit \glqq Boosting\grqq{} gemacht und bevorzugt einen Lösungsansatz ohne \glqq Boosting\grqq{}.
 
 \subsubsection{Ansatz: Aufbereitung der Suchresultate anhand eines Klick-Modell basierten Algorithmus}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden:Suchresultate}
 
-Die dritte Möglichkeit ist bei der Aufbereitung der Suchresultate aus der Solr-Suche einen Klick-Modell (siehe \cite{pbm}) basierten Algorithmus zu verwenden. Dieser soll die Suchergebnisliste analysieren, die Userrelevanzen der Dokumente berechnen und die Liste neu sortieren. 
+Die dritte Möglichkeit ist bei der Aufbereitung der Suchresultate aus der Solr-Suche einen Klick-Modell~(siehe \cite{pbm}) basierten Algorithmus zu verwenden. Dieser soll die Suchergebnisliste analysieren, die Userrelevanzen der Dokumente berechnen und die Liste neu sortieren. 
 \\
 \\
-Diese Lösung können wir relativ einfach in die Springermedizin-Applikation integrieren, ohne die restliche Suchlogik\footnote{Dazu gehört die Aufbereitung der Suchanfrage für die Solr und die Suche auf der Solr} zu beeinflussen. Hierbei müssen wir jedoch beachten, dass die Solr durch die Pagination-Funktion\footnote{https://cwiki.apache.org/confluence/display/solr/Pagination+of+Results} nur die Top-N-Ergebnisse (bei Springermedizin sind es 20 Ergebnisse) zurückgibt. Diese Logik liegt in der Springermedizin-Applikation im Aufbau der Suchanfrage. Daher können wir diese selber steuern und uns statt 20 beispielsweise die nächsten 100 Ergebnisse zurückgeben lassen. Am Ende filtern wir die ersten 20 Ergebnisse und stellen diese dar. Außerdem wissen wir bei diesem Lösungsansatz, in welcher Reihenfolge die Ergebnisse aus der Solr zurückgegeben werden. Wir kennen die Dokumente und deren Rang. Dadurch haben wir hilfreiches Zusatzwissen, welches wir in den Klick-Modell basierten Algorithmus einfließen lassen können.
+Diese Lösung können wir relativ einfach in die Springermedizin-Applikation integrieren, ohne die restliche Suchlogik\footnote{Dazu gehört die Aufbereitung der Suchanfrage für die Solr und die Suche auf der Solr} zu beeinflussen. Hierbei müssen wir jedoch beachten, dass die Solr durch die Pagination-Funktion~(siehe \cite{Pagination}) nur die Top-N-Ergebnisse (bei Springermedizin sind es 20 Ergebnisse) zurückgibt. Diese Logik liegt in der Springermedizin-Applikation im Aufbau der Suchanfrage. Daher können wir diese selber steuern und uns statt 20 beispielsweise die nächsten 100 Ergebnisse zurückgeben lassen. Am Ende filtern wir die ersten 20 Ergebnisse und stellen diese dar. Außerdem wissen wir bei diesem Lösungsansatz, in welcher Reihenfolge die Ergebnisse aus der Solr zurückgegeben werden. Wir kennen die Dokumente und deren Rang. Dadurch haben wir hilfreiches Zusatzwissen, welches wir in den Klick-Modell basierten Algorithmus einfließen lassen können.
 
 \subsubsection{Entscheidung für den Ansatz der Aufbereitung der Suchresultate anhand eines Klick-Modell basierten Algorithmus}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden:Entscheidung}
@@ -187,7 +187,7 @@ Wägen wir die besprochenen Fakten ab, wirkt der Ansatz mit der Aufbereitung der
 Mithilfe der Click-Trough-Daten aus Webtrekk, können wir zwei wichtige Informationen zu jedem Suchterm ermitteln. Wir wissen welche Dokumente und welche Positionen im Suchresultat angeklickt worden sind. Zudem kennen wir die Reihenfolge der Dokumente im Suchresultat der Solr.
 \\
 \\
-Ein Ansatz der genau auf diesen Informationen aufbaut, ist das \textit{Position-based Modell} (PBM)\cite{pbm}. Dieses berechnet die Wahrscheinlichkeit dafür, dass ein User ein Dokument wirklich genau analysiert, bevor er es anklickt. Es setzt sich aus zwei Wahrscheinlichkeiten zusammen. Die Wahrscheinlichkeit für einen Klick auf die Position im Suchresultat und die Wahrscheinlichkeit für einen Klick auf das Dokument. Diesen Ansatz werden wir in dieser Arbeit implementieren.
+Ein Ansatz der genau auf diesen Informationen aufbaut, ist das \textit{Position-based Modell} (PBM)~(siehe \cite{pbm}). Dieses berechnet die Wahrscheinlichkeit dafür, dass ein User ein Dokument wirklich genau analysiert, bevor er es anklickt. Es setzt sich aus zwei Wahrscheinlichkeiten zusammen. Die Wahrscheinlichkeit für einen Klick auf die Position im Suchresultat und die Wahrscheinlichkeit für einen Klick auf das Dokument. Diesen Ansatz werden wir in dieser Arbeit implementieren.
 
 \subsubsection{Verhältnis zwischen den Klick-Wahrscheinlichkeiten abhängig der Position im Suchresultat definieren}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden:PBM}
@@ -200,7 +200,7 @@ Aus eigener Erfahrung wissen wir, dass die ersten Dokumente im Suchresultat imme
 Wir wissen dass eine Wahrscheinlichkeit einen Wert zwischen 1 und 0 besitzt. Dadurch können Nullwerte entstehen. Das PBM multipliziert die Positions- und Dokument-Wahrscheinlichkeit miteinander, um die Klick-Wahrscheinlichkeit zu berechnen. Wir müssen aber davon ausgehen, dass es Dokumente geben kann, deren Rang nie angeklickt worden ist und umgekehrt. 
 \\
 \\
-Multiplikationen mit Null ergeben immer einen Nullwert. An dieser Stelle führen wir einen \glqq Smoothing-Faktor\grqq{} ein. Der Smoothing-Faktor soll zwei Probleme lösen. Zum einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten. Zum anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanzfeedbacks in den Algorithmus einbeziehen. Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe, dem sogenannten "Weighted Moving Average", dessen Gewichte sich zu Eins aufsummieren. Diese Gewichte sind die Smoothing-Faktoren, weshalb das Verfahren zählt zu den Smoothing-Algorithmen zählt.
+Multiplikationen mit Null ergeben immer einen Nullwert. An dieser Stelle führen wir einen \textit{Smoothing-Faktor} ein. Der Smoothing-Faktor soll zwei Probleme lösen. Zum einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten. Zum anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanzfeedbacks in den Algorithmus einbeziehen. Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe, dem sogenannten \textit{Weighted Moving Average}, dessen Gewichte sich zu Eins aufsummieren. Diese Gewichte sind die Smoothing-Faktoren, weshalb das Verfahren zählt zu den Smoothing-Algorithmen zählt.
 
 \subsection{Effektive Userrelevanz}
 \label{sec:Einfuehrung:Methodik:Userrelevanz}
@@ -218,7 +218,7 @@ Um dem entgegenzuwirken und ein \textit{overfitting} zu vermeiden, darf der Algo
 \subsubsection{Zusätzliche Varianz durch Zufallsfaktor}
 \label{sec:Einfuehrung:Methodik:Userrelevanz:Zufallsfaktor}
 
-Mithilfe eines Zufallsfaktors kann eine solche Varianz in den Klick-Modell basierten Algorithmus gebracht werden. Wie bereits weiter oben erwähnt, werden viele Suchresultate nie und deren Rang selten bis gar nicht angeklickt. Sie haben darum keine Click-Trough-Daten. Deren Klick-Wahrscheinlichkeit ist entweder Null oder sehr klein. Der Zufallsfaktor soll darum nur leichte Einflüsse in die Klick-Wahrscheinlichkeitsberechnung haben. Auch hier können wir wieder mit dem oben eingeführten \glqq Weighted Moving Average\grqq{}\cite{weightedAVG} arbeiten.
+Mithilfe eines Zufallsfaktors kann eine solche Varianz in den Klick-Modell basierten Algorithmus gebracht werden. Wie bereits weiter oben erwähnt, werden viele Suchresultate nie und deren Rang selten bis gar nicht angeklickt. Sie haben darum keine Click-Trough-Daten. Deren Klick-Wahrscheinlichkeit ist entweder Null oder sehr klein. Der Zufallsfaktor soll darum nur leichte Einflüsse in die Klick-Wahrscheinlichkeitsberechnung haben. Auch hier können wir wieder mit dem oben eingeführten \textit{Weighted Moving Average}~(siehe \cite{weightedAVG}) arbeiten.
 
 \subsection{Evaluation}
 \label{sec:Einfuehrung:Methodik:Evaluation}
@@ -241,12 +241,12 @@ Dazu müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Ev
 \subsubsection{Evaluationsdaten für die Auswertung mit Cohens Kappa-Koeffizient selektieren}
 \label{sec:Einfuehrung:Methodik:Evaluation:EvaluationsdatenSelektieren}
 
-Um die Zuverlässigkeit der Relevanzbewertungen zu messen, werden wir die gleichen Suchterme jeweils von zwei fachlichen Experten bewerten lassen. Das  meist verwendete  Maß  zur  Bewertung  der Übereinstimmungsgüte ist der \textit{Cohens Kappa-Koeffizient} (siehe \cite{Kappa}). Diese Zahl misst den  Anteil übereinstimmender Bewertungen. Hierbei können aber auch zufällige Übereinstimmungen entstehen. Der Cohens Kappa-Koeffizient korrigiert das Maß an Übereinstimmung um diesen Zufallsfaktor. Anhand der Auswertungen werden wir ein Mindestmaß der Übereinstimmungsgüte definieren. Die darunter liegenden Bewertung werden wir in der Auswertung ignorieren. 
+Um die Zuverlässigkeit der Relevanzbewertungen zu messen, werden wir die gleichen Suchterme jeweils von zwei fachlichen Experten bewerten lassen. Das  meist verwendete  Maß  zur  Bewertung  der Übereinstimmungsgüte ist der \textit{Cohens Kappa-Koeffizient}~(siehe \cite{Kappa}). Diese Zahl misst den  Anteil übereinstimmender Bewertungen. Hierbei können aber auch zufällige Übereinstimmungen entstehen. Der Cohens Kappa-Koeffizient korrigiert das Maß an Übereinstimmung um diesen Zufallsfaktor. Anhand der Auswertungen werden wir ein Mindestmaß der Übereinstimmungsgüte definieren. Die darunter liegenden Bewertung werden wir in der Auswertung ignorieren. 
 
 \subsubsection{Evaluationsdaten mittels NDCG auswerten}
 \label{sec:Einfuehrung:Methodik:Evaluation:EvaluationsdatenNDCG}
 
-Um das Qualitätsmaß der beiden Suchen vergleichen zu können werden wir den Bewertungsalgorithmus \textit{NDCG} (siehe \cite{NDCG}) einsetzen. Dieser geht davon aus, dass besser positionierte Suchergebnisse eine höhere Relevanz als schlechter positionierte haben. Der NDCG vergleicht die Reihenfolge der Relevanzbewertungen der Suchergebnisse mit der idealen Reihenfolge derselben Relevanzbewertungen. Im Idealfall entspricht die Reihenfolge der Suchergebnisse der Relevanz der Suchergebnisse.
+Um das Qualitätsmaß der beiden Suchen vergleichen zu können werden wir den Bewertungsalgorithmus \textit{NDCG}~(siehe \cite{NDCG}) einsetzen. Dieser geht davon aus, dass besser positionierte Suchergebnisse eine höhere Relevanz als schlechter positionierte haben. Der NDCG vergleicht die Reihenfolge der Relevanzbewertungen der Suchergebnisse mit der idealen Reihenfolge derselben Relevanzbewertungen. Im Idealfall entspricht die Reihenfolge der Suchergebnisse der Relevanz der Suchergebnisse.
 
 \subsubsection{Qualitätsmaß einer Suchvariante bestimmen}
 \label{sec:Einfuehrung:Methodik:Evaluation:QualitaetMessen}
