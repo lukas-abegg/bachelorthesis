@@ -196,5 +196,7 @@ TSWLatexianTemp*
 # KBibTeX
 *~[0-9]*
 
+bib-refs.bib~
+
 # auto folder when using emacs and auctex 
 /auto/*
