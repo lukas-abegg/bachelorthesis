@@ -1,2 +1,84 @@
 % !TEX root = ../thesis-example.tex
 %
+%************************************************
+% Evaluation
+%************************************************
+\chapter{Evaluation und Auswertung}
+\label{sec:Evaluation}
+
+\section{Einführung}
+\label{sec:Evaluation:Einfuehrung}
+
+\subsubsection{Suchvarianten mithilfe eines Evaluationssystems vergleichen}
+\label{sec:Evaluation:Einfuehrung:Evaluationssystems}
+
+Das große Kernproblem der Überprüfung der Verbesserungen durch den untersuchten Lösungsansatz wird das Messen der Qualität der erzielten Suchergebnisse sein. Mithilfe einer Evaluation wollen wir messen, wie gut die Suchergebnis-Qualität der aktuellen Springermedizin-Suche im Vergleich zur im Zuge dieser Arbeit entwickelten Lösung ist.
+
+\subsubsection{Ziel der Evaluation}
+\label{sec:Evaluation:Einfuehrung:Ziel}
+
+Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der neue Lösungsansatz bringt. Aus den Ergebnissen wollen wir erkennen, an welchen \glqq Schrauben\grqq{} etwas gedreht werden muss, damit die Suche wirklich gute Ergebnisse aus Sicht der User bringt.
+
+\section{Aufbau der Analyse}
+\label{sec:Evaluation:Aufbau}
+
+\subsection{Datengrundlage}
+\label{sec:Evaluation:Aufbau:Datengrundlage}
+
+\subsubsection{Filterung der nutzbaren Daten mittels Cohens Kappa}
+\label{sec:Evaluation:Aufbau:Datengrundlage:EvaluationsdatenFiltern}
+
+Um die Zuverlässigkeit der Relevanzbewertungen zu messen, werden wir die gleichen Suchterme jeweils von zwei fachlichen Experten bewerten lassen. Das  meist verwendete  Maß  zur  Bewertung  der Übereinstimmungsgüte ist der \textit{Cohens Kappa Koeffizient}~(siehe \cite{Kappa}). Diese Zahl misst den  Anteil übereinstimmender Bewertungen. Hierbei können aber auch zufällige Übereinstimmungen entstehen. Der Cohens Kappa Koeffizient korrigiert das Maß an Übereinstimmung um diesen Zufallsfaktor. Anhand der Auswertungen werden wir ein Mindestmaß der Übereinstimmungsgüte definieren. Die darunter liegenden Bewertung werden wir in der Auswertung ignorieren. 
+
+\subsection{Metrik}
+\label{sec:Evaluation:Aufbau:Metrik}
+
+\subsubsection{Evaluationsdaten mittels NDCG-Algorithmus auswerten}
+\label{sec:Evaluation:Aufbau:Metrik:EvaluationsdatenNDCG}
+
+Um das Qualitätsmaß der beiden Suchen vergleichen zu können werden wir den Bewertungsalgorithmus \textit{NDCG}~(siehe \cite{NDCG}) einsetzen. Dieser geht davon aus, dass besser positionierte Suchergebnisse eine höhere Relevanz als schlechter positionierte haben. Der NDCG vergleicht die Reihenfolge der Relevanzbewertungen der Suchergebnisse mit der idealen Reihenfolge derselben Relevanzbewertungen. Im Idealfall entspricht die Reihenfolge der Suchergebnisse der Relevanz der Suchergebnisse.
+
+\subsubsection{Qualitätsmaß einer Suchvariante bestimmen}
+\label{sec:Evaluation:Aufbau:Metrik:QualitaetMessen}
+
+In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die Springermedizin-Suche und zwei Bewertungen für die Suche mit dem hier zu untersuchenden Lösungsansatz abgegeben. Um das Qualitätsmaß einer Suchvariante zu einem Suchterm zu bestimmen, berechnen wir den NDCG der beiden Bewertungen. Nehmen wir den Mittelwert der beiden resultierenden NDCG-Werte, erhalten wir den effektiven NDCG-Wert. Die NDCG-Werte der beiden Suchen können wir dann miteinander vergleichen.
+
+\subsection{Vorgehen}
+\label{sec:Evaluation:Aufbau:Vorgehen}
+
+\subsubsection{Evaluationssystem aufbauen}
+\label{sec:Evaluation:Aufbau:Vorgehen:Aufbau}
+
+Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluationssystem, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluationssystem sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse  der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils besten 10 Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
+
+\subsubsection{Evaluationssystem auswerten}
+\label{sec:Evaluation:Aufbau:Vorgehen:Auswerten}
+
+Nach Ablauf der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluationssystem statt. 
+\\
+\\
+Dazu werden die Daten aus der Datenbank gelesen und mit dem Cohens Kappa Koeffizienten die nutzbaren Daten gefiltert. 
+
+
+\subsection{Durchführung}
+\label{sec:Evaluation:Aufbau:Durchfuehrung}
+
+\subsubsection{Verschiedene Varianten des neuen Lösungsansatzes werden evaluiert}
+\label{sec:Evaluation:Aufbau:Durchfuehrung:EvaluationsdatenVarianteLoesungsansatzes}
+
+Der in dieser Arbeit zu untersuchende Lösungsansatz kann verschieden konfiguriert werden. Wir können den Einfluss des Zufallsfaktors bestimmen. Um verschiedene Konstellationen testen zu können, werden wir mit zwei verschiedenen Werten für den Einfluss des Zufallsfaktor evaluieren. Die Click-Trough-Daten von an der Applikation angemeldeten Benutzern können wir von den Click-Trough-Daten von anonymen Benutzern unterscheiden.
+\\
+\\
+Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und anonymen Benutzern, ergeben sich vier Konstellationen, die evaluiert werden können. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Mithilfe des Evaluationssystems werden wir die Zuteilung der Suchterme zufällig generieren lassen.
+
+\section{Auswertung der Suchergebnis-Qualität}
+\label{sec:Evaluation:Auswertung}
+
+\subsection{Quantitative Auswertung}
+\label{sec:Evaluation:Auswertung:QuantitativeAuswertung}
+
+\subsection{Diskussion}
+\label{sec:Evaluation:Auswertung:Diskussion}
+
+\section{Zusammenfassung}
+\label{sec:Evaluation:Zusammenfassung}

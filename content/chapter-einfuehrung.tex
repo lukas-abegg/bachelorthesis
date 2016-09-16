@@ -91,7 +91,7 @@ Springermedizin führt ein eigenes Tracking der User durch und verwendet auf Web
 \subsubsection{Anwendung auf Springermedizin-Umfeld}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Adaptierung}
 
-Bei der Verwendung von Userrelevanzen in der Suche handelt es sich um ein bekanntes und gut erforschtes Problem. Wir werden in dieser Arbeit versuchen, einen bestehenden Lösungsansatz (Die Wahl des Lösungsansatz folgt in Kapitel \ref{sec:Einfuehrung:Methodik:SucheEinbinden:PBM}) auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein.
+Bei der Verwendung von Userrelevanzen in der Suche handelt es sich um ein bekanntes und gut erforschtes Problem. Wir werden in dieser Arbeit versuchen, einen bestehenden Lösungsansatz (Position-based Modell) auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein.
 
 \subsubsection{Was wird in dieser Arbeit nicht behandelt?}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:NichtBehandeln}
@@ -104,162 +104,76 @@ Bei der Umsetzung des Lösungsansatzes konzentrieren wir uns auf die Implementat
 \section{Methodik}
 \label{sec:Einfuehrung:Methodik}
 
-Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wollen wir das Klickverhalten der User in der Suche analysieren um die Suchergebnisse zu verbessern.
+\subsection{Einführung}
+\label{sec:Einfuehrung:Methodik:Einfuehrung}
 
-\subsection{Analyse der Click-Trough Daten}
+Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wollen wir das Klick-Verhalten der User in der Suche analysieren um mithilfe der daraus berechenbaren Userrelevanzen die Suchergebnisse zu verbessern. Dieses Klick-Verhalten können wir aus den Click-Trough-Daten lesen. Um mit Click-Trough-Daten arbeiten zu können, müssen wir zuerst verstehen, was Click-Trough-Daten sind und wie sie entstehen. 
+
+\subsection{Click-Trough-Daten verstehen}
 \label{sec:Einfuehrung:Methodik:Click-Trough-Daten}
 
-\subsubsection{Userrelevante Dokumente durch Click-Trough-Rates identifizieren}
-\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:UserrelevanteDokumente}
+\subsubsection{Was sind Click-Trough-Daten und wie entstehen diese?}
+\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:WasSindClick-Trough-Daten}
 
-Eine Möglichkeit, die Userrelevanz eines Suchergebnisses zu bestimmen, ist die Verwendung der Click-Trough-Daten zur Berechnung der Userrelevanz. Anhand der Click-Trough-Rates der Suchergebnisse, können wir die für die Nutzer der Suche relevanten Dokumente identifizieren.
+Click-Trough-Daten sind Tracking-Daten. Tracking-Daten entstehen durch die Interaktion zwischen dem User der Applikation und der Applikation selbst. Sie verfolgen das Verhalten der User auf der Applikation und speichern diese in einer Datenbank, in unserem Fall in Webtrekk ab. Die für uns interessanten Tracking-Daten entstehen, wenn der User auf der Suche von Springermedizin ein Anfrage stellt und darauf folgend, ein Element aus dem Suchresultat anklickt.
 
-Dazu analysieren wir, welche Dokumente im Suchergebnis zu welchen Suchtermen angeklickt worden sind. Wir gehen dabei davon aus, dass jedes Dokument, welches zu einer Suchanfrage angeklickt wurde, eine gewisse Relevanz für diese hat.
+\subsubsection{Wie werden die Click-Trough-Daten in Webtrekk gespeichert?}
+\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:SpeichernClick-Trough-Daten}
 
-\subsubsection{Click-Trough-Daten kommen aus Webtrekk-Analysen}
-\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:Click-Trough-DatenWebtrekk-Analysen}
+Die Speicherung der Daten auf Webtrekk übernimmt die Springermedizin-Applikation. Führt ein User eine Suche durch und klickt dabei ein Resultat an, sendet die Springermedizin-Applikation die Tracking-Informationen an Webtrekk. Die Tracking-Daten für diese Aktion, setzen sich zusammen aus der Suchanfrage, dem Zeitpunkt der Suche, den Userdaten, der angeklickten Position im Suchresultat und den Dokumentinformationen zum angeklickten Dokument. Aus diesen Daten werden die Click-Trough-Daten erstellt, mithilfe denen wir die Userrelevanz berechnen werden.
 
-Als Wissensbasis zur Berechnung der Click-Trough-Daten dienen die Webtrekk-Analysen von Springermedizin. Wir können anhand dieser Analysen feststellen, welches Dokument zu welchem Suchterm angeklickt wurde. Wir wissen dadurch, wie oft es angeklickt wurde und auf welcher Position\footnote{Mit Position wird der dargestellte Rang des Dokumentes im Suchresultat bezeichnet} im Suchresultat sich das Dokument dabei befunden hat. 
+\subsubsection{Wie können wir Click-Trough-Daten aus Webtrekk lesen?}
+\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:LesenClick-Trough-Daten}
 
-\subsubsection{Suchterm semantisch aufschlüsseln mittels Segmentierung}
-\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:SuchtermSegmentierung}
-
-Ein Suchterm kann aus mehr als einem Wort bestehen. Wir müssen darum davon ausgehen, dass möglicherweise jedes Wort des Suchterms in unterschiedlichen Suchanfragen verwendet wird. Außerdem kann auch nach Synonymen eines Wortes gesucht werden. Der Suchterm muss darum semantisch aufgeschlüsselt werden, um alle relevanten Click-Trough-Daten berechnen zu können. Die Click-Trough-Daten sind dann relevant, wenn mindestens ein Wort des aufgeschlüsselten Suchterms in Relation zu diesen Daten steht. Von einer Gewichtung der Relation wird abgesehen.
+Webtrekk ist ein Analysetool. Das heißt für uns, wir können nicht direkt auf die Datenbank mit den Tracking-Daten zugreifen. Um die Tracking-Daten lesen zu können, müssen wir eine Analyse auf Webtrekk ausführen. Mithilfe dieser Analyse können wir uns die Click-Trough-Daten so zusammenstellen lassen, wie wir sie für die Berechnung der Userrelevanz benötigen.
 \\
 \\
-Die Auftrennung des Suchterms in die einzelne Worte können wir mithilfe einer Segmentierung\footnote{Bezeichnet die Aufteilung in Abschnitte, in diesem Fall in einzelne Worte} durchführen. Hier könnten wir uns überlegen, zusätzlich mit Stoppwörtern\footnote{Stoppwörter sind Wörter, die sehr häufig auftreten und für gewöhnlich keine Relevanz für den Dokumentinhalt besitzen} nicht relevante Wörter aus dem Suchterm zu entfernen. Dieses Verfahren macht aber im Springermedizin-Kontext keinen Sinn. Wie in Kapitel \ref{sec:Einfuehrung:Problemstellung:Userrelevanz} angesprochen, suchen die User der Springermedizin-Applikation oft mit einschlägig, fundierten Fachbegriffen. Wir gehen darum davon aus, dass alle Wörter des verwendeten Suchterms für das Suchergebnis relevant sind. Diese Erkenntnis basiert auf Aussagen der Redakteure von Springermedizin und Webtrekk-Analysen der meist gesuchtesten Suchtermen der letzten Monate. Auch sind Stoppwörter veraltet und werden in modernen Information Retrieval Verfahren nicht mehr eingesetzt. Wir verzichten darum auf den Einstatz von Stoppwörtern.
+Die Click-Trough-Daten bestehen aus einzelnen Click-Trough-Rates. Eine Click-Trough-Rate zeigt die Anzahl der Klicks, die zu einer bestimmten Suchanfrage auf ein bestimmtes Dokument gemacht wurden und auf welcher Position im Suchresultat sich dieses Dokument dabei befunden hat. Die Webtrekk-Analysen geben uns eine Sammlung von Click-Trough-Rates zurück. Wir können bei diesen Analysen die Click-Trough-Rates nach Suchbegriffen oder auch Suchtermen filtern und den Zeitraum mitgeben, in welchen die Suchanfragen durchgeführt wurden. Des weiteren gibt es die Möglichkeit weitere Filter wie die Anzahl zurückzugebender Click-Trough-Rates oder auch den \glqq Login-Status\footnote{Mit Login-Status wird zwischen einem zum Zeitpunkt der Suche auf der Springermedizin-Applikation angemeldeten und nicht angemeldeten User unterschieden} des Users\grqq{} zu setzen. 
 
-\subsubsection{Suchterm semantisch erweitern mittels Thesaurus}
-\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:SuchtermThesaurus}
+\subsubsection{Wie sehen die Click-Trough-Daten aus?}
+\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:AussehenClick-Trough-Daten}
 
-Für die semantische Erweiterung eines Suchwortes wird ein Thesaurus\footnote{Als Thesaurus wird ein strukturiertes Verzeichnis von Begriffen, welche allesamt in irgendeiner Beziehung stehen bezeichnet} benötigt. Die Erweiterung umfasst zum Suchterm gleichbedeutende Begriffe (Synonyme), sehr ähnliche Begriffe (Narrow Terms), ähnliche Begriffe im weiteren Sinne (Broader Terms) und verwandte Begriffe (Related Terms).
-\\
-\\
-Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{Unified Medical Language System} (UMLS)~(siehe \cite{UMLS}) zugegriffen werden kann. 
+Eine Beispiel für eine Click-Trough-Rate wie sie von einer Webtrekk-Analyse ausgespielt wird, sieht wie folgt aus:
 
-\subsubsection{Komplexe Auswertungen der Click-Trough-Daten nicht möglich}
-\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:Click-Trough-DatenAuswertungen}
+\begin{tabular}{|p{0.8\textwidth}|p{0.15\textwidth}|}\hline
+	\textbf{Click-Trough-Rate} & \textbf{Anzahl Klicks} \\ \hline
+	searchresult-1.Course.chronische Dyspnoe bei Erwachsenen.10621768.chronische Dyspnoe & 1 \\ \hline
+ \end{tabular}
 
-Die Webtrekk-Analysen bieten uns jedoch nur beschränkte Informationen zum Klickverhalten der User. Wichtige Informationen wie die Verweildauer auf einem Dokument oder ob nach diesem Dokument ein weiteres Dokument zum gleichen Suchterm angeklickt worden ist, lassen diese Analysen nicht zu. Da diese Informationen für komplexe Auswertungen der Click-Trough-Daten nicht ausreichen, können wir in dieser Arbeit \textit{Feedback-Strategien} für die Click-Trough-Rate Auswertung, wie in \cite{Joachims} beschrieben, nicht verwenden. Stattdessen müssen wir davon ausgehen, dass jeder Klick auf ein Dokument relevant ist.
+Hier die Aufschlüsselung der Click-Trough-Rate:
 
-\subsubsection{Durch Webtrekk kein komplexer Lern-Algorithmus notwendig}
-\label{sec:Einfuehrung:Methodik:Click-Trough-Daten:Lern-Algorithmus}
+\begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.27\textwidth}|p{0.1\textwidth}|p{0.2\textwidth}|}\hline
+	\textbf{Position} & \textbf{Dokumenttyp} & \textbf{Titel} & \textbf{ID} & \textbf{Suchterm} \\ \hline
+	searchresult-1 & Course & chronische Dyspnoe bei Erwachsenen & 10621768 & chronische Dyspnoe \\ \hline
+ \end{tabular}
+ 
+Die Click-Trough-Rate lässt sich wie folgt lesen. In diesem Beispiel haben die User mit der Suchanfrage \glqq chronische Dyspnoe\footnote{Als Dyspnoe wird eine unangenehm erschwerte Atemtätigkeit bezeichnet}\grqq{} gesucht. Dabei haben sie das Dokument mit der ID 10621768 angeklickt. Dieses hat sich dabei auf der Position 1 der Suchresultate gefunden. Es wurde insgesamt einmal angeklickt in der gesuchten Periode. 
 
-Der Vorteil bei der Verwendung von Webtrekk ist, dass der Algorithmus nicht stetig neues Wissen lernen und altes vergessen muss. Der Algorithmus kann direkt zur Laufzeit\footnote{Unter Laufzeit wird in diesem Fall der Zeitpunkt der direkte Abfrage während der Suchanfrage bezeichnet} Analysen gegen Webtrekk über eine frei definierbare Periode machen. Dadurch kann \textit{overfitting}\footnote{Überanpassung des Algorithmus durch zu viele (falsche oder veraltete) Daten} vermieden werden. Deshalb werden wir von komplexen Lern-Algorithmen wie in \cite{IWUSBI} vorgestellt, absehen.
+\subsection{Reranking mittels Click-Trough-Rate}
+\label{sec:Einfuehrung:Methodik:Reranking}
 
-\subsection{Userrelevanz in Suchprozess einbinden}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden}
+Im vorherigen Abschnitt haben wir gelernt wie Click-Trough-Daten entstehen und wie sie zu lesen sind. Nun können wir mit diesem Wissen die Userrelevanzen der Dokumente im Suchresultat zur Suchanfrage berechnen. Mithilfe der berechneten Userrelevanzen werden wir dann ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate durchführen. So wollen wir die Userrelevanz in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
 
-Es gibt drei mögliche Eingriffspunkte während des Suchprozesses, um Userrelevanzen in der Springermedizin-Suche zu verwenden. Möglich wäre die Verwendung der Userrelevanzen in der Aufbereitung der Suchanfrage auf der Springermedizin-Applikation. Denkbar wäre auch, die Berechnung der Userrelevanzen in den Suchindex der Solr einzubauen. Die dritte Variante wäre die Verwendung der Userrelevanzen in der Aufbereitung der Suchresultate der Springermedizin-Applikation. Eine davon, wollen wir in dieser Arbeit untersuchen. 
+\subsubsection{Suchterm semantisch aufschlüsseln}
+\label{sec:Einfuehrung:Methodik:Reranking:SuchtermSegmentierung}
 
-\subsubsection{Ansatz: Suchindex-Erweiterung in der Solr-Suche}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:SolrSuche}
+Um die Userrelevanz berechnen zu können müssen wir zunächst die relevanten Click-Trough-Daten filtern. Click-Trough-Daten müssen nicht immer mit dem vollständigen Suchterm in Relation stehen. Sie können auch nur mit einem Wort des Suchterms oder einem Synonym des Wortes in Relation stehen. Wir müssen darum den Suchterm semantisch aufschlüsseln um alle relevanten Click-Trough-Daten filtern zu können. 
 
-Um die Userrelevanzen direkt in die Solr einzubeziehen gibt es zwei Varianten. Wir können das Schema des Suchindexes über die Schema API~(siehe \cite{SchemaAPISolr}) erweitern und alle Einträge neu indexieren, oder wir ergänzen den Index um ein externes Feld (ExternalFileField)~(siehe \cite{ExtFieldSolr}).
-\\
-\\
-Beide Lösungsansätze ergeben nur bei der Speicherung einer einfachen Click-Count Popularität\footnote{Kennzahl für alle Klicks auf ein Dokument unabhängig des Suchterms} Sinn. Diese genügen allerdings den hier gegebenen Anforderungen nicht, da die Click-Trough-Rate abhängig vom Suchterm ist. Der erste Lösungsansatz ist zudem besonders heikel, weil bei jeder Änderung des Click-Count-Wertes, das Dokument in der Solr neu indexiert werden.
+\subsubsection{Aufbereitung Click-Trough-Daten}
+\label{sec:Einfuehrung:Methodik:Reranking:Click-Trough-Daten}
 
-\subsubsection{Ansatz: Aufbereitung der Suchanfrage}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:Suchanfrage}
+Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, müssen lernen wie wir diese richtig aufbereiten, um die Userelevanzen berechnen zu können. 
 
-Die Solr-Suche bietet eine Boost-Funktion namens \textit{DisMax Query Parser}~(siehe \cite{DisMax}). Mit dieser können basierend auf Feldwerten, einzelne Dokumente besser im Suchergebnis positioniert werden. Die Boost-Funktion müssten wir in den Aufbau der Suchanfrage für die Suche auf der Springermedizin-Applikation einbauen. Dieser Ansatz beinhaltet einige Gefahren die wir beachten müssen.
-\\
-\\
-Dazu zählen beispielsweise die Abhängigkeiten von anderen Boost-Faktoren\footnote{Die Solr besitzt eine Boosting-Funktion, um bestimmte Wertübereinstimmungen in der Suche höher gewichtet zu können}. Alle Boost-Faktoren hängen voneinander ab und müssten bei jeder Ergänzung um neue Faktoren normalisiert werden, um kein \glqq über-Boosting\grqq{}\footnote{Bezeichnet die über-priorisierte Bewertung einzelner Faktoren} einzelner Faktoren zu riskieren. Zudem besteht die Gefahr des \glqq blinden Boosting\grqq{} von Dokumenten. Die Solr-Relevanzberechnung ist komplex und der Einfluss des \glqq Boosting\grqq{} in die Solr-Relevanzberechnung schwer erkennbar. Auch hat Springermedizin bereits sehr schlechte Erfahrungen mit \glqq Boosting\grqq{} gemacht und bevorzugt einen Lösungsansatz ohne \glqq Boosting\grqq{}.
+\subsubsection{Userrelevanz in Suchprozess einbinden}
+\label{sec:Einfuehrung:Methodik:Reranking:SucheEinbinden}
 
-\subsubsection{Ansatz: Aufbereitung der Suchresultate anhand eines Klick-Modell basierten Algorithmus}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:Suchresultate}
 
-Die dritte Möglichkeit ist bei der Aufbereitung der Suchresultate aus der Solr-Suche einen Klick-Modell~(siehe \cite{pbm}) basierten Algorithmus zu verwenden. Dieser soll die Suchergebnisliste analysieren, die Userrelevanzen der Dokumente berechnen und die Liste neu sortieren. 
-\\
-\\
-Diese Lösung können wir relativ einfach in die Springermedizin-Applikation integrieren, ohne die restliche Suchlogik\footnote{Dazu gehört die Aufbereitung der Suchanfrage für die Solr und die Suche auf der Solr} zu beeinflussen. Hierbei müssen wir jedoch beachten, dass die Solr durch die Pagination-Funktion~(siehe \cite{Pagination}) nur die Top-N-Ergebnisse (bei Springermedizin sind es 20 Ergebnisse) zurückgibt. Diese Logik liegt in der Springermedizin-Applikation im Aufbau der Suchanfrage. Daher können wir diese selber steuern und uns statt 20 beispielsweise die nächsten 100 Ergebnisse zurückgeben lassen. Am Ende filtern wir die ersten 20 Ergebnisse und stellen diese dar. Außerdem wissen wir bei diesem Lösungsansatz, in welcher Reihenfolge die Ergebnisse aus der Solr zurückgegeben werden. Wir kennen die Dokumente und deren Rang. Dadurch haben wir hilfreiches Zusatzwissen, welches wir in den Klick-Modell basierten Algorithmus einfließen lassen können.
+\subsubsection{Result-Reranking mittels PBM Algorithmus}
+\label{sec:Einfuehrung:Methodik:Reranking:Result-RerankingPBM}
 
-\subsubsection{Entscheidung für den Ansatz der Aufbereitung der Suchresultate anhand eines Klick-Modell basierten Algorithmus}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:Entscheidung}
+\subsubsection{Vergessen der alten Daten}
+\label{sec:Einfuehrung:Reranking:Vergessen}
 
-Wägen wir die besprochenen Fakten ab, wirkt der Ansatz mit der Aufbereitung der Suchresultate durch einen Klick-Modell basierten Algorithmus am sinnvollsten. Wir wissen bei diesem Ansatz, welche Dokumente für die Userrelevanz-Berechnung überhaupt in Frage kommen. Zudem kennen wir alle Einfluss-Faktoren für den Algorithmus und wir sind unabhängig von der Suchlogik auf der Solr. Dadurch können wir Änderungen in unserer Logik schnell und einfach implementieren.
-
-\subsubsection{Klick-Wahrscheinlichkeit mit Position-based Modell berechnen}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:PBM}
-
-Mithilfe der Click-Trough-Daten aus Webtrekk, können wir zwei wichtige Informationen zu jedem Suchterm ermitteln. Wir wissen welche Dokumente und welche Positionen im Suchresultat angeklickt worden sind. Zudem kennen wir die Reihenfolge der Dokumente im Suchresultat der Solr.
-\\
-\\
-Ein Ansatz der genau auf diesen Informationen aufbaut, ist das \textit{Position-based Modell} (PBM)~(siehe \cite{pbm}). Dieses berechnet die Wahrscheinlichkeit dafür, dass ein User ein Dokument wirklich genau analysiert, bevor er es anklickt. Es setzt sich aus zwei Wahrscheinlichkeiten zusammen. Die Wahrscheinlichkeit für einen Klick auf die Position im Suchresultat und die Wahrscheinlichkeit für einen Klick auf das Dokument. Diesen Ansatz werden wir in dieser Arbeit implementieren.
-
-\subsubsection{Verhältnis zwischen den Klick-Wahrscheinlichkeiten abhängig der Position im Suchresultat definieren}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:PBM}
-
-Aus eigener Erfahrung wissen wir, dass die ersten Dokumente im Suchresultat immer zuerst gesehen werden. Die dahinter gelisteten Dokumente werden fortlaufend analysiert. Wir sollten darauf achten, dass je \textit{schlechter} der Rang des angeklickten Dokumentes im Suchresultat der Solr ist, desto \textit{höher} das Relevanzfeedback zu bewerten ist.
-
-\subsubsection{Smoothing Faktor in Position-based Modell}
-\label{sec:Einfuehrung:Methodik:SucheEinbinden:SmoothingPBM}
-
-Wir wissen dass eine Wahrscheinlichkeit einen Wert zwischen 1 und 0 besitzt. Dadurch können Nullwerte entstehen. Das PBM multipliziert die Positions- und Dokument-Wahrscheinlichkeit miteinander, um die Klick-Wahrscheinlichkeit zu berechnen. Wir müssen aber davon ausgehen, dass es Dokumente geben kann, deren Rang nie angeklickt worden ist und umgekehrt. 
-\\
-\\
-Multiplikationen mit Null ergeben immer einen Nullwert. An dieser Stelle führen wir einen \textit{Smoothing-Faktor} ein. Der Smoothing-Faktor soll zwei Probleme lösen. Zum einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten. Zum anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanzfeedbacks in den Algorithmus einbeziehen. Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe, dem sogenannten \textit{Weighted Moving Average}, dessen Gewichte sich zu Eins aufsummieren. Diese Gewichte sind die Smoothing-Faktoren, weshalb das Verfahren zählt zu den Smoothing-Algorithmen zählt.
-
-\subsection{Effektive Userrelevanz}
-\label{sec:Einfuehrung:Methodik:Userrelevanz}
-
-\subsubsection{Die Klick-Wahrscheinlichkeit ist kein absoluter Wert für Userrelevanz}
-\label{sec:Einfuehrung:Methodik:Userrelevanz:Relevanzfeedback}
-
-Nun könnten wir die Klick-Wahrscheinlichkeit als absoluten Wert für die \textit{Userrelevanz} betrachten. Dies wäre jedoch falsch, wir müssen davon ausgehen, dass viele User der Qualität der Suchmaschine vertrauen. Diese betrachten die Top-Suchresultate als die relevanten Suchresultate. Denkbar wäre auch, dass sie unabsichtlich das falsche Dokument anklicken.
-
-\subsubsection{Overfitting vermeiden}
-\label{sec:Einfuehrung:Methodik:Userrelevanz:Overfitting}
-
-Um dem entgegenzuwirken und ein \textit{overfitting} zu vermeiden, darf der Algorithmus nicht immer anschlagen. Wir müssen sicherstellen, dass vereinzelt zufällige Dokumente in den \glqq Top-Suchresultaten\grqq{} angezeigt werden. So können auch andere Dokumente in den Fokus des Users gerückt werden. Das System fährt sich dadurch nicht auf falschen Annotationen fest. 
-
-\subsubsection{Zusätzliche Varianz durch Zufallsfaktor}
-\label{sec:Einfuehrung:Methodik:Userrelevanz:Zufallsfaktor}
-
-Mithilfe eines Zufallsfaktors kann eine solche Varianz in den Klick-Modell basierten Algorithmus gebracht werden. Wie bereits weiter oben erwähnt, werden viele Suchresultate nie und deren Rang selten bis gar nicht angeklickt. Sie haben darum keine Click-Trough-Daten. Deren Klick-Wahrscheinlichkeit ist entweder Null oder sehr klein. Der Zufallsfaktor soll darum nur leichte Einflüsse in die Klick-Wahrscheinlichkeitsberechnung haben. Auch hier können wir wieder mit dem oben eingeführten \textit{Weighted Moving Average}~(siehe \cite{weightedAVG}) arbeiten.
-
-\subsection{Evaluation}
-\label{sec:Einfuehrung:Methodik:Evaluation}
-
-\subsubsection{Suchvarianten mithilfe eines Evaluationssystems vergleichen}
-\label{sec:Einfuehrung:Methodik:Evaluation:Ziel}
-
-Das große Kernproblem der Überprüfung der Verbesserungen durch den untersuchten Lösungsansatz wird das Messen der Qualität der erzielten Suchergebnisse sein. Mithilfe einer Evaluation wollen wir messen, wie gut die Suchergebnis-Qualität der aktuellen Springermedizin-Suche im Vergleich zur im Zuge dieser Arbeit entwickelten Lösung ist.
-
-\subsubsection{Ziel der Evaluation}
-\label{sec:Einfuehrung:Methodik:Evaluation:Ziel}
-
-Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der neue Lösungsansatz bringt. Aus den Ergebnissen wollen wir erkennen, an welchen \glqq Schrauben\grqq{} etwas gedreht werden muss, damit die Suche wirklich gute Ergebnisse aus Sicht der User bringt.
-
-\subsubsection{Evaluationssystem aufbauen}
-\label{sec:Einfuehrung:Methodik:Evaluation:Aufbau}
-
-Dazu müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluationssystem, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluationssystem sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse  der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils besten 10 Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
-
-\subsubsection{Evaluationsdaten für die Auswertung mit Cohens Kappa-Koeffizient selektieren}
-\label{sec:Einfuehrung:Methodik:Evaluation:EvaluationsdatenSelektieren}
-
-Um die Zuverlässigkeit der Relevanzbewertungen zu messen, werden wir die gleichen Suchterme jeweils von zwei fachlichen Experten bewerten lassen. Das  meist verwendete  Maß  zur  Bewertung  der Übereinstimmungsgüte ist der \textit{Cohens Kappa-Koeffizient}~(siehe \cite{Kappa}). Diese Zahl misst den  Anteil übereinstimmender Bewertungen. Hierbei können aber auch zufällige Übereinstimmungen entstehen. Der Cohens Kappa-Koeffizient korrigiert das Maß an Übereinstimmung um diesen Zufallsfaktor. Anhand der Auswertungen werden wir ein Mindestmaß der Übereinstimmungsgüte definieren. Die darunter liegenden Bewertung werden wir in der Auswertung ignorieren. 
-
-\subsubsection{Evaluationsdaten mittels NDCG auswerten}
-\label{sec:Einfuehrung:Methodik:Evaluation:EvaluationsdatenNDCG}
-
-Um das Qualitätsmaß der beiden Suchen vergleichen zu können werden wir den Bewertungsalgorithmus \textit{NDCG}~(siehe \cite{NDCG}) einsetzen. Dieser geht davon aus, dass besser positionierte Suchergebnisse eine höhere Relevanz als schlechter positionierte haben. Der NDCG vergleicht die Reihenfolge der Relevanzbewertungen der Suchergebnisse mit der idealen Reihenfolge derselben Relevanzbewertungen. Im Idealfall entspricht die Reihenfolge der Suchergebnisse der Relevanz der Suchergebnisse.
-
-\subsubsection{Qualitätsmaß einer Suchvariante bestimmen}
-\label{sec:Einfuehrung:Methodik:Evaluation:QualitaetMessen}
-
-In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die Springermedizin-Suche und zwei Bewertungen für die Suche mit dem hier zu untersuchenden Lösungsansatz abgegeben. Um das Qualitätsmaß einer Suchvariante zu einem Suchterm zu bestimmen, berechnen wir den NDCG der beiden Bewertungen. Nehmen wir den Mittelwert der beiden resultierenden NDCG-Werte, erhalten wir den effektiven NDCG-Wert. Die NDCG-Werte der beiden Suchen können wir dann miteinander vergleichen.
-
-\subsubsection{Verschiedene Varianten des neuen Lösungsansatzes werden evaluiert}
-\label{sec:Einfuehrung:Methodik:Evaluation:EvaluationsdatenVarianteLoesungsansatzes}
-
-Der in dieser Arbeit zu untersuchende Lösungsansatz kann verschieden konfiguriert werden. Wir können den Einfluss des Zufallsfaktors bestimmen. Um verschiedene Konstellationen testen zu können, werden wir mit zwei verschiedenen Werten für den Einfluss des Zufallsfaktor evaluieren. Die Click-Trough-Daten von an der Applikation angemeldeten Benutzern können wir von den Click-Trough-Daten von anonymen Benutzern unterscheiden.
-\\
-\\
-Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und anonymen Benutzern, ergeben sich vier Konstellationen, die evaluiert werden können. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Mithilfe des Evaluationssystems werden wir die Zuteilung der Suchterme zufällig generieren lassen.
 
 \section{Gliederung und Aufbau}
 \label{sec:Einfuehrung:GliederungAufbau}

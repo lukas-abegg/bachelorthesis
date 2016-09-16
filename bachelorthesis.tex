@@ -17,8 +17,8 @@
 	chapterprefix=true,			% prefix for chapter marks
 	10pt,						% font size
 	headings=normal,				% size of headings
-	bibliography=totoc,			% include bib in toc
-	listof=totoc,				% include listof entries in toc
+%	bibliography=totoc,			% include bib in toc
+%	listof=totoc,				% include listof entries in toc
 	titlepage=on,				% own page for each title page
 	captions=tableabove,			% display table captions above the float env
 	draft=false, 				% value for draft version
@@ -170,14 +170,22 @@
 \setcounter{page}{1}					% set page counter
 \pagestyle{maincontentstyle} 		% fancy header and footer
 
-\input{content/chapter-einfuehrung} 	% INCLUDE: Einführung
-\input{content/chapter-grundlagen} 	% INCLUDE: Grundlagen
+\input{content/chapter-einfuehrung} 			% INCLUDE: Einführung
+\input{content/chapter-grundlagen} 			% INCLUDE: Grundlagen
+\input{content/chapter-reranking} 			% INCLUDE: Kern der Arbeit
+\input{content/chapter-implementierung} 		% INCLUDE: Kern der Implementierung
+\input{content/chapter-evaluation}			% INCLUDE: Evaluation
+\input{content/chapter-zusammenfassung} 		% INCLUDE: Zusammenfassung
 
 \cleardoublepage
 
-% --------------------------
-% Back matter
-% --------------------------
+%************************************************
+% Anhang
+%************************************************
+\chapter{Anhang}
+\label{sec:Anhang}
+
+\addcontentsline{toc}{section}{Literatur-Verzeichnis}
 {%
 \setstretch{1.1}
 \renewcommand{\bibfont}{\normalfont\small}
@@ -188,16 +196,17 @@
 }
 \cleardoublepage
 
-\addcontentsline{toc}{chapter}{Abbildungs-Verzeichnis}
+\addcontentsline{toc}{section}{Abbildungs-Verzeichnis}
 \renewcommand{\cftlottitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 \renewcommand{\cftloftitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 \listoffigures
 \cleardoublepage
 
-\addcontentsline{toc}{chapter}{Tabellen-Verzeichnis}
+\addcontentsline{toc}{section}{Tabellen-Verzeichnis}
 \listoftables
 \cleardoublepage
 
+\addcontentsline{toc}{section}{Sourcecode-Verzeichnis}
 \listoflistings
 \cleardoublepage
 
