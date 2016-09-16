@@ -9,6 +9,46 @@
 \section{Grundbegriffe}
 \label{sec:Grundlagen:Grundbegriffe}
 
+\subsection{Click-Trough-Daten verstehen}
+\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten}
+
+\subsubsection{Was sind Click-Trough-Daten und wie entstehen diese?}
+\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:WasSindClick-Trough-Daten}
+
+Click-Trough-Daten sind Tracking-Daten. Tracking-Daten entstehen durch die Interaktion zwischen dem User der Applikation und der Applikation selbst. Sie verfolgen das Verhalten der User auf der Applikation und speichern diese in einer Datenbank, in unserem Fall in Webtrekk ab. Die für uns interessanten Tracking-Daten entstehen, wenn der User auf der Suche von Springermedizin ein Anfrage stellt und darauf folgend, ein Element aus dem Suchresultat anklickt.
+
+\subsubsection{Wie werden die Click-Trough-Daten in Webtrekk gespeichert?}
+\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:SpeichernClick-Trough-Daten}
+
+Die Speicherung der Daten auf Webtrekk übernimmt die Springermedizin-Applikation. Führt ein User eine Suche durch und klickt dabei ein Resultat an, sendet die Springermedizin-Applikation die Tracking-Informationen an Webtrekk. Die Tracking-Daten für diese Aktion, setzen sich zusammen aus der Suchanfrage, dem Zeitpunkt der Suche, den Userdaten, der angeklickten Position im Suchresultat und den Dokumentinformationen zum angeklickten Dokument. Aus diesen Daten werden die Click-Trough-Daten erstellt, mithilfe denen wir die Userrelevanz berechnen werden.
+
+\subsubsection{Wie können wir Click-Trough-Daten aus Webtrekk lesen?}
+\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:LesenClick-Trough-Daten}
+
+Webtrekk ist ein Analysetool. Das heißt für uns, wir können nicht direkt auf die Datenbank mit den Tracking-Daten zugreifen. Um die Tracking-Daten lesen zu können, müssen wir eine Analyse auf Webtrekk ausführen. Mithilfe dieser Analyse können wir uns die Click-Trough-Daten so zusammenstellen lassen, wie wir sie für die Berechnung der Userrelevanz benötigen.
+\\
+\\
+Die Click-Trough-Daten bestehen aus einzelnen Click-Trough-Rates. Eine Click-Trough-Rate zeigt die Anzahl der Klicks, die zu einer bestimmten Suchanfrage auf ein bestimmtes Dokument gemacht wurden und auf welcher Position im Suchresultat sich dieses Dokument dabei befunden hat. Die Webtrekk-Analysen geben uns eine Sammlung von Click-Trough-Rates zurück. Wir können bei diesen Analysen die Click-Trough-Rates nach Suchbegriffen oder auch Suchtermen filtern und den Zeitraum mitgeben, in welchen die Suchanfragen durchgeführt wurden. Des weiteren gibt es die Möglichkeit weitere Filter wie die Anzahl zurückzugebender Click-Trough-Rates oder auch den \glqq Login-Status\footnote{Mit Login-Status wird zwischen einem zum Zeitpunkt der Suche auf der Springermedizin-Applikation angemeldeten und nicht angemeldeten User unterschieden} des Users\grqq{} zu setzen. 
+
+\subsubsection{Wie sehen die Click-Trough-Daten aus?}
+\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:AussehenClick-Trough-Daten}
+
+Eine Beispiel für eine Click-Trough-Rate wie sie von einer Webtrekk-Analyse ausgespielt wird, sieht wie folgt aus:
+
+\begin{tabular}{|p{0.8\textwidth}|p{0.15\textwidth}|}\hline
+	\textbf{Click-Trough-Rate} & \textbf{Anzahl Klicks} \\ \hline
+	searchresult-1.Course.chronische Dyspnoe bei Erwachsenen.10621768.chronische Dyspnoe & 1 \\ \hline
+ \end{tabular}
+
+Hier die Aufschlüsselung der Click-Trough-Rate:
+
+\begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.27\textwidth}|p{0.1\textwidth}|p{0.2\textwidth}|}\hline
+	\textbf{Position} & \textbf{Dokumenttyp} & \textbf{Titel} & \textbf{ID} & \textbf{Suchterm} \\ \hline
+	searchresult-1 & Course & chronische Dyspnoe bei Erwachsenen & 10621768 & chronische Dyspnoe \\ \hline
+ \end{tabular}
+ 
+Die Click-Trough-Rate lässt sich wie folgt lesen. In diesem Beispiel haben die User mit der Suchanfrage \glqq chronische Dyspnoe\footnote{Als Dyspnoe wird eine unangenehm erschwerte Atemtätigkeit bezeichnet}\grqq{} gesucht. Dabei haben sie das Dokument mit der ID 10621768 angeklickt. Dieses hat sich dabei auf der Position 1 der Suchresultate gefunden. Es wurde insgesamt einmal angeklickt in der gesuchten Periode. 
+
 \subsection{Semantik von User-Interaktionen}
 \label{sec:Grundlagen:SemantikUserInteraktionen}
 

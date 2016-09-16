@@ -15,6 +15,8 @@
 \subsection{Einführung}
 \label{sec:Reranking:Methodik:Einfuehrung}
 
+In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten} haben wir gelernt wie Click-Trough-Daten entstehen und wie sie zu lesen sind. Nun können wir mit diesem Wissen die Userrelevanzen der Dokumente im Suchresultat zur Suchanfrage berechnen. Mithilfe der berechneten Userrelevanzen werden wir dann ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate durchführen. So wollen wir die Userrelevanz in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
+
 \subsection{Suchterm Segmentierung}
 \label{sec:Reranking:Methodik:SuchtermSegmentierung}
 
@@ -37,15 +39,15 @@ Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{U
 \subsection{Aufbereitung Click-Trough-Daten}
 \label{sec:Reranking:Methodik:Click-Trough-Daten}
 
-\subsubsection{Gewichtung der Click-Trough-Daten}
-\label{sec:Reranking:Methodik:Click-Trough-Daten:Gewichtung}
-
-Durch die semantische Aufschlüsselung des Suchtermes haben wir verschieden starke Relationen zwischen Click-Trough-Daten und dem Suchterm. Die Gewichtung der Stärke dieser Relation ist aber nicht Kern dieser Arbeit. Wir gehen darum davon aus, dass unabhängig der stärke der Relation zum Suchterm, alle Click-Trough-Daten eine gleiche Relevanz besitzen.
-
 \subsubsection{Komplexe Auswertungen der Click-Trough-Daten nicht möglich}
 \label{sec:Reranking:Methodik:Click-Trough-Daten:Click-Trough-DatenAuswertungen}
 
 Die Webtrekk-Analysen bieten uns nur beschränkte Informationen zum Klickverhalten der User. Wichtige Informationen wie die Verweildauer auf einem Dokument oder ob nach diesem Dokument ein weiteres Dokument zum gleichen Suchterm angeklickt worden ist, lassen diese Analysen nicht zu. Da diese Informationen für komplexe Auswertungen der Click-Trough-Daten nicht ausreichen, können wir in dieser Arbeit \textit{Feedback-Strategien} für die Click-Trough-Rate Auswertung, wie in \cite{Joachims} beschrieben, nicht verwenden. Stattdessen müssen wir davon ausgehen, dass jeder Klick auf ein Dokument relevant ist.
+
+\subsubsection{Gewichtung der Click-Trough-Daten}
+\label{sec:Reranking:Methodik:Click-Trough-Daten:Gewichtung}
+
+Durch die semantische Aufschlüsselung des Suchterms haben wir verschieden starke Relationen zwischen Click-Trough-Daten und dem Suchterm. Die Gewichtung der Stärke dieser Relation ist aber nicht Kern dieser Arbeit. Wir gehen darum davon aus, dass unabhängig der stärke der Relation zum Suchterm, alle Click-Trough-Daten eine gleiche Relevanz besitzen.
 
 \subsection{Userrelevanz in Suchprozess einbinden}
 \label{sec:Reranking:Methodik:SucheEinbinden}
