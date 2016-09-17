@@ -11,6 +11,9 @@ Springer Nature ist ein weltweit führender Verlag für Forschungs-, Bildungs- u
 \\
 Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über das Verhalten der User\footnote{Als User werden die Nutzer der Springermedizin-Suche bezeichnet} bei der Nutzung ihrer Suche, lässt dieses Wissen jedoch bisher noch nicht in ihre Suche einfließen. In dieser Arbeit wollen wir untersuchen, ob mithilfe dieses Wissens, die Suche optimiert werden kann.
 
+% Aufbau der Suche bei Springer Nature
+%------------------------------------------------
+
 \section{Aufbau der Suche bei Springer Nature}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature}
 
@@ -38,6 +41,9 @@ In Abb. \ref{fig:SucheSpringerNature} ist die Suche nochmals grafisch aufbereite
 \label{fig:SucheSpringerNature}
 \end{figure}
 
+% Problemstellung: Keine Userrelevanz in der Suche
+%------------------------------------------------
+
 \section{Problemstellung: Keine Userrelevanz in der Suche}
 \label{sec:Einfuehrung:Problemstellung}
 
@@ -57,6 +63,8 @@ Zu den Stakeholder\footnote{Bezeichnet Springer Nature interne Kunden, die ein I
 
 Springermedizin sammelt Tracking-Daten über jegliche Aktivitäten auf deren Applikationen und investiert Zeit und Geld in die Individualisierung\footnote{Mit Individualisierung wird die Speicherung eigener Parameter bezeichnet} der Analysedaten auf Webtrekk. Mittlerweile sind knapp 30 Custom-Parameter\footnote{Individuell erzeugte Parameter für Berichte und Analysen} auf Webtrekk angelegt um genau die Daten zu tracken, die zur Analyse des Verhaltens der User auf ihrer Applikationen relevant sind. Dadurch entsteht ein fast \glqq gläsernen User\grqq{}. Dieses Wissen könnte zum Vorteil des Users eingesetzt werden, indem es in der Suche verwendet wird.
 
+% Ziel der Arbeit
+%------------------------------------------------
 \section{Ziel der Arbeit}
 \label{sec:Einfuehrung:ZielArbeit}
 
@@ -91,7 +99,7 @@ Springermedizin führt ein eigenes Tracking der User durch und verwendet auf Web
 \subsubsection{Anwendung auf Springermedizin-Umfeld}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Adaptierung}
 
-Bei der Verwendung von Userrelevanzen in der Suche handelt es sich um ein bekanntes und gut erforschtes Problem. Wir werden in dieser Arbeit versuchen, einen bestehenden Lösungsansatz (Position-based Modell) auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein.
+Bei der Verwendung von Userrelevanzen in der Suche handelt es sich um ein bekanntes und gut erforschtes Problem. Wir werden in dieser Arbeit versuchen, ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate mithilfe eines Klick-Modell~(siehe \cite{pbm}) basierten Algorithmus auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein.
 
 \subsubsection{Was wird in dieser Arbeit nicht behandelt?}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:NichtBehandeln}
@@ -101,23 +109,31 @@ Durch den vorgegebenen Zeitraum für die Erstellung dieser Bachelorarbeit beding
 \\
 Bei der Umsetzung des Lösungsansatzes konzentrieren wir uns auf die Implementation des Algorithmus zur Berechnung der Userrelevanz. Die semantische Aufschlüsselung von Suchtermen ist nicht Kern dieser Arbeit. Die semantische Aufschlüsselung des Suchterms\footnote{Als Suchterm wird eine Suchanfragen bezeichnet} zur Analyse der Webtrekk-Daten enthält darum keine Gewichtungen der Relationen zwischen Webtrekk-Daten und Suchterm. Alle Relationen werden gleich gewichtet. 
 
+% Methodik
+%------------------------------------------------
+
 \section{Methodik}
 \label{sec:Einfuehrung:Methodik}
 
-\subsection{Einführung}
+\subsubsection{Einführung}
 \label{sec:Einfuehrung:Methodik:Einfuehrung}
 
-Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wollen wir das Klick-Verhalten der User in der Suche analysieren um mithilfe der daraus berechenbaren Userrelevanzen die Suchergebnisse zu verbessern. Dieses Klick-Verhalten können wir aus den Click-Trough-Daten lesen. Um mit Click-Trough-Daten arbeiten zu können, müssen wir zuerst verstehen, was Click-Trough-Daten sind und wie sie entstehen. 
+Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wollen wir das Klick-Verhalten der User in der Suche analysieren, um mithilfe der daraus berechenbaren Userrelevanzen die Suchergebnisse zu verbessern. Dieses Klick-Verhalten können wir aus den Click-Trough-Daten lesen. 
 
 \subsubsection{Suchterm semantisch aufschlüsseln}
 \label{sec:Einfuehrung:Methodik:SuchtermSegmentierung}
 
-Um die Userrelevanz berechnen zu können müssen wir zunächst die relevanten Click-Trough-Daten filtern. Click-Trough-Daten müssen nicht immer mit dem vollständigen Suchterm in Relation stehen. Sie können auch nur mit einem Wort des Suchterms oder einem Synonym des Wortes in Relation stehen. Wir müssen darum den Suchterm semantisch aufschlüsseln um alle relevanten Click-Trough-Daten filtern zu können. 
+Um mit den Click-Trough-Daten arbeiten zu können, müssen wir zunächst die relevanten Click-Trough-Daten herausfiltern. Dazu müssen wir die Click-Trough-Daten dem Suchterm der Anfrage zuordnen können. Zu den Click-Trough-Daten wird immer der Suchterm gespeichert, mit dem dabei gesucht wurde. Das heißt wir können eine Relation zwischen dem Suchterm der Click-Trough-Daten und dem Suchterm unserer Anfrage herstellen.
+\\
+\\
+Die Click-Trough-Daten müssen aber nicht mit dem vollständigen Suchterm in Relation stehen. Sie können auch nur mit einem Wort, einem Teil des Suchterms oder einem Synonym eines dieser Worte in Relation stehen. Wir müssen darum den Suchterm semantisch aufschlüsseln um alle relevanten Click-Trough-Daten filtern zu können. 
 
 \subsubsection{Aufbereitung Click-Trough-Daten}
 \label{sec:Einfuehrung:Methodik:Click-Trough-Daten}
 
-Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, müssen lernen wie wir diese richtig aufbereiten, um die Userelevanzen berechnen zu können. 
+Ein wichtiger Punkt bei der Aufbereitung der Click-Trough-Daten 
+
+Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, müssen lernen wie wir diese richtig aufbereiten, um die Userelevanzen berechnen zu können. Wie bereits in Kapitel \ref{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Adaptierung} erwähnt, verwenden wir einem Algorithmus auf Basis eines Klick-Modells arbeiten. In dieser Arbeit werden wir den Ansatz des Position-based Modells~(siehe \cite{pbm}) verfolgen.  Click-Trough-Daten gelesen werden können. 
 
 \subsubsection{Userrelevanz in Suchprozess einbinden}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden}
@@ -129,6 +145,8 @@ Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, mü
 \subsubsection{Vergessen der alten Daten}
 \label{sec:Einfuehrung:Vergessen}
 
+% Gliederung und Aufbau
+%------------------------------------------------
 
 \section{Gliederung und Aufbau}
 \label{sec:Einfuehrung:GliederungAufbau}

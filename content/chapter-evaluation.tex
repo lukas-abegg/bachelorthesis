@@ -59,7 +59,6 @@ Nach Ablauf der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die
 \\
 Dazu werden die Daten aus der Datenbank gelesen und mit dem Cohens Kappa Koeffizienten die nutzbaren Daten gefiltert. 
 
-
 \subsection{Durchführung}
 \label{sec:Evaluation:Aufbau:Durchfuehrung}
 
@@ -70,6 +69,30 @@ Der in dieser Arbeit zu untersuchende Lösungsansatz kann verschieden konfigurie
 \\
 \\
 Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und anonymen Benutzern, ergeben sich vier Konstellationen, die evaluiert werden können. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Mithilfe des Evaluationssystems werden wir die Zuteilung der Suchterme zufällig generieren lassen.
+\\
+\\
+Hier folgend die Aufteilung der generierten Analysen:
+
+\centering
+\begin{myitemize}
+\setlength\itemsep{0em}
+\item Springermedizin.de Suche 
+\begin{myitemize}
+\item 50\% der Analysen
+\end{myitemize}
+\end{myitemize}
+\begin{myitemize}
+\item Reranking Suche 
+\begin{myitemize}
+\item 50\% der Analysen
+\begin{myitemize}
+\item Einfluss Zufallsranking 0.1: 25\% der Analysen 
+\end{myitemize}
+\begin{myitemize}
+\item Einfluss Zufallsranking 0.01: 25\% der Analysen 
+\end{myitemize}
+\end{myitemize}
+\end{myitemize}
 
 \section{Auswertung der Suchergebnis-Qualität}
 \label{sec:Evaluation:Auswertung}

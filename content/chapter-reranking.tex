@@ -6,8 +6,43 @@
 \chapter{Reranking mittels Click-Trough-Rate Ergebnis}
 \label{sec:Reranking}
 
+%Probleme und Lösungsansätze
+%----------------------------------------------------------------
+
 \section{Probleme und Lösungsansätze}
 \label{sec:Reranking:Probleme}
+
+\subsection{Suchterm Segmentierung}
+\label{sec:Reranking:Probleme:SuchtermSegmentierung}
+
+- Mehrdeutigkeiten
+- verwandte Begriffe und Synonyme
+- Segmentierung
+
+\subsection{Aufbereitung Click-Trough-Daten}
+\label{sec:Reranking:Probleme:Click-Trough-Daten}
+
+\subsubsection{Kein Einfluss auf Suchergebnisqualität während der Klicks}
+\label{sec:Reranking:Probleme:Click-Trough-Daten:Click-Trough-Suchergebnisqualität}
+
+siehe Grundlagen
+
+\subsubsection{Userverhalten }
+\label{sec:Reranking:Probleme:Click-Trough-Daten:Click-Trough-Userverhalten}
+
+Die Webtrekk-Analysen bieten uns nur beschränkte Informationen zum Klickverhalten der User. Wichtige Informationen wie die Verweildauer auf einem Dokument oder ob nach diesem Dokument ein weiteres Dokument zum gleichen Suchterm angeklickt worden ist, lassen diese Analysen nicht zu. 
+
+\subsection{Userrelevanz in Suchprozess einbinden}
+\label{sec:Reranking:Methodik:SucheEinbinden}
+
+\subsection{Result-Reranking mittels PBM Algorithmus}
+\label{sec:Reranking:Methodik:Result-RerankingPBM}
+
+\subsection{Vergessen der alten Daten}
+\label{sec:Reranking:Methodik:Vergessen}
+
+%Methodik
+%----------------------------------------------------------------
 
 \section{Methodik}
 \label{sec:Reranking:Methodik}
@@ -15,7 +50,7 @@
 \subsection{Einführung}
 \label{sec:Reranking:Methodik:Einfuehrung}
 
-In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten} haben wir gelernt wie Click-Trough-Daten entstehen und wie sie zu lesen sind. Nun können wir mit diesem Wissen die Userrelevanzen der Dokumente im Suchresultat zur Suchanfrage berechnen. Mithilfe der berechneten Userrelevanzen werden wir dann ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate durchführen. So wollen wir die Userrelevanz in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
+In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten} haben wir gelernt wie Click-Trough-Daten entstehen und wie sie zu lesen sind. Nun können wir mit diesem Wissen die Userrelevanzen der Dokumente im Suchresultat zur Suchanfrage berechnen. Mithilfe der berechneten Userrelevanzen werden wir dann ein \textit{Reranking} der Suchresultate durchführen. So wollen wir die Userrelevanz in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
 
 \subsection{Suchterm Segmentierung}
 \label{sec:Reranking:Methodik:SuchtermSegmentierung}
@@ -39,10 +74,10 @@ Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{U
 \subsection{Aufbereitung Click-Trough-Daten}
 \label{sec:Reranking:Methodik:Click-Trough-Daten}
 
-\subsubsection{Komplexe Auswertungen der Click-Trough-Daten nicht möglich}
+\subsubsection{Jeder Klick auf ein Dokument ist relevant}
 \label{sec:Reranking:Methodik:Click-Trough-Daten:Click-Trough-DatenAuswertungen}
 
-Die Webtrekk-Analysen bieten uns nur beschränkte Informationen zum Klickverhalten der User. Wichtige Informationen wie die Verweildauer auf einem Dokument oder ob nach diesem Dokument ein weiteres Dokument zum gleichen Suchterm angeklickt worden ist, lassen diese Analysen nicht zu. Da diese Informationen für komplexe Auswertungen der Click-Trough-Daten nicht ausreichen, können wir in dieser Arbeit \textit{Feedback-Strategien} für die Click-Trough-Rate Auswertung, wie in \cite{Joachims} beschrieben, nicht verwenden. Stattdessen müssen wir davon ausgehen, dass jeder Klick auf ein Dokument relevant ist.
+Wie in Kapitel \ref{sec:Reranking:Probleme:Click-Trough-Daten} beschrieben, reichen Webtrekk-Analysen für komplexe Auswertungen der Click-Trough-Daten nicht aus. Wir können darum in dieser Arbeit \textit{Feedback-Strategien} für die Click-Trough-Rate Auswertung, wie in \cite{Joachims} beschrieben, nicht verwenden. Stattdessen müssen wir davon ausgehen, dass jeder Klick auf ein Dokument relevant ist.
 
 \subsubsection{Gewichtung der Click-Trough-Daten}
 \label{sec:Reranking:Methodik:Click-Trough-Daten:Gewichtung}
@@ -132,10 +167,16 @@ Um dem entgegenzuwirken und ein \textit{overfitting} zu vermeiden, darf der Algo
 
 Mithilfe eines Zufallsfaktors kann eine solche Varianz in den Klick-Modell basierten Algorithmus gebracht werden. Wie bereits weiter oben erwähnt, werden viele Suchresultate nie und deren Rang selten bis gar nicht angeklickt. Sie haben darum keine Click-Trough-Daten. Deren Klick-Wahrscheinlichkeit ist entweder Null oder sehr klein. Der Zufallsfaktor soll darum nur leichte Einflüsse in die Klick-Wahrscheinlichkeitsberechnung haben. Auch hier können wir wieder mit dem oben eingeführten \textit{Weighted Moving Average}~(siehe \cite{weightedAVG}) arbeiten.
 
+%Der PBM-Algorithmus
+%----------------------------------------------------------------
+
 \section{Der PBM-Algorithmus}
 \label{sec:Reranking:PBM-Algorithmus}
 
 
+%Zusammenfassung
+%----------------------------------------------------------------
 
 \section{Zusammenfassung}
 \label{sec:Reranking:Zusammenfassung}
+
