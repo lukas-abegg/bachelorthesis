@@ -1,0 +1,74 @@
+
+Um das Klick-Verhalten der User auf der Springermedizin-Suche zu verstehen, ist es wichtig anhand oft gesuchter Suchphrasen dieses Verhalten zu analysieren. Dazu wurde eine Analyse über einen Zeitraum von 30 Tagen erstellt und die zehn am häufigsten gesuchten Suchphrasen verwendet. Die Analyse vergleicht für jede Suchphrase die 20 Dokumente mit den meisten Klicks. Die Dokumente wurden hierbei nicht nach Position im Suchergebnis sondern nach Klick-Wert selektiert. Jeder Graph stellt eine Suchphrase dar. Die meisten Graphen zeigen ein stark exponentiell abnehmendes Verhalten. Dieses exponentielle Verhalten zeigt, dass einzelne Dokumente häfug und viele Dokumente selten bis nie angeklickt werden. Dieser Effekt kann wie in vielen natürlichen Phänomenen, durch das Potenzgesetz (Power Law, siehe \cite{PowerLaw}) beschrieben werden. 
+
+\begin{figure}[H]
+\centering 
+ 
+\pgfplotstableread[col sep=semicolon]{content/diagrams/clicks_top10_searchphrases_result.csv}\topSearchphrases
+  
+\begin{tikzpicture}
+\begin{axis}[
+	width=14cm,
+	height=5cm,
+	scale only axis,
+	xmajorgrids,
+	xminorgrids,
+    ylabel=\textbf{Anzahl der Klicks}, 
+	xlabel=\textbf{Dokumente sortiert nach Anzahl der Klicks},
+    xtick=data,
+    ymin=0,
+    xmin=1,
+    xmax=20,
+    legend pos=north east,
+    legend style={font=\tiny}
+]
+\addplot table [
+    x=S1,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+    y=S2,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S3,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S4,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S5,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S6,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S7,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S8,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S9,
+    x=Position
+] {\topSearchphrases};
+\addplot table [
+     y=S10,
+    x=Position
+] {\topSearchphrases};
+\legend{borreliose, copd, dgrm-jahrestagung $2016$, diabetes, dyspnoe, forensische traumatologie, gicht, hypertonie, mmw, vorhofflimmern}
+\end{axis}
+\end{tikzpicture}
+
+
+\caption[Analyse der 20 am häufigsten angeklickten Dokumente  der zehn meistgesuchten Suchphrasen. \textit{Zeitraum der Analyse: 19.08.16 - 19.09.16}]{Analyse der 20 am häufigsten angeklickten Dokumente  der zehn meistgesuchten Suchphrasen. \\ \textit{Zeitraum der Analyse: 19.08.16 - 19.09.16}}
+\label{fig:Grundlagen:AnalyseKlicksTop10Suchergebnisse}
+\end{figure}
+
+Betrachten wir die Graphen können wir vor allem auf der ersten Position hohe Klick-Werte feststellen. Daraus lässt sich vermuten, dass einzelne Dokumente eine sehr hohe Relevanz für die entsprechende Suchanfrage aufweisen und nur wenige Dokumente auf die User als relevant wirken. Ein weitere Vermutung könnte sein, dass der zu durchsuchende Content wenig relevante Dokumente hat. Die Suchphrasen lassen auf sehr diverse Suchintentionen deuten. Es handelt sich hierbei unter anderem um Krankheiten, Zeitschriften und Behandlungen mit mehreren tausend Suchergebnissen. Die Wahrscheinlichkeit, dass wenig relevanter Content für die meisten der analysierten Suchphrasen zutrifft, sollte deshalb relativ gering sein. Wir müssen darum eher davon ausgehen, dass sich die User auf einzelne Dokumente festfahren. Das könnte an schlechten Suchergebnissen und somit an einer schlechten Suchqualität liegen. Um jedoch ein genaueres Bild über das Verhalten erstellen zu können müssen wir einen Vergleich mit der nachfolgenden Analyse in Abbildung \ref{fig:Grundlage:AnalyseKlicksPositionen} ziehen.

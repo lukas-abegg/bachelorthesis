@@ -1,0 +1,39 @@
+
+In der unten folgenden Analyse sehen wir das positionsbezogene Klick-Verhalten der User der Springermedizin-Suche. Dazu wurden über den Zeitraum von einem Monat, die letzten 1000 Suchanfragen ausgewertet. Dargestellt sehen wir die Häufigkeitsverteilung der Klicks als Graph. Wir beschränken uns hierbei auf die ersten 20 Positionen der Suchresultate. Wie wir sehen, nimmt die Anzahl der Klicks mit zunehmender Position exponentiell ab. Dieser Effekt kann ebenfalls wie in Abbildung \ref{fig:Grundlagen:AnalyseKlicksTop10Suchergebnisse}, durch das Potenzgesetz (Power Law, siehe \cite{PowerLaw}) beschrieben werden. 
+\\
+\\
+Betrachten wir den Graph, sehen wir, dass besonders die erste Position auffällig viel angeklickt wird. Daraus könnten wir die Vermutungen ziehen, dass die Suche eine sehr gute Qualität besitzt und die meisten User der Suchmaschine vertrauen. Wie wir aber aus den Analysen von \cite{Joachims} lesen können, müssen wir eher davon ausgehen, dass die meisten User der Suchmaschine vertrauen und darum größtenteils ein Dokument aus den ersten zehn Positionen anklicken. Vergleichen wir die Analyse aus Abbildung \ref{fig:Grundlagen:AnalyseKlicksTop10Suchergebnisse} mit dieser Analyse, sehen wir ein sehr ähnliches Muster in der Häufigkeitsverteilung der Klicks. Wir können anhand der Klick-Zahlen ebenfalls vermuten, dass die am häufigsten angeklickten Dokumente sich dabei auf den kleinsten Positionen befunden haben.
+
+\begin{figure}[H]
+\centering 
+ 
+\pgfplotstableread[col sep=semicolon]{content/diagrams/clicks_top1000_ranks_result.csv}\topRanks
+  
+\begin{tikzpicture}
+\begin{axis}[
+	width=14cm,
+	height=5cm,
+	scale only axis,
+	xmajorgrids,
+	xminorgrids,
+    ylabel=\textbf{Anzahl der Klicks}, 
+	xlabel=\textbf{Position im Suchergebnis},
+	nodes near coords, 
+	 every node near coord/.append style={xshift=+10pt,yshift=-1pt},
+    xtick=data,
+    ymin=0,
+    xmin=1,
+    xmax=20,
+    legend style={font=\tiny}
+]
+\addplot table [
+    x=Position,
+    y=Klicks
+] {\topRanks};
+\legend{Anzahl Klicks}
+\end{axis}
+\end{tikzpicture}
+
+\caption[Analyse der Klicks auf die ersten 20 Positionen der Suchergebnisse aller Suchanfragen. \textit{Zeitraum der Analyse: 19.08.16 - 19.09.16}]{Analyse der Klicks auf die ersten 20 Positionen der Suchergebnisse aller Suchanfragen. \\ \textit{Zeitraum der Analyse: 19.08.16 - 19.09.16}}
+\label{fig:Grundlage:AnalyseKlicksPositionen}
+\end{figure}
