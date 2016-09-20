@@ -49,7 +49,7 @@ In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die Springermed
 \subsubsection{Evaluationssystem aufbauen}
 \label{sec:Evaluation:Aufbau:Vorgehen:Aufbau}
 
-Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluationssystem, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluationssystem sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse  der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils besten 10 Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
+Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluationssystem, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluationssystem sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse  der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils besten zehn Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
 
 \subsubsection{Evaluationssystem auswerten}
 \label{sec:Evaluation:Aufbau:Vorgehen:Auswerten}
@@ -78,18 +78,19 @@ Hier folgend die Aufteilung der generierten Analysen:
 \setlength\itemsep{0em}
 \item Springermedizin.de Suche 
 \begin{myitemize}
-\item 50\% der Analysen
+\item 50\% aller Analysen
 \end{myitemize}
-\end{myitemize}
-\begin{myitemize}
 \item Reranking Suche 
 \begin{myitemize}
-\item 50\% der Analysen
+\item CTR-Daten der angemeldeten User: 25\% aller Analysen
 \begin{myitemize}
-\item Einfluss Zufallsranking 0.1: 25\% der Analysen 
+\item Einfluss Zufallsranking 0.1: 50\% dieser Analysen 
+\item Einfluss Zufallsranking 0.01: 50\% dieser Analysen 
 \end{myitemize}
+\item CTR-Daten aller User: 25\% aller Analysen
 \begin{myitemize}
-\item Einfluss Zufallsranking 0.01: 25\% der Analysen 
+\item Einfluss Zufallsranking 0.1: 50\% dieser Analysen 
+\item Einfluss Zufallsranking 0.01: 50\% dieser Analysen 
 \end{myitemize}
 \end{myitemize}
 \end{myitemize}

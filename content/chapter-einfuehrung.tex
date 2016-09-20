@@ -9,7 +9,7 @@
 Springer Nature ist ein weltweit führender Verlag für Forschungs-, Bildungs- und Fachliteratur mit einer breiten Palette an angesehenen und bekannten Medienmarken und zudem der weltweit größte Verlag für Wissenschaftsbücher. Für das Unternehmen Springer Nature ist es darum wichtig, auf seinen Web-Applikationen eine Suche anbieten zu können, die Suchintentionen erkennt und möglichst schnell zum gesuchten Content leitet. Die Suche wird vor allem als Hilfsmittel zur Navigation und zum Finden von Literatur und Dienstleistungen genutzt. Durch die vielen von Springer Nature publizierten Zeitschriften und Querverweise in Artikeln, wird sie aber auch oft zur Suche nach Issues\footnote{Nummer der Zeitschriftenausgabe, in der sich der Artikel befindet.} und Artikeln verwendet sowie als Hilfestellung um Diagnosen zu Krankheitsbilder stellen zu können.
 \\
 \\
-Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über das Verhalten der User\footnote{Als User werden die Nutzer der Springermedizin-Suche bezeichnet} bei der Nutzung ihrer Suche, lässt dieses Wissen jedoch bisher noch nicht in ihre Suche einfließen. In dieser Arbeit wollen wir untersuchen, ob mithilfe dieses Wissens, die Suche optimiert werden kann.
+Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über das Verhalten der User\footnote{Als User werden die Nutzer der Springer Nature Suche bezeichnet} bei der Nutzung ihrer Suche, lässt dieses Wissen jedoch bisher noch nicht in ihre Suche einfließen. In dieser Arbeit wollen wir untersuchen, ob mithilfe dieses Wissens, die Suche optimiert werden kann.
 
 % Aufbau der Suche bei Springer Nature
 %------------------------------------------------
@@ -32,7 +32,7 @@ Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Sprin
 \subsubsection{Architektur}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Architektur}
 
-In Abb. \ref{fig:SucheSpringerNature} ist die Suche nochmals grafisch aufbereitet:
+In Abbildung \ref{fig:SucheSpringerNature} ist die Suche nochmals grafisch aufbereitet:
 
 \begin{figure}[H]
 \centering
@@ -47,6 +47,8 @@ In Abb. \ref{fig:SucheSpringerNature} ist die Suche nochmals grafisch aufbereite
 \section{Problemstellung: Keine Userrelevanz in der Suche}
 \label{sec:Einfuehrung:Problemstellung}
 
+Zu den Stakeholder\footnote{Bezeichnet Springer Nature interne Kunden, die ein Interesse am Ergebnis der White Label Applikation haben} der in Kapitel \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche} angesprochenen White Label Applikation gehört \textit{Springermedizin}~(siehe \cite{SMED}). Springermedizin betreibt ein Fortbildungs- und Informationsportal für Ärzte.
+
 \subsubsection{Userrelevante Dokumente werden nicht gefunden}
 \label{sec:Einfuehrung:Problemstellung:Userrelevanz}
 
@@ -55,9 +57,8 @@ Die User von Springermedizin suchen oft mit einschlägig, fundierten Fachbegriff
 \subsubsection{Der Springer Nature Stakeholder: Springermedizin setzt auf Webtrekk}
 \label{sec:Einfuehrung:Problemstellung:Springermedizin}
 
-Zu den Stakeholder\footnote{Bezeichnet Springer Nature interne Kunden, die ein Interesse am Ergebnis der White Label Applikation haben} der in Kapitel \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche} angesprochenen White Label Applikation gehört \textit{Springermedizin}~(siehe \cite{SMED}). Springermedizin ist ein Fortbildungs- und Informationsportal für Ärzte. Mithilfe von Webanalysten und Webtrekk versucht Springermedizin das Marketing seines Webauftrittes zu verbessern und ist sehr interessiert an neuen Ansätzen, um die gesammelten Tracking-Daten besser einzusetzen. In dieser Arbeit wird darum der Fokus auf die Verwendung von Tracking-Daten in der Suche von Springermedizin gesetzt. 
+Mithilfe von Webanalysten und Webtrekk versucht Springermedizin das Marketing seines Webauftrittes zu verbessern und ist sehr interessiert an neuen Ansätzen, um die gesammelten Tracking-Daten besser einzusetzen. In dieser Arbeit wird darum der Fokus auf die Verwendung von Tracking-Daten in der Suche von Springermedizin gesetzt. 
  
-
 \subsubsection{Der fast gläserne User}
 \label{sec:Einfuehrung:Problemstellung:Glaeserne-User}
 
@@ -71,7 +72,7 @@ Springermedizin sammelt Tracking-Daten über jegliche Aktivitäten auf deren App
 \subsection{Suchoptimierung durch Click-Trough-Daten}
 \label{sec:Einfuehrung:ZielArbeit:Suchoptimierung}
 
-In dieser Arbeit werden wir untersuchen, ob mithilfe der von Springermedizin gesammelten Click-Trough-Daten dessen Suche verbessert werden kann. Im Idealfall widerspiegeln die gesammelten Click-Trough-Daten der Suchresultate die Userrelevanz der einzelnen Dokumente\footnote{Als Dokumente werden die einzelnen Suchresultate bezeichnet}.
+In dieser Arbeit werden wir untersuchen, ob mithilfe der von Springermedizin gesammelten Click-Trough-Daten dessen Suche verbessert werden kann. Konkret wollen wir dies anhand des Klick-Modell basierten Algorithmus \textit{Position-Based Modell}~(siehe \cite{pbm}) untersuchen. Im Idealfall widerspiegeln die gesammelten Click-Trough-Daten der Suchresultate die Userrelevanz der einzelnen Dokumente\footnote{Als Dokumente werden die einzelnen Suchresultate bezeichnet}.
 
 \subsubsection{Annahmen}
 \label{sec:Einfuehrung:ZielArbeit:Suchoptimierung:Annahmen}
@@ -99,15 +100,12 @@ Springermedizin führt ein eigenes Tracking der User durch und verwendet auf Web
 \subsubsection{Anwendung auf Springermedizin-Umfeld}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Adaptierung}
 
-Bei der Verwendung von Userrelevanzen in der Suche handelt es sich um ein bekanntes und gut erforschtes Problem. Wir werden in dieser Arbeit versuchen, ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate mithilfe eines Klick-Modell~(siehe \cite{pbm}) basierten Algorithmus auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein.
+Wir werden in dieser Arbeit versuchen, Click-Trough-Rates mithilfe eines Algorithmus basierend auf dem Klick-Modell \textit{Position-Based Modell}~(siehe \cite{pbm}) zu berechnen und mit diesen ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein.
 
 \subsubsection{Was wird in dieser Arbeit nicht behandelt?}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:NichtBehandeln}
 
 Durch den vorgegebenen Zeitraum für die Erstellung dieser Bachelorarbeit bedingt, werden wir den Lösungsansatz so wählen, dass er mit den Gegebenheiten bei Springermedizin sinnvoll und in diesem Zeitrahmen realistisch implementiert werden kann. Wir werden daher in dieser Arbeit keine Gegenüberstellung mit anderen Lösungsansätzen machen. 
-\\
-\\
-Bei der Umsetzung des Lösungsansatzes konzentrieren wir uns auf die Implementation des Algorithmus zur Berechnung der Userrelevanz. Die semantische Aufschlüsselung von Suchtermen ist nicht Kern dieser Arbeit. Die semantische Aufschlüsselung des Suchterms\footnote{Als Suchterm wird eine Suchanfragen bezeichnet} zur Analyse der Webtrekk-Daten enthält darum keine Gewichtungen der Relationen zwischen Webtrekk-Daten und Suchterm. Alle Relationen werden gleich gewichtet. 
 
 % Methodik
 %------------------------------------------------
@@ -115,15 +113,12 @@ Bei der Umsetzung des Lösungsansatzes konzentrieren wir uns auf die Implementat
 \section{Methodik}
 \label{sec:Einfuehrung:Methodik}
 
-\subsubsection{Einführung}
-\label{sec:Einfuehrung:Methodik:Einfuehrung}
-
-Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wollen wir das Klick-Verhalten der User in der Suche analysieren, um mithilfe der daraus berechenbaren Userrelevanzen die Suchergebnisse zu verbessern. Dieses Klick-Verhalten können wir aus den Click-Trough-Daten lesen. 
+Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wollen wir das Klick-Verhalten der User in der Suche analysieren, um mithilfe der daraus berechenbaren Click-Trough-Rates, die Suchergebnisse zu verbessern. Dieses Klick-Verhalten können wir aus den Click-Trough-Daten lesen. 
 
 \subsubsection{Suchterm semantisch aufschlüsseln}
 \label{sec:Einfuehrung:Methodik:SuchtermSegmentierung}
 
-Um mit den Click-Trough-Daten arbeiten zu können, müssen wir zunächst die relevanten Click-Trough-Daten herausfiltern. Dazu müssen wir die Click-Trough-Daten dem Suchterm der Anfrage zuordnen können. Zu den Click-Trough-Daten wird immer der Suchterm gespeichert, mit dem dabei gesucht wurde. Das heißt wir können eine Relation zwischen dem Suchterm der Click-Trough-Daten und dem Suchterm unserer Anfrage herstellen.
+Um mit den Click-Trough-Daten arbeiten zu können, müssen wir zunächst die relevanten Click-Trough-Daten herausfiltern. Dazu müssen wir die Click-Trough-Daten dem \textit{Suchterm}{Als Suchterm wird eine Suchanfrage bezeichnet} der Anfrage zuordnen können. Zu den Click-Trough-Daten wird immer der Suchterm gespeichert, mit dem dabei gesucht wurde. Das heißt wir können eine Relation zwischen dem Suchterm der Click-Trough-Daten und dem Suchterm unserer Anfrage herstellen.
 \\
 \\
 Die Click-Trough-Daten müssen aber nicht mit dem vollständigen Suchterm in Relation stehen. Sie können auch nur mit einem Wort, einem Teil des Suchterms oder einem Synonym eines dieser Worte in Relation stehen. Wir müssen darum den Suchterm semantisch aufschlüsseln um alle relevanten Click-Trough-Daten filtern zu können. 
@@ -131,19 +126,28 @@ Die Click-Trough-Daten müssen aber nicht mit dem vollständigen Suchterm in Rel
 \subsubsection{Aufbereitung Click-Trough-Daten}
 \label{sec:Einfuehrung:Methodik:Click-Trough-Daten}
 
-Ein wichtiger Punkt bei der Aufbereitung der Click-Trough-Daten 
+Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, müssen lernen wie wir diese richtig aufbereiten, um die Click-Trough-Daten berechnen zu können.  Ein wichtiger Punkt bei der Aufbereitung der Click-Trough-Daten ist die Interpretation des Relevanzfeedbacks der einzelnen Click-Trough-Daten. Nicht jeder Klick ist gleich relevant zu interpretieren. Die Relevanz eines Klicks hängt davon ab, welche Aktionen der User während dem Suchvorgang vor und nach dem Klick durchgeführt hat. Wir müssen darum zuerst analysieren, welche Informationen wir zu den Click-Trough-Daten aus Webtrekk lesen können.  Reichen die Informationen für detailliertere Interpretationen nicht aus, müssen wir alle Click-Trough-Daten als gleich relevant lesen.
 
-Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, müssen lernen wie wir diese richtig aufbereiten, um die Userelevanzen berechnen zu können. Wie bereits in Kapitel \ref{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Adaptierung} erwähnt, verwenden wir einem Algorithmus auf Basis eines Klick-Modells arbeiten. In dieser Arbeit werden wir den Ansatz des Position-based Modells~(siehe \cite{pbm}) verfolgen.  Click-Trough-Daten gelesen werden können. 
-
-\subsubsection{Userrelevanz in Suchprozess einbinden}
+\subsubsection{Click-Trough-Rate in Suchprozess einbinden}
 \label{sec:Einfuehrung:Methodik:SucheEinbinden}
 
+Wissen wir, wie wir die Click-Trough-Daten aufbereiten, können wir diese zur Berechnung der Click-Trough-Rate eines Dokumentes und somit dessen Userrelevanz einsetzen. Für die Verwendung dieser Userrelevanz müssen wir festlegen wann und in welcher Art wir sie einsetzen. Hierfür werden wir verschiedene Eingriffspunkte während des Suchprozesses analysieren. 	
+\\
+\\
+Wie bereits in Kapitel \ref{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Adaptierung} erwähnt, werden wir uns in dieser Arbeit auf die \textit{Aufbereitung} der Suchresultate aus der Solr konzentrieren und dort einen Reranking-Algorithmus einbauen. Dazu werden wir zuerst anschauen, warum wir mit diesem Ansatz arbeiten und was gegen die alternativen Eingriffspunkte spricht.
 
 \subsubsection{Result-Reranking mittels PBM Algorithmus}
 \label{sec:Einfuehrung:Methodik:Result-RerankingPBM}
 
+Der im vorherigen Abschnitt erwähnte Algorithmus basiert auf einem Klick-Modell. Er verwendet die Click-Trough-Daten, um daraus die Click-Trough-Rate eines Dokumentes zu berechnen. Die Wahl des Klick-Modells hängt darum von den Click-Trough-Daten und den darin enthaltenen Informationen ab. In dieser Arbeit werden wir veranschaulichen, warum wir den Ansatz des Position-Based Modells~(siehe \cite{pbm}) gewählt haben und wie wir den Algorithmus umgesetzt haben.
+
 \subsubsection{Vergessen der alten Daten}
 \label{sec:Einfuehrung:Vergessen}
+
+Das Position-Based Modell berechnet Wahrscheinlichkeiten, um die Click-Trough-Rate eines Dokumentes zu einer Suchanfrage festzustellen. Dem Algorithmus muss dazu das notwendige Wissen entweder zur Verfügung gestellt oder antrainiert werden. Wird dem Algorithmus das Wissen antrainiert, benötigt der Algorithmus eine Möglichkeit, neues Wissen zu Lernen und altes zu Vergessen. 
+\\
+\\
+Mit Webtrekk haben wir eine Wissensbasis, die durch die Springermedizin-Applikation automatisch um neue Click-Trough-Daten ergänzt wird. Das heißt wir müssen uns nicht um eine Möglichkeit zum Lernen neuer Daten kümmern. Wir müssen uns aber überlegen, wie wir altes Wissen vergessen und wie wir dem User neues Wissen präsentieren, damit dieser sich durch die Click-Trough-Rate-Berechnung nicht auf alten Dokumenten festfährt.
 
 % Gliederung und Aufbau
 %------------------------------------------------
@@ -154,14 +158,14 @@ Können wir alle relevanten Click-Trough-Daten zu einer Suchanfrage filtern, mü
 \subsubsection{Der Lösungsansatz und deren Grundlagen}
 \label{sec:Einfuehrung:GliederungAufbau:Loesungsansatz}
 
-Im ersten Kapitel wurde der zu untersuchenden Lösungsansatz vorgestellt. Dabei sind wir auf die Hintergründe dieser Arbeit und die Vorgehensweise eingegangen. Im zweiten Kapitel (Grundlagen) folgt die Theorie des beschriebenen Lösungsansatzes. Hier werden wir uns auf die fachlichen Grundlagen konzentrieren. 
+In diesem Kapitel wurde der zu untersuchenden Lösungsansatz vorgestellt. Dabei sind wir auf die Hintergründe dieser Arbeit und die Vorgehensweise eingegangen. Im zweiten Kapitel~(Grundlagen) folgt die Theorie des beschriebenen Lösungsansatzes. Hier werden wir uns auf die fachlichen Grundlagen konzentrieren. 
 
 \subsubsection{Umsetzung des Lösungsansatzes}
 \label{sec:Einfuehrung:GliederungAufbau:Umsetzung}
 
-In Kapitel 3 (Reranking mittels Click-Trough-Rate Ergebnis) werden wir die in Kapitel \ref{sec:Einfuehrung:Methodik} angesprochene Methodik verfeinern und detailliert die Vorgehensweise bei der Umsetzung diskutieren. Die Umsetzung selbst folgt dann in Kapitel 4 (Implementierung).
+In Kapitel \ref{sec:Reranking}~(Reranking mittels Click-Trough-Rate Ergebnis) werden wir die in Kapitel \ref{sec:Einfuehrung:Methodik} angesprochene Methodik verfeinern und detailliert die Vorgehensweise bei der Umsetzung diskutieren. Die Umsetzung selbst folgt dann in Kapitel \ref{sec:Implementierung}~(Implementierung).
 
 \subsubsection{Erkenntnisse verarbeiten}
 \label{sec:Einfuehrung:GliederungAufbau:Erkenntnisse}
 
-Um zu prüfen ob der umgesetzte Lösungsansatz die erhofften Verbesserungen erzielt, werden wir diesen in Kapitel 5 (Evaluation und Auswertung) in einer Evaluation mit der bisherigen Springermedizin-Suche vergleichen. Aufgrund der resultierenden Erkenntnisse werden wir in Kapitel 6 ein Fazit ziehen können und einen Ausblick auf mögliche zukünftige Arbeiten geben.
+Um zu prüfen ob der umgesetzte Lösungsansatz die erhofften Verbesserungen erzielt, werden wir diesen in Kapitel \ref{sec:Evaluation}~(Evaluation und Auswertung) in einer Evaluation mit der bisherigen Springermedizin-Suche vergleichen. Aufgrund der resultierenden Erkenntnisse werden wir in Kapitel \ref{sec:ZusammenfassungAusblick}~(Zusammenfassung und Ausblick) ein Fazit ziehen können und einen Ausblick auf mögliche zukünftige Arbeiten geben.

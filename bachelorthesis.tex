@@ -3,7 +3,6 @@
 \WarningFilter{titlesec}{Non standard sectioning command}
 \WarningFilter{scrreprt}{Usage of package}
 \WarningFilter{scrreprt}{Activating an ugly workaround}
-
 % **************************************************
 % Document Class Definition
 % **************************************************
@@ -23,6 +22,8 @@
 	captions=tableabove,			% display table captions above the float env
 	draft=false, 				% value for draft version
 ]{scrreprt}						%
+
+\usepackage{csvsimple,longtable,booktabs}
 
 \usepackage{tocloft}
 \usepackage{graphicx}				% Grafiken
@@ -64,6 +65,7 @@
 }
 
 \usepackage{minted} % needed for the inclusion of source code
+\usepackage{pgfplots} % needed for drawing diagrams
 \usepackage{textcomp}
 
 % **************************************************
@@ -73,9 +75,9 @@
 \newcommand{\thesisName}{Lukas Abegg}
 \newcommand{\thesisMatrikelNr}{Matrikelnummer 798972}
 \newcommand{\thesisSubtitle}{Suchoptimierung mittels maschinellen Lernens}
-\newcommand{\thesisZeitraum}{Zeitraum 04.07.2016 - 04.10.2016}
+\newcommand{\thesisZeitraum}{Zeitraum 04.07.2016 - 11.10.2016}
 \newcommand{\thesisSemester}{Sommersemester 2016}
-\newcommand{\thesisDate}{Oktober 04, 2016}
+\newcommand{\thesisDate}{Oktober 11, 2016}
 
 \newcommand{\thesisFirstReviewer}{Prof. Dr. habil. Alexander Löser}
 \newcommand{\thesisFirstPosition}{Fachbereich VI - Informatik und Medien}
@@ -150,6 +152,8 @@
 \renewcommand\listoflistingscaption{Sourcecode-Verzeichnis}
 \renewcaptionname{german}{\listfigurename}{Abbildungs-Verzeichnis}
 \renewcaptionname{german}{\listtablename}{Tabellen-Verzeichnis}
+\renewcommand{\cftlottitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
+\renewcommand{\cftloftitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 
 % --------------------------
 % itemize
@@ -207,17 +211,11 @@
 \cleardoublepage
 
 \addcontentsline{toc}{section}{Abbildungs-Verzeichnis}
-\renewcommand{\cftlottitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
-\renewcommand{\cftloftitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 \listoffigures
 \cleardoublepage
 
 \addcontentsline{toc}{section}{Tabellen-Verzeichnis}
 \listoftables
-\cleardoublepage
-
-\addcontentsline{toc}{section}{Sourcecode-Verzeichnis}
-\listoflistings
 \cleardoublepage
 
 %\clearpage

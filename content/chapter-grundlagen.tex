@@ -7,13 +7,39 @@
 \label{sec:Grundlagen}
 
 % Grundbegriffe
-%------------------------------------------------
+%************************************************
 
 \section{Grundbegriffe}
 \label{sec:Grundlagen:Grundbegriffe}
 
-\subsection{Click-Trough-Daten verstehen}
-\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten}
+In diesem Kapitel werden wir die fachlichen Grundlagen zu unserem in Kapitel \ref{sec:Einfuehrung:Methodik} vorgestellten Lösungsansatz aufarbeiten. Wichtig hierfür ist das Verständnis für die Problemstellungen in der Interaktion zwischen den Nutzern des Suche und der Suche selbst. Dazu gehört die Auseinandersetzung mit dem Klick-Verhalten der User auf der Suche von Springermedizin. Mit der Click-Trough-Rate wollen wir eine Userrelevanz bestimmen. Dazu müssen wir die Click-Trough-Daten als Relevanzfeedback deuten können. Wie wir die Click-Trough-Rates berechnen, lernen wir in den Grundlagen zu unserem Reranking-Algorithmus. Diese Grundlagen sind notwendig für die Umsetzung des Lösungsansatzes in den nachfolgenden Kapiteln \ref{sec:Reranking} und \ref{sec:Implementierung}.
+
+% Semantik von User-Interaktionen
+%------------------------------------------------
+
+\subsection{Semantik von User-Interaktionen}
+\label{sec:Grundlagen:SemantikUserInteraktionen}
+
+\subsubsection{Synonyme und verwandte Begriffe}
+\label{sec:Grundlagen:SemantikUserInteraktionen:SynonymeVerwandte Begriffe}
+
+Nehmen wir als Beispiel die Suchanfrage \glqq chronische Dyspnoe\grqq{}. Würde eine andere Person stattdessen nach dem gleichbedeutenden Suchterm \glqq konstante Atemnot\grqq{} suchen, könnten auf derer Bedeutungsgleichheit die Ergebnisse beider Suchresultate und somit auch deren Click-Trough-Daten gleichermaßen relevant sein. 
+
+\subsubsection{Wenige Dokumente erhalten viele Klicks}
+\label{sec:Grundlagen:SemantikUserInteraktionen:DocumentAttraction}
+
+\input{content/diagrams/pruneOfClicksOfTopSearchphrases}
+
+\subsubsection{Niedrige Positionen werden häufiger angeklickt}
+\label{sec:Grundlagen:SemantikUserInteraktionen:RankExamination}
+
+\input{content/diagrams/pruneOfClicksOfRankExamination}
+
+% Userrelevanz mittels Click-Trough-Rate (CTR)
+%------------------------------------------------
+
+\subsection{Userrelevanz mittels Click-Trough-Rate (CTR)}
+\label{sec:Grundlagen:Click-Trough-Daten}
 
 Um mit Click-Trough-Daten arbeiten zu können, müssen wir zuerst verstehen, was Click-Trough-Daten sind und wie sie entstehen. 
 
@@ -25,42 +51,35 @@ Click-Trough-Daten sind Tracking-Daten. Tracking-Daten entstehen durch die Inter
 \subsubsection{Wie werden die Click-Trough-Daten in Webtrekk gespeichert?}
 \label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:SpeichernClick-Trough-Daten}
 
-Die Speicherung der Daten auf Webtrekk übernimmt die Springermedizin-Applikation. Führt ein User eine Suche durch und klickt dabei ein Resultat an, sendet die Springermedizin-Applikation die Tracking-Informationen an Webtrekk. Die Tracking-Daten für diese Aktion, setzen sich zusammen aus der Suchanfrage, dem Zeitpunkt der Suche, den Userdaten, der angeklickten Position im Suchresultat und den Dokumentinformationen zum angeklickten Dokument. Aus diesen Daten werden die Click-Trough-Daten erstellt, mithilfe denen wir die Userrelevanz berechnen werden.
+Die Speicherung der Daten auf Webtrekk übernimmt die Springermedizin-Applikation. Führt ein User eine Suche durch und klickt dabei ein Resultat an, sendet die Springermedizin-Applikation die Tracking-Informationen an Webtrekk. Die Tracking-Daten für diese Aktion, setzen sich zusammen aus der Suchanfrage, dem Zeitpunkt der Suche, den Userdaten, der angeklickten Position im Suchresultat und den Dokumentinformationen zum angeklickten Dokument.
 
 \subsubsection{Wie können wir Click-Trough-Daten aus Webtrekk lesen?}
 \label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:LesenClick-Trough-Daten}
 
-Webtrekk ist ein Analysetool. Das heißt für uns, wir können nicht direkt auf die Datenbank mit den Tracking-Daten zugreifen. Um die Tracking-Daten lesen zu können, müssen wir eine Analyse auf Webtrekk ausführen. Mithilfe dieser Analyse können wir uns die Click-Trough-Daten so zusammenstellen lassen, wie wir sie für die Berechnung der Userrelevanz benötigen.
+Webtrekk ist ein Analysetool. Das heißt für uns, wir können nicht direkt auf die Datenbank mit den Tracking-Daten zugreifen. Um die Tracking-Daten lesen zu können, müssen wir eine Analyse auf Webtrekk ausführen. Mithilfe dieser Analyse können wir uns die Click-Trough-Daten so zusammenstellen lassen, wie wir sie für die Berechnung der Click-Trough-Rate benötigen.
 \\
 \\
-Die Click-Trough-Daten bestehen aus einzelnen Click-Trough-Rates. Eine Click-Trough-Rate zeigt die Anzahl der Klicks, die zu einer bestimmten Suchanfrage auf ein bestimmtes Dokument gemacht wurden und auf welcher Position im Suchresultat sich dieses Dokument dabei befunden hat. Die Webtrekk-Analysen geben uns eine Sammlung von Click-Trough-Rates zurück. Wir können bei diesen Analysen die Click-Trough-Rates nach Suchbegriffen oder auch Suchtermen filtern und den Zeitraum mitgeben, in welchen die Suchanfragen durchgeführt wurden. Des weiteren gibt es die Möglichkeit weitere Filter wie die Anzahl zurückzugebender Click-Trough-Rates oder auch den \glqq Login-Status\footnote{Mit Login-Status wird zwischen einem zum Zeitpunkt der Suche auf der Springermedizin-Applikation angemeldeten und nicht angemeldeten User unterschieden} des Users\grqq{} zu setzen. 
+Die Click-Trough-Daten bestehen aus einzelnen \textit{Klick-Werten}. Ein Klick-Wert beschreibt die Anzahl der Klicks, die zu einer bestimmten Suchanfrage auf ein bestimmtes Dokument gemacht wurden und auf welcher Position im Suchresultat sich dieses Dokument dabei befunden hat. Die Webtrekk-Analysen geben uns eine Sammlung von Klick-Werten zurück. Wir können bei diesen Analysen die Klick-Werte nach Suchbegriffen oder auch Suchtermen filtern und den Zeitraum mitgeben, in welchen die Suchanfragen durchgeführt wurden. Des weiteren gibt es die Möglichkeit, weitere Filter wie die Anzahl zurückzugebender Klick-Werte oder auch den \glqq Login-Status\footnote{Mit Login-Status wird zwischen einem zum Zeitpunkt der Suche auf der Springermedizin-Applikation angemeldeten und nicht angemeldeten User unterschieden} des Users\grqq{} zu setzen. 
 
 \subsubsection{Wie sehen die Click-Trough-Daten aus?}
 \label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:AussehenClick-Trough-Daten}
 
-Eine Beispiel für eine Click-Trough-Rate wie sie von einer Webtrekk-Analyse ausgespielt wird, sieht wie folgt aus:
+Eine Beispiel für einen Klick-Wert wie er von einer Webtrekk-Analyse ausgespielt wird, sieht wie folgt aus:
 
 \begin{tabular}{|p{0.8\textwidth}|p{0.15\textwidth}|}\hline
-	\textbf{Click-Trough-Rate} & \textbf{Anzahl Klicks} \\ \hline
-	searchresult-1.Course.chronische Dyspnoe bei Erwachsenen.10621768.chronische Dyspnoe & 1 \\ \hline
+	\textbf{Click-Trough-Daten} & \textbf{Klick-Wert} \\ \hline
+	searchresult-1.Course.chronische Dyspnoe bei Erwachsenen.10621768.chronische Dyspnoe & 5 \\ \hline
  \end{tabular}
 
-Hier die Aufschlüsselung der Click-Trough-Rate:
+Hier die Aufschlüsselung der Click-Trough-Daten:
 
 \begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.27\textwidth}|p{0.1\textwidth}|p{0.2\textwidth}|}\hline
 	\textbf{Position} & \textbf{Dokumenttyp} & \textbf{Titel} & \textbf{ID} & \textbf{Suchterm} \\ \hline
 	searchresult-1 & Course & chronische Dyspnoe bei Erwachsenen & 10621768 & chronische Dyspnoe \\ \hline
  \end{tabular}
  
-Die Click-Trough-Rate lässt sich wie folgt lesen. In diesem Beispiel haben die User mit der Suchanfrage \glqq chronische Dyspnoe\footnote{Als Dyspnoe wird eine unangenehm erschwerte Atemtätigkeit bezeichnet}\grqq{} gesucht. Dabei haben sie das Dokument mit der ID 10621768 angeklickt. Dieses hat sich dabei auf der Position 1 der Suchresultate gefunden. Es wurde insgesamt einmal angeklickt in der gesuchten Periode. 
+Die Click-Trough-Daten lassen sich wie folgt lesen. In diesem Beispiel haben die User mit der Suchanfrage \glqq chronische Dyspnoe\footnote{Als Dyspnoe wird eine unangenehm erschwerte Atemtätigkeit bezeichnet}\grqq{} gesucht. Dabei haben sie das Dokument mit der ID 10621768 angeklickt. Dieses hat sich dabei auf der Position eins der Suchresultate befunden. Es wurde insgesamt fünfmal angeklickt in der gesuchten Periode. 
 
-\subsection{Semantik von User-Interaktionen}
-\label{sec:Grundlagen:SemantikUserInteraktionen}
-
-Nehmen wir als Beispiel die im vorherigen Abschnitt besprochene Suchanfrage \glqq chronische Dyspnoe\grqq{}. Würde eine andere Person stattdessen nach dem gleichbedeutenden Suchterm \glqq konstanter Atemnot\grqq{} suchen, können die Ergebnisse beider Suchresultate und somit auch deren Click-Trough-Daten gleichermaßen relevant sein. 
-
-\subsection{Userrelevanz mittels Click-Trough-Rate (CTR)}
-\label{sec:Grundlagen:UserrelevanzCTR}
 
 \subsubsection{Das Userverhalten bestimmt über die Relevanz eines Klicks}
 \label{sec:Reranking:Grundlagen:UserrelevanzCTR:Aussagekraft}
@@ -68,8 +87,11 @@ Nehmen wir als Beispiel die im vorherigen Abschnitt besprochene Suchanfrage \glq
 Zur Definition der Click-Trough-Daten gibt es verschiedene Ansätze. Wie in \cite{Joachims} beschrieben, können anhand des Verhaltens der User vor während und nach dem Klick Schlussfolgerungen für die Relevanz des Klicks gemacht werden.
 \\
 \\
+Wir bauen dabei auf den Erkenntnissen aus \cite{Joachims} aus. In diesen Analysen wurde untersucht, wie aussagekräftig ein Klick während eines Suchvorgangs ist.  
 
-In \cite{Joachims} wird untersucht, wie aussagekräftig ein Klick während eines Suchvorgangs ist. Dabei stellt sich heraus, dass anhand der
+
+% Result-Reranking mittels PBM Algorithmus
+%------------------------------------------------
 
 \subsection{Result-Reranking mittels PBM Algorithmus}
 \label{sec:Grundlagen:Result-RerankingPBM}
