@@ -12,7 +12,7 @@
 \section{Grundbegriffe}
 \label{sec:Grundlagen:Grundbegriffe}
 
-In diesem Kapitel werden wir die fachlichen Grundlagen zu unserem in Kapitel \ref{sec:Einfuehrung:Methodik} vorgestellten Lösungsansatz aufarbeiten. Wichtig hierfür ist das Verständnis für die Problemstellungen in der Interaktion zwischen den Nutzern des Suche und der Suche selbst. Dazu gehört die Auseinandersetzung mit dem Klick-Verhalten der User auf der Suche von Springermedizin. Mit der Click-Trough-Rate wollen wir eine Userrelevanz bestimmen. Dazu müssen wir die Click-Trough-Daten als Relevanzfeedback deuten können. Wie wir die Click-Trough-Rates berechnen, lernen wir in den Grundlagen zu unserem Reranking-Algorithmus. Diese Grundlagen sind notwendig für die Umsetzung des Lösungsansatzes in den nachfolgenden Kapiteln \ref{sec:Reranking} und \ref{sec:Implementierung}.
+In diesem Kapitel werden wir die fachlichen Grundlagen zu unserem in Kapitel \ref{sec:Einfuehrung:Methodik} vorgestellten Lösungsansatz aufarbeiten. Wichtig hierfür ist das Verständnis für die Problemstellungen in der Interaktion zwischen den Nutzern der Suche und der Suche selbst und warum unser verfolgter Lösungsansatz schief gehen kann. Dazu gehört die Auseinandersetzung mit dem Klick-Verhalten der User auf der Suche von Springermedizin. Mit der Click-Trough-Rate wollen wir eine Userrelevanz bestimmen. Dazu müssen wir die Click-Trough-Daten als Relevanzfeedback deuten können. Wie wir die Click-Trough-Rates berechnen, lernen wir in den Grundlagen zu unserem Reranking-Algorithmus. Diese Grundlagen sind notwendig für die Umsetzung des Lösungsansatzes in den nachfolgenden Kapiteln \ref{sec:Reranking} und \ref{sec:Implementierung}.
 
 % Semantik von User-Interaktionen
 %------------------------------------------------
@@ -20,10 +20,49 @@ In diesem Kapitel werden wir die fachlichen Grundlagen zu unserem in Kapitel \re
 \subsection{Semantik von User-Interaktionen}
 \label{sec:Grundlagen:SemantikUserInteraktionen}
 
-\subsubsection{Synonyme und verwandte Begriffe}
-\label{sec:Grundlagen:SemantikUserInteraktionen:SynonymeVerwandte Begriffe}
+\subsubsection{Problemstellungen der Click-Trough-Daten: Was analysieren wir?}
+\label{sec:Grundlagen:SemantikUserInteraktionen:ProblemstellungenClick-Trough-Daten}
 
-Nehmen wir als Beispiel die Suchanfrage \glqq chronische Dyspnoe\grqq{}. Würde eine andere Person stattdessen nach dem gleichbedeutenden Suchterm \glqq konstante Atemnot\grqq{} suchen, könnten auf derer Bedeutungsgleichheit die Ergebnisse beider Suchresultate und somit auch deren Click-Trough-Daten gleichermaßen relevant sein. 
+\paragraph{Einzelne Wörter oder Teile des Suchterms können in weiteren Suchanfragen vorkommen}
+Ein Suchterm kann aus einem oder mehreren Wörtern bestehen. Jeder User formuliert eine Suchanfrage anders. Sei es die Wortwahl, die Zeitform oder die Verwendung von Bindewörtern. Daraus lässt sich vermuten, dass einzelne Wörter oder Teile des Suchterms in weiteren Suchanfragen vorkommen können. Folglich muss der Suchterm semantisch aufgeschlüsselt werden, um Relationen zwischen Click-Trough-Daten und der Suchanfrage herstellen zu können. Nur so können wir alle relevanten Click-Trough-Daten filtern.
+
+\paragraph{Suchanfragen mit Synonymen und verwandten Begriffen beachten}
+Nehmen wir als Beispiel die Suchanfrage \glqq chronische Dyspnoe\grqq{}. Würden wir stattdessen den sinnverwandten Suchterm \glqq konstante Atemnot\grqq{} verwenden, würden wir für beide Fälle ähnliche Suchresultate erwarten. Folglich würden wir auch ähnliche Click-Trough-Daten vermuten. Wir sollten daher die Synonyme und verwandte Begriffe zu unserem Suchterm ebenfalls beachten und deren Click-Trough-Daten, in den Reranking-Algorithmus einfließen lassen. Dazu benötigen wir eine Wissensbasis, welche die Synonyme und verwandte Begriffe zu unserem Suchterm gespeichert hat. Eine solche Basis bieten Wörterbücher und Thesauri\footnote{Thesauri sind strukturierte Verzeichnisse von Begriffen, die allesamt in irgendeiner Beziehung zueinander stehen bezeichnet}. Beim Content von Springermedizin handelt es sich um medizinische Inhalte in deutscher Sprache. Es macht daher Sinn dies in der Wahl der richtigen Wissensbasis zu berücksichtigen.
+
+\subsubsection{Problemstellungen des Lösungsansatzes: Warum kann es schief gehen?}
+\label{sec:Reranking:SemantikUserInteraktionen:ProblemstellungenLoesungsansatz} 
+
+Die folgenden Faktoren leiten sich aus dem verfolgten Lösungsansatz des Reranking-Algorithmus ab, bzw. werden in diesem nicht beachtet. Wir müssen davon ausgehen dass diese das Untersuchungsergebnis des Lösungsansatzes negativ beeinflussen könnten.
+
+\paragraph{Die Relation des Suchterms zu den Click-Trough-Daten wird nicht gewichtet}
+Die Click-Trough-Daten sind dann relevant, wenn mindestens ein Wort des aufgeschlüsselten Suchterms in Relation zu diesen Daten steht. Dadurch können falsche Relationen entstehen und nicht relevante Click-Trough-Daten die Klick-Wahrscheinlichkeiten der Dokumente im Reranking-Algorithmus negativ beeinflussen.
+
+\paragraph{Intentionen und die Mehrdeutigkeit von Begriffen werden nicht beachtet}
+Die genaue semantische Analyse eines Suchterms beinhaltet unter anderem die Erkennung von Begriffen und deren Mehrdeutigkeiten. Suchte jemand z.B. nach dem Begriff \glqq Brücke\grqq{}, hat dieser im medizinischen Kontext mehrere Bedeutungen. Es könnte ein \glqq ein Teil des zentralen Nervensystems\grqq{} gemeint sein oder eine \glqq Form des Zahnersatzes\grqq{}. Wie bereits im vorherigen Kapitel \ref{sec:Grundlagen:SemantikUserInteraktionen:ProblemstellungenClick-Trough-Daten} erwähnt, können wir mithilfe eines Thesaurus die verschiedenen Bedeutungen erkennen. Unser Reranking-Algorithmus ignoriert diese Mehrdeutigkeit jedoch. Er würde in diesem Fall alle Click-Trough-Daten zu beiden Begriffsbedeutungen suchen. Hier können wir zufallsbedingt drei Ausgangslagen haben. Die Click-Trough-Daten entsprechen der Suchintention (1) - das wäre der zufallsbedingte Optimalfall. Das Suchresultat würde von der Mehrfachbedeutung nicht beeinflusst werden. Tritt das Gegenteil ein (2) - Das Suchresultat wird in diesem Fall durch eine falsche Relevanz negativ beeinflusst. Keine Click-Trough-Daten vorhanden (3) - Die Volltextsuche und die Klick-Wahrscheinlichkeit der Position im Suchresultat definieren das Suchergebnis. In diesem Fall kann die Wertigkeit des Algorithmus nicht vorhergesehen werden.
+
+\paragraph{Keine Aktualität in der Suche}
+Der von uns verfolgte Reranking-Algorithmus nimmt keine Rücksicht auf die \glqq Aktualität\grqq{} eines Beitrages sondern nur auf die Klick-Wahrscheinlichkeit und könnte dadurch aktuellere Dokumente trotz Relevanz, schlecht positionieren im Suchresultat.  Die Klick-Wahrscheinlichkeit kann durch zwei Faktoren beeinflusst werden. Hohe Relevanz in der Solr-Suche (1) - wird in der Volltextsuche die Aktualität des Dokumentes in die Berechnung der Relevanz einbezogen, werden aktuelle Beiträge im Suchergebnis der Solr weit vorne eingestuft. Wie wir aus Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} erkennen können, haben niedrige Positionen eine höhere Klick-Wahrscheinlichkeit. Das könnte die Berechnung des Reranking-Algorithmus positiv beeinflussen. Reranking-Algorithmus um Zufallsfaktor erweitern (2) - mithilfe eines Zufallsfaktor ist die Reihenfolge der Suchresultate weniger vom Algorithmus abhängig und die Wahrscheinlichkeit, aktuelle Dokumente ohne Click-Trough-Daten weit vorne im Suchergebnis zu finden wird erhöht.
+
+\paragraph{Interessante Dokumente werden nie gesehen}
+Wie bereits oben erwähnt, beachtet der Reranking-Algorithmus Dokumente ohne Click-Trough-Daten nur, wenn die Position im Suchresultat eine Klick-Wahrscheinlichkeit aufweist. Dadurch kann es sein, dass interessante Dokumente nie gesehen werden. Dem entgegenwirken können wir ebenfalls mit dem oben erwähnten Zufallsfaktor. Dadurch wird die Klick-Wahrscheinlichkeit für interessante Dokumente zufallsbedingt erhöht.
+
+
+\paragraph{Reranking-Algorithmus beachtet nur die Top-N-Ergebnisse}
+Der Reranking-Algorithmus wird in die Aufbereitung der Suchresultate aus der Solr-Suche integriert. Wir müssen darum beachten, dass die Solr durch die Pagination-Funktion~(siehe \cite{Pagination}) nur die Top-N-Ergebnisse zurückgibt. Dadurch sehen wir nur einen Teil der Suchergebnisse. Wenn wir die Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} betrachten, sehen wir, dass die Klick-Wahrscheinlichkeit mit zunehmender Positionen kleiner wird und bei Position 20 bereits relativ klein ist. Um sicherzustellen, dass wir möglichst alle relevanten Suchergebnisse berücksichtigen, werden wir jeweils nach Relevanz der Solr in absteigender Form 100 Suchergebnisse im Reranking-Algorithmus verarbeiten. Für die Untersuchung des Reranking-Algorithmus werden wir uns bei der Auswertung jeweils auf die Seite 1 der Suchergebnisse konzentrieren. Bei Springermedizin somit auf die ersten 20 Suchresultate. Die Pagination der Folgeseiten der Suchresultate werden wir nicht untersuchen. Würden wir dies aber implementieren, müssten für die Ausspielung der Folgeseiten des Suchresultats einen Lösungsansatz überlegen, damit die Solr die durch den Reranking-Algorithmus ausgespielten Suchresultate nicht mehrfach ausspielt.
+
+\subsubsection{Nicht beeinflussbare Faktoren: Fehlerhafter Content verfälscht die Suchergebnisse}
+\label{sec:Grundlagen:SemantikUserInteraktionen:FehlerhafterContent}
+
+Die folgenden Faktoren beeinflussen das Suchergebnis negativ, sind aber vom Content so vorgegeben. Der von uns verfolgte Lösungsansatz des Reranking-Algorithmus kann diese nicht beeinflussen. Wir beachten diese Faktoren in unserer Arbeit darum nicht.
+
+\paragraph{Mehrfachverwertung des Contents}
+Auf der Springermedizin Suche wird teilweise im Suchergebnis auf denselben Artikel mehrfach  verwiesen. Das liegt an der bei Springermedizin praktizierten Mehrfachverwertung des Contents. Es gibt \textit{Journal-Artikel}, das sind aus Journalen, Zeitschriften oder Magazinen stammende Artikel, die auf Springermedizin direkt online\footnote{Der Begriff \glqq online\grqq{} wird hier als Verweis auf die Springermedizin.de-Webseite verwendet} gelesen werden können. Bei Neuerscheinung des Artikels, werden dazu oft redaktionelle Artikel publiziert, welche auf den Journal-Artikel verweisen sollen. Diese können im CMS (siehe Abb. \ref{fig:SucheSpringerNature}) von der Suche exkludiert werden. Werden diese nicht exkludiert, können beide Artikel im Suchergebnis erscheinen.
+
+\paragraph{Ausspielung von Teaser}
+Springermedizin verwendet Teaser\footnote{Als Teaser wird ein kurzer Texte bezeichnet, der das Interesse für den nachfolgenden Beitrag wecken soll} auf der Startseite und auf Übersichtsseiten zu Rubriken als Einstieg in den nachfolgenden ausführlichen Beitrag. Diese werden auch in der Suche ausgespielt. Teaser sagen nichts über die Wertigkeit des Beitrages aus. Man weiß nicht, auf welche Art von Beitrag (z.B wissenschaftliche Publikation oder ein Artikel aus ein Journal) verwiesen wird und von welchem Autor der Beitrag stammt. Sie können darum nicht nach Relevanz eingestuft werden und sollten darum nicht im Suchergebnis erscheinen.
+
+\paragraph{Fehlerhafte Importe der Daten}
+Viele Beiträge sind falschen Rubriken zugeordnet. Beispielsweise werden Beiträge fälschlicherweise als wissenschaftliche Publikationen publiziert, obwohl sie aus einem Journal oder einer Fachzeitschrift stammen. Diese Fehler sind auf fehlerhafte Importe der Daten zurückzuführen und verfälschen die Wertigkeit des Suchergebnisses.
 
 \subsubsection{Wenige Dokumente erhalten viele Klicks}
 \label{sec:Grundlagen:SemantikUserInteraktionen:DocumentAttraction}
@@ -59,42 +98,96 @@ Die Speicherung der Daten auf Webtrekk übernimmt die Springermedizin-Applikatio
 Webtrekk ist ein Analysetool. Das heißt für uns, wir können nicht direkt auf die Datenbank mit den Tracking-Daten zugreifen. Um die Tracking-Daten lesen zu können, müssen wir eine Analyse auf Webtrekk ausführen. Mithilfe dieser Analyse können wir uns die Click-Trough-Daten so zusammenstellen lassen, wie wir sie für die Berechnung der Click-Trough-Rate benötigen.
 \\
 \\
-Die Click-Trough-Daten bestehen aus einzelnen \textit{Klick-Werten}. Ein Klick-Wert beschreibt die Anzahl der Klicks, die zu einer bestimmten Suchanfrage auf ein bestimmtes Dokument gemacht wurden und auf welcher Position im Suchresultat sich dieses Dokument dabei befunden hat. Die Webtrekk-Analysen geben uns eine Sammlung von Klick-Werten zurück. Wir können bei diesen Analysen die Klick-Werte nach Suchbegriffen oder auch Suchtermen filtern und den Zeitraum mitgeben, in welchen die Suchanfragen durchgeführt wurden. Des weiteren gibt es die Möglichkeit, weitere Filter wie die Anzahl zurückzugebender Klick-Werte oder auch den \glqq Login-Status\footnote{Mit Login-Status wird zwischen einem zum Zeitpunkt der Suche auf der Springermedizin-Applikation angemeldeten und nicht angemeldeten User unterschieden} des Users\grqq{} zu setzen. 
+Die Click-Trough-Daten bestehen aus einzelnen \textit{Klick-Häufigkeiten}. Eine Klick-Häufigkeit beschreibt die Anzahl der Klicks, die zu einer bestimmten Suchanfrage auf ein bestimmtes Dokument gemacht wurden und auf welcher Position im Suchresultat sich dieses Dokument dabei befunden hat. Die Webtrekk-Analysen geben uns eine Sammlung von Klick-Häufigkeiten zurück. Wir können bei diesen Analysen die Klick-Häufigkeiten nach Suchbegriffen oder auch Suchtermen filtern und den Zeitraum mitgeben, in welchen die Suchanfragen durchgeführt wurden. Des weiteren gibt es die Möglichkeit, weitere Filter wie die Anzahl zurückzugebender Klick-Häufigkeiten oder auch den \glqq Login-Status\footnote{Mit Login-Status wird zwischen einem zum Zeitpunkt der Suche auf der Springermedizin-Applikation angemeldeten und nicht angemeldeten User unterschieden} des Users\grqq{} zu setzen. 
 
 \subsubsection{Wie sehen die Click-Trough-Daten aus?}
 \label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:AussehenClick-Trough-Daten}
 
-Eine Beispiel für einen Klick-Wert wie er von einer Webtrekk-Analyse ausgespielt wird, sieht wie folgt aus:
+Eine Beispiel für eine Klick-Häufigkeit wie er von einer Webtrekk-Analyse ausgespielt wird, sieht wie folgt aus:
 
+\begin{table}[H]
+\centering
 \begin{tabular}{|p{0.8\textwidth}|p{0.15\textwidth}|}\hline
-	\textbf{Click-Trough-Daten} & \textbf{Klick-Wert} \\ \hline
+	\textbf{Click-Trough-Daten} & \textbf{Klick-Häufigkeit} \\ \hline
 	searchresult-1.Course.chronische Dyspnoe bei Erwachsenen.10621768.chronische Dyspnoe & 5 \\ \hline
  \end{tabular}
+  \vspace{.25em}
+ \caption[Beispiel Click-Trough-Daten]{Beispiel Click-Trough-Daten}
+\label{tab:BeispielCTDaten}
+\vspace{-2.5em}
+\end{table}
 
 Hier die Aufschlüsselung der Click-Trough-Daten:
 
+\begin{table}[H]
+\centering
 \begin{tabular}{|p{0.15\textwidth}|p{0.15\textwidth}|p{0.27\textwidth}|p{0.1\textwidth}|p{0.2\textwidth}|}\hline
 	\textbf{Position} & \textbf{Dokumenttyp} & \textbf{Titel} & \textbf{ID} & \textbf{Suchterm} \\ \hline
 	searchresult-1 & Course & chronische Dyspnoe bei Erwachsenen & 10621768 & chronische Dyspnoe \\ \hline
  \end{tabular}
- 
+ \vspace{.25em}
+\caption[Beispielhafte Aufschlüsselung der Click-Trough-Daten]{Beispielhafte Aufschlüsselung der Click-Trough-Daten}
+\label{tab:AufschluesselungCTDaten}
+\vspace{-2.5em}
+\end{table}
+
 Die Click-Trough-Daten lassen sich wie folgt lesen. In diesem Beispiel haben die User mit der Suchanfrage \glqq chronische Dyspnoe\footnote{Als Dyspnoe wird eine unangenehm erschwerte Atemtätigkeit bezeichnet}\grqq{} gesucht. Dabei haben sie das Dokument mit der ID 10621768 angeklickt. Dieses hat sich dabei auf der Position eins der Suchresultate befunden. Es wurde insgesamt fünfmal angeklickt in der gesuchten Periode. 
 
+\subsubsection{Aus Merkmalen und Eigenschaften des Userverhaltens ein implizites Feedback bilden}
+\label{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:UserverhaltensFeedback}
 
-\subsubsection{Das Userverhalten bestimmt über die Relevanz eines Klicks}
-\label{sec:Reranking:Grundlagen:UserrelevanzCTR:Aussagekraft}
-
-Zur Definition der Click-Trough-Daten gibt es verschiedene Ansätze. Wie in \cite{Joachims} beschrieben, können anhand des Verhaltens der User vor während und nach dem Klick Schlussfolgerungen für die Relevanz des Klicks gemacht werden.
-\\
-\\
-Wir bauen dabei auf den Erkenntnissen aus \cite{Joachims} aus. In diesen Analysen wurde untersucht, wie aussagekräftig ein Klick während eines Suchvorgangs ist.  
-
+Mit dem Tracking der User auf einer Suchmaschine verfolgen wir die Idee, ein implizites Feedback aus deren Verhalten interpretieren zu können. Das machen wir, indem wir Merkmale und Eigenschaften des Verhaltens lesen und daraus ein Feature-Set\footnote{Mit Feature-Set bezeichnen wir eine Sammlung von Merkmalen und Eigenschaften zum Userverhalten auf der Suchmaschine}, wie in \cite{IWUSBI} beschrieben erzeugen. Dieses Feature-Set setzt sich zusammen aus den Informationen des \textit{Klick-Verhaltens} der User (Click-Trough Features) und deren \textit{Browsing-Verhalten}\footnote{Mit Browsing wird hier das Verhalten des Users bei der Navigation durch die Suche beschrieben} (Browsing Features) während einer Suchanfrage und den \textit{semantischen Relationen} zwischen der Suchanfrage und den dazu ausgespielten Suchresultaten (Query-Text Features). Mithilfe des Feature-Set lassen sich dann  Schlussfolgerungen zum Relevanzfeedback ziehen. Auf diesem Feature-Set werden wir bei der Auswertungen unserer Click-Trough-Daten aufbauen, um damit unsere Click-Trough-Rates zu berechnen.
 
 % Result-Reranking mittels PBM Algorithmus
 %------------------------------------------------
 
-\subsection{Result-Reranking mittels PBM Algorithmus}
-\label{sec:Grundlagen:Result-RerankingPBM}
+\subsection{Result-Reranking mittels PBM basierten Algorithmus}
+\label{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM}
+
+\subsubsection{Alternative Ansätze um Click-Trough-Daten in den Suchprozess einzubinden}
+\label{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AlternativenSucheEinbinden}
+
+\paragraph{Kurzanalyse der möglichen Ansätze um Click-Trough-Daten in Suchprozess einzubinden} 
+Wir untersuchen in dieser Arbeit die Verwendung der Click-Trough-Daten in der Aufbereitung der Suchresultate der Springermedizin-Applikation. Es gibt aber auch andere mögliche Eingriffspunkte während des Suchprozesses, um die Click-Trough-Daten zu verwenden. Eine Alternative wäre die Verwendung der Click-Trough-Rate in der Aufbereitung der Suchanfrage auf der Springermedizin-Applikation. Denkbar wäre auch, die Berechnung der Click-Trough-Rate in den Suchindex der Solr einzubauen. Wir werden die verschiedenen Ansätze kurz durchgehen und am Ende erläutern, weshalb wir uns für den gewählten Ansatz mit dem PBM basierten Algorithmus entschieden haben.
+
+\paragraph{Ansatz: Suchindex-Erweiterung in der Solr-Suche}
+Um die Click-Trough-Rate direkt in die Solr einzubeziehen gibt es zwei Varianten. Wir können das \textit{Schema des Suchindexes} über die Schema API~(siehe \cite{SchemaAPISolr}) erweitern (1) und alle Einträge neu indexieren, oder wir ergänzen den Index um ein \textit{externes Feld}~(ExternalFileField, siehe \cite{ExtFieldSolr}) (2).
+\\
+\\
+Beide Lösungsansätze ergeben nur bei der Speicherung einer einfachen \textit{Click-Count Popularität}\footnote{Kennzahl für alle Klicks auf ein Dokument unabhängig des Suchterms} Sinn. Diese genügen allerdings den hier gegebenen Anforderungen nicht, da die Click-Trough-Rate abhängig vom Suchterm ist. Der erste Lösungsansatz ist zudem besonders heikel, weil bei jeder Änderung des Click-Count-Wertes, das Dokument in der Solr neu indexiert werden.
+
+\paragraph{Ansatz: Aufbereitung der Suchanfrage} Die Solr-Suche bietet eine Boost-Funktion namens \textit{DisMax Query Parser}~(siehe \cite{DisMax}). Mit dieser können basierend auf Feldwerten, einzelne Dokumente besser im Suchergebnis positioniert werden. Die Boost-Funktion müssten wir in den Aufbau der Suchanfrage für die Suche auf der Springermedizin-Applikation einbauen. Dieser Ansatz beinhaltet einige Gefahren die wir beachten müssen.
+\\
+\\
+Dazu zählen beispielsweise die Abhängigkeiten von anderen \textit{Boost-Faktoren}\footnote{Die Solr besitzt eine Boosting-Funktion, um bestimmte Wertübereinstimmungen in der Suche höher gewichtet zu können}. Alle Boost-Faktoren hängen voneinander ab und müssten bei jeder Ergänzung um neue Faktoren normalisiert werden, um kein \glqq über-Boosting\grqq{}\footnote{Bezeichnet die über-priorisierte Bewertung einzelner Faktoren} einzelner Faktoren zu riskieren. Zudem besteht die Gefahr des \glqq blinden Boosting\grqq{} von Dokumenten. Die Solr-Relevanzberechnung ist komplex und der Einfluss des \textit{Boosting} in die Solr-Relevanzberechnung schwer erkennbar. Auch hat Springermedizin bereits sehr schlechte Erfahrungen mit Boosting gemacht und bevorzugt einen Lösungsansatz ohne Boosting.
+
+
+\subsubsection{Der in dieser Arbeit verfolgte Ansatz: Aufbereitung der Suchresultate anhand eines Klick-Modell basierten Algorithmus}
+\label{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden}
+
+Wir verfolgen in dieser Arbeit den Ansatz der Aufbereitung der Suchresultate aus der Solr-Suche mithilfe des PBM basierten Algorithmus. Dieser soll die Suchergebnisliste analysieren, die Click-Trough-Rate der Dokumente berechnen und die Liste neu sortieren. 
+\\
+\\
+Mithilfe der Click-Trough-Daten aus Webtrekk, können wir zwei wichtige Informationen zu jeder Suchanfrage ermitteln. Wir wissen welches Dokument und welche Position im Suchresultat angeklickt worden ist. Zudem kennen wir die Reihenfolge der Dokumente im Suchresultat der Solr.
+\\
+\\
+Der \textit{Position-based Modell} basierte Algorithmus baut genau auf diesen Click-Trough-Informationen auf. Er berechnet die Wahrscheinlichkeit dafür, dass ein User ein Dokument wirklich genau analysiert, bevor er es anklickt. Es setzt sich aus zwei Wahrscheinlichkeiten zusammen. Die Wahrscheinlichkeit für einen Klick auf die Position im Suchresultat und die Wahrscheinlichkeit für einen Klick auf das Dokument. 
+
+\paragraph{Warum verwenden wir den PBM basierten Reranking-Algorithmus?}
+
+Den PBM basierten Algorithmus können wir relativ einfach in die Springermedizin-Applikation integrieren, ohne die restliche Suchlogik\footnote{Dazu gehört die Aufbereitung der Suchanfrage für die Solr und die Suche auf der Solr} zu beeinflussen. 
+
+Wägen wir die besprochenen Fakten ab, wirkt der Ansatz mit der Aufbereitung der Suchresultate durch einen Klick-Modell basierten Algorithmus am sinnvollsten. Wir wissen bei diesem Ansatz, welche Dokumente für die Click-Trough-Rate-Berechnung überhaupt in Frage kommen. Zudem kennen wir alle Einfluss-Faktoren für den Algorithmus und wir sind unabhängig von der Suchlogik auf der Solr. Dadurch können wir Änderungen in unserer Logik schnell und einfach implementieren.
+
+\subsubsection{Grundlagen des Algorithmus}
+\label{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen}
+
+\paragraph{Worauf basiert unser Ansatz?}
+Publikationen blablabla
+
+\paragraph{Verwendete Formeln}
+Formeln blablabla
+
 
 % Zusammenfassung
 %------------------------------------------------
