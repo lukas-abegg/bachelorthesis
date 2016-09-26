@@ -1,4 +1,4 @@
-%% LLT: Turn off some annoying warnings...
+	%% LLT: Turn off some annoying warnings...
 \RequirePackage{silence}
 \WarningFilter{titlesec}{Non standard sectioning command}
 \WarningFilter{scrreprt}{Usage of package}
@@ -24,7 +24,6 @@
 ]{scrreprt}						%
 
 \usepackage{csvsimple,longtable,booktabs}
-
 \usepackage{tocloft}
 \usepackage{graphicx}				% Grafiken
 \usepackage[utf8]{inputenc}			% defines file's character encoding
@@ -33,7 +32,8 @@
 \counterwithout{figure}{chapter} 	% Einfache Nummerierung von Abbildungen
 \usepackage{listings} 				% Code Listings
 \usepackage{float} 					% exaktes Figure Placement mit H
-\usepackage{caption}          		% Figure-Captions formatieren
+\usepackage[center]{caption}          		% Figure-Captions formatieren
+
 \lstset{
   breaklines=true,
 %  numbers=left,
@@ -67,6 +67,8 @@
 \usepackage{minted} % needed for the inclusion of source code
 \usepackage{pgfplots} % needed for drawing diagrams
 \usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 % **************************************************
 % Information and Commands for Reuse
@@ -121,7 +123,7 @@
 	colortheme=bluemagenta,%
 	bibsys=bibtex,%
 	bibfile=bib-refs,%
-	bibstyle=alphabetic,%
+	bibstyle=alphabetic,	%
 ]{bachelorthesis}
 
 \hypersetup{								% setup the hyperref-package options
@@ -136,12 +138,14 @@
 	bookmarksopen=true					%
 }
 
-\sloppy
+	\sloppy
 
 % **************************************************
 % Document CONTENT
 % **************************************************
 \begin{document}
+
+\setstretch{1.1}
 
 % --------------------------
 % rename document parts
