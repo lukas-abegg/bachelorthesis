@@ -22,7 +22,7 @@ In Kapitel \ref{sec:Grundlagen:Grundbegriffe} haben wir die Grundlagen zu unsere
 \vspace{-1em}
 \caption[Prozessaufbau des Lösungsansatzes]{Prozessaufbau des Lösungsansatzes}
 \label{fig:Prozessaufbau}
-\includegraphics[width=0.5\linewidth]{gfx/Prozessaufbau}
+\includegraphics[width=\linewidth]{gfx/ProzessaufbauBild}
 \vspace{-2em}
 \end{figure}
 		
@@ -147,7 +147,7 @@ Unseren Reranking-Algorithmus bauen wir auf der in Kapitel \ref{sec:Grundlagen:G
 Wir wissen dass eine Wahrscheinlichkeit einen Wert zwischen 1 und 0 besitzt. Dadurch können Nullwerte entstehen. Das PBM multipliziert die Positions- und Dokument-Wahrscheinlichkeit miteinander, um die Klick-Wahrscheinlichkeit zu berechnen. Wir müssen aber davon ausgehen, dass es Dokumente geben kann, deren Position nie angeklickt worden ist und umgekehrt. 
 
 \paragraph{Mit Smoothing-Faktor Wahrscheinlichkeitswerte gewichten}
-Multiplikationen mit Null ergeben immer einen Nullwert. An dieser Stelle führen wir einen \textit{Smoothing-Faktor} ein. Der Smoothing-Faktor soll zwei Probleme lösen. Zum Einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten (1). Zum Anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanz-Feedbacks in den Algorithmus einbeziehen (2). Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe indem wir eine \textit{Smooting-Konstante} einführen. Die Smoothing-Konstante $\lambda$ soll die Gewichte der beiden Klick-Wahrscheinlichkeiten $P(E_{u})$ und $P(A_{u})$ zu eins aufsummieren. Wir verwenden dazu das \textit{Exponential Smoothing Modell}~(siehe \cite{ExpSmoothing}). Bilden wir dieses Modell auf den Position-Based Modell basierten Algorithmus ab, sieht die Formel für die Click-Trough-Rate (CTR) wie folgt aus:
+Multiplikationen mit Null ergeben immer einen Nullwert. An dieser Stelle führen wir einen \textit{Smoothing-Faktor} ein. Der Smoothing-Faktor soll zwei Probleme lösen. Zum Einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten (1). Zum Anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanz-Feedbacks in den Algorithmus einbeziehen (2). Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe indem wir eine \textit{Smooting-Konstante} einführen. Die Smoothing-Konstante $\lambda$ soll die Gewichte der beiden Klick-Wahrscheinlichkeiten $P(E_{u})$ und $P(A_{u})$ zu eins aufsummieren. Wir verwenden dazu das \textit{Exponential Smoothing Modell}~(siehe \cite{ExpSmoothing}). Bilden wir dieses Modell auf den Position-Based Modell basierten Algorithmus ab, sieht die Formel für die Click-Trough-Rate (CTR = $P(C_{u})$) wie folgt aus:
   
 \begin{equation}
 	P(C_{u}) = \lambda\cdot P(E_{u}) + (1 - \lambda)\cdot P(A_{u})
