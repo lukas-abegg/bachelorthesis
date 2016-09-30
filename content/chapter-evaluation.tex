@@ -9,18 +9,60 @@
 \section{Einführung}
 \label{sec:Evaluation:Einfuehrung}
 
-\subsubsection{Suchvarianten mithilfe eines Evaluationssystems vergleichen}
-\label{sec:Evaluation:Einfuehrung:Evaluationssystems}
-
-Das große Kernproblem der Überprüfung der Verbesserungen durch den untersuchten Lösungsansatz wird das Messen der Qualität der erzielten Suchergebnisse sein. Mithilfe einer Evaluation wollen wir messen, wie gut die Suchergebnis-Qualität der aktuellen Springermedizin-Suche im Vergleich zur im Zuge dieser Arbeit entwickelten Lösung ist.
+In vorherigen Kapitel haben wir unseren Lösungsansatz in der Springermedizin-Suche implementiert. Wir wissen nun wie und warum wir den Reranking-Algorithmus umgesetzt haben. Was wir bisher nicht wissen ist, wie gut er funktioniert. Mithilfe einer Evaluation wollen wir darum nun messen, wie gut die Suchergebnis-Qualität der aktuellen Springermedizin-Suche im Vergleich zur im Zuge dieser Arbeit entwickelten Lösung mit dem Reranking-Algorithmus ist. 
 
 \subsubsection{Ziel der Evaluation}
 \label{sec:Evaluation:Einfuehrung:Ziel}
 
-Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der neue Lösungsansatz bringt. Aus den Ergebnissen wollen wir erkennen, an welchen \glqq Schrauben\grqq{} etwas gedreht werden muss, damit die Suche wirklich gute Ergebnisse aus Sicht der User bringt.
+Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der neue Lösungsansatz bringt. Aus den Ergebnissen wollen wir erkennen, was an dem Lösungsansatz geändert werden muss, damit die Suche wirklich gute Ergebnisse aus Sicht der User liefert und unter welchen Voraussetzungen, sie im Springermedizin-Umfeld eingesetzt werden kann.
+
+\subsubsection{Methodik}
+\label{sec:Evaluation:Einfuehrung:Methodik}
+Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluationssystem und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springer-Suche und einmal auf der Springer-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
 
 \section{Aufbau der Analyse}
 \label{sec:Evaluation:Aufbau}
+
+Mithilfe der Relevanz-Bewertungen wollen wir das Qualitätsmaß der Suchvarianten bestimmen. Dazu müssen wir zuerst die \glqq zuverlässigen\grqq{} Bewertungen filtern und dann mithilfe der nDCG-Metrik auswerten. Der Prozess dazu sieht wie folgt aus:
+
+\begin{figure}[H]
+\centering
+\vspace{-.5em}
+\caption[Prozess der Datenaufbereitung und Metrik der Auswertung]{Prozess der Datenaufbereitung und Metrik der Auswertung}
+\vspace{.5em}
+\label{fig:SucheSpringerNature}
+\includegraphics[width=\linewidth]{gfx/EvaluationDatenaufbereitung}
+\vspace{-2em}
+\end{figure}
+
+\pagebreak
+
+In diesem Kapitel werden Formeln eingeführt. Folgend eine Legende der wichtigsten Symbole:
+
+\begin{table}[H]
+\centering
+\vspace{-.5em}
+\caption[Legende der wichtigsten Formel-Symbolen für die Evaluation]{Legende der wichtigsten Formel-Symbolen für die Evaluation}
+\label{tab:LegendeSymboleFormelnEvaluation}
+\vspace{-.5em}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+\multicolumn{2}{l}{\textit{\textbf{Kappa}}}                            		& \multicolumn{2}{l}{\textit{\textbf{nDCG}}}                  \\ \hline
+\textbf{Bedeutung} & \textbf{Symbol}                                   			& \textbf{Bedeutung} & \textbf{Symbol}                        \\ \hline
+$K$				& Cohens-Kappa-Koeffizient                          				& $r$                	& die Anzahl der zu prüfenden Positionen \\
+$p_0$			& Anteil tatsächlich beobachteter Übereinstimmungen 	& $i$                	& die zu prüfende Position               \\
+$p_e$			& Anteil zufälliger Übereinstimmungen               			& $rel_i$				& Relevanz-Wert der Position $i$             \\
+                   & 																						& $\vert REL \vert$				& die ideale Reihenfolge der Relevanz-Werte der Dokumente in $r$ \\
+                   & 																						& $DCG_r$     		& Discounted Cumulative Gain             \\
+                   &                                                   								& $IDCG_r$    		& Ideal Discounted Cumulative Gain       \\
+                   &                                                   								& $nDCG_r$  		& Normalized Discounted Cumulative Gain  \\ \hline
+\end{tabular}
+}
+\vspace{-2.5em}
+\end{table}
 
 \subsection{Datengrundlage}
 \label{sec:Evaluation:Aufbau:Datengrundlage}
@@ -28,26 +70,123 @@ Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der ne
 \subsubsection{Filterung der nutzbaren Daten mittels Cohens Kappa}
 \label{sec:Evaluation:Aufbau:Datengrundlage:EvaluationsdatenFiltern}
 
-Um die Zuverlässigkeit der Relevanzbewertungen zu messen, werden wir die gleichen Suchterme jeweils von zwei fachlichen Experten bewerten lassen. Das  meist verwendete  Maß  zur  Bewertung  der Übereinstimmungsgüte ist der \textit{Cohens Kappa Koeffizient}~(siehe \cite{Kappa}). Diese Zahl misst den  Anteil übereinstimmender Bewertungen. Hierbei können aber auch zufällige Übereinstimmungen entstehen. Der Cohens Kappa Koeffizient korrigiert das Maß an Übereinstimmung um diesen Zufallsfaktor. 
+Um die Zuverlässigkeit der Relevanz-Bewertungen zu messen, werden wir die gleichen Suchterme von jeweils zwei Redakteuren von Springermedizin bewerten lassen. Haben die Relevanz-Bewertungen ein zu geringes Maß an Übereinstimmung, sind sie für die anschliessenden Auswertungen zu wenig zuverlässig und werden darum in dieser nicht verwendet. Das meist verwendete Maß zur Bewertung der Übereinstimmungsgüte ist der \textit{Cohens-Kappa-Koeffizient} $K$~(siehe \cite{Kappa}). Dieser misst den Anteil \textit{übereinstimmender Bewertungen} $p_0$ und berechnet daraus die Zuverlässigkeit der Bewertung. Hierbei müssen wir berücksichtigen, dass die Beurteiler mit einer gewissen Wahrscheinlichkeit auch zufällig zur gleichen Einschätzung gelangen können. Der Cohens-Kappa-Koeffizient korrigiert das Maß an Übereinstimmung um diesen \textit{Zufallsfaktor} $p_e$. Die Berechnungsformel zur Bestimmung des Cohens-Kappa-Koeffizienten sieht wie folgt aus:
 
+\vspace{-1.5em}
 \begin{equation}	
-	X_{u} \in \lbrace \text{Positionen im Suchresultat} \rbrace \subset \mathbb{N}
+	K = \frac{p_0 - p_e}{1 - p_e}
 \end{equation}
+\vspace{-1.5em}
 
-Anhand der Auswertungen werden wir ein Mindestmaß der Übereinstimmungsgüte definieren. Die darunter liegenden Bewertung werden wir in der Auswertung ignorieren. 
+\paragraph{Die Übereinstimmungen der beiden Redakteure aus einer Übereinstimmungsmatrix lesen}
+Um die Stärke der Übereinstimmung der beiden Redakteuren bei der Relevanz-Bewertung eines Suchterms zu messen, erstellen wir zu jedem Suchterm eine Übereinstimmungsmatrix. Diese enthält die vier Relevanzstufen. Die Bewertungen der Suchergebnisse ordnen wir diesen vier Relevanzstufen zu:
+
+\begin{table}[H]
+\centering
+\vspace{-.5em}
+\caption[Übereinstimmungsmatrix von zwei Redakteuren bei der Klassifikation einer Suchanfrage]{Übereinstimmungsmatrix von zwei Redakteuren bei der Klassifikation einer Suchanfrage}
+\label{tab:KreuztabelleKappaBerechnung}
+\vspace{-.5em}
+\resizebox{\textwidth}{!}{%
+\setlength{\arrayrulewidth}{.5pt}
+\renewcommand*{\arraystretch}{1.2}
+\begin{tabular}{llcccccl}
+\hhline{|*2{~}|*5{-}|}
+                                                                                    & \multicolumn{1}{l|}{\textbf{}}                           & \multicolumn{4}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{Redakteur 2}}                                                                                                                                                                      & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{Gesamt}}                                                                                  &                                 \\
+                                                                                    & \multicolumn{1}{l|}{}                                    & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{-1}} & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{0}} & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{1}} & \multicolumn{1}{c|}{\cellcolor[HTML]{C0C0C0}\textbf{2}} & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}}                                                                                                 &                                 \\ \hhline{|*7{>{\arrayrulecolor{black}}-}|~|}
+\multicolumn{1}{|l}{\cellcolor[HTML]{C0C0C0}}                                       & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}\textbf{-1}} & \multicolumn{1}{c|}{\cellcolor[HTML]{00D2CB}$a$}         & \multicolumn{1}{c|}{$b$}                                & \multicolumn{1}{c|}{$c$}                                & \multicolumn{1}{c|}{$d$}                                & \multicolumn{1}{c|}{$(a+b+c+d)/n$}                                                                                                            & \multicolumn{1}{c}{\textbf{$r_{-1}$}} \\ \hhline{|*1{>{\arrayrulecolor[HTML]{C0C0C0}}-}*6{>{\arrayrulecolor{black}}-}|}
+\multicolumn{1}{|l}{\cellcolor[HTML]{C0C0C0}}                                       & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}\textbf{0}}  & \multicolumn{1}{c|}{$e$}                                 & \multicolumn{1}{c|}{\cellcolor[HTML]{00D2CB}$f$}        & \multicolumn{1}{c|}{$g$}                                & \multicolumn{1}{c|}{$h$}                                & \multicolumn{1}{c|}{\cellcolor[HTML]{FFFFFF}$(e+f+g+h)/n$}                                                                                    & \multicolumn{1}{c}{\textbf{$r_0$}} \\ \hhline{|*1{>{\arrayrulecolor[HTML]{C0C0C0}}-}*6{>{\arrayrulecolor{black}}-}|}
+\multicolumn{1}{|l}{\cellcolor[HTML]{C0C0C0}}                                       & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}\textbf{1}}  & \multicolumn{1}{c|}{$i$}                                 & \multicolumn{1}{c|}{$j$}                                & \multicolumn{1}{c|}{\cellcolor[HTML]{00D2CB}$k$}        & \multicolumn{1}{c|}{$l$}                                & \multicolumn{1}{c|}{$(i+j+k+l)/n$}                                                                                                            & \multicolumn{1}{c}{\textbf{$r_1$}} \\ \hhline{|*1{>{\arrayrulecolor[HTML]{C0C0C0}}-}*6{>{\arrayrulecolor{black}}-}|}
+\multicolumn{1}{|l}{\multirow{-4}{*}{\cellcolor[HTML]{C0C0C0}\textbf{Redakteur 1}}} & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}\textbf{2}}  & \multicolumn{1}{c|}{$m$}                                 & \multicolumn{1}{c|}{$n$}                                & \multicolumn{1}{c|}{$o$}                                & \multicolumn{1}{c|}{\cellcolor[HTML]{00D2CB}$p$}        & \multicolumn{1}{c|}{$(m+n+o+p)/n$}                                                                                                            & \multicolumn{1}{c}{\textbf{$r_2$}} \\ \hhline{|*7{-}|}
+\multicolumn{2}{|l|}{\cellcolor[HTML]{C0C0C0}\textbf{Gesamt}}                                                                                  & \multicolumn{1}{c|}{$(a+e+i+m)/n$}                       & \multicolumn{1}{c|}{$(b+f+j+n)/n$}                      & \multicolumn{1}{c|}{$(c+g+k+o)/n$}                      & \multicolumn{1}{c|}{$(d+h+l+p)/n$}                      & \multicolumn{1}{c|}{\cellcolor[HTML]{FFCB2F}\begin{tabular}[c]{@{}c@{}}$\textbf{n} = \sum \text{ aller Matrixelemente} \left( a,b...o,p \right)$ \end{tabular}} &                                 \\ \hhline{|*7{-}|}
+                                                                                    &                                                          & \textbf{$c_{-1}$}                                              & \textbf{$c_0$}                                             & \textbf{$c_1$}                                             & \textbf{$c_2$}                                             & \multicolumn{1}{l}{}                                                                                                                          &                                
+\end{tabular}%
+}
+\vspace{-2em}
+\end{table}
+
+Den Anteil tatsächlich beobachteter Übereinstimmungen $p_0$ können wir direkt aus den Werten der \textit{Hauptdiagonalen} der Matrix berechnen. Die Berechnungsformel dazu sieht wie folgt aus: 
+
+\vspace{-1.5em}
+\begin{equation}	
+	p_0 = \frac{ \sum \text{ der Übereinstimmungen} \left( a + f + k + p \right)}{ \sum \text{ aller Übereinstimmungen} \left( n \right) }
+\end{equation}
+\vspace{-1em}
+
+Der daraus resultierende Wert müssen wir um den Anteil zufälliger Übereinstimmungen $pe$ korrigieren. Der Wert von $pe$ wird mithilfe der Randsummen der Matrix (Spalten- bzw. Zeilensummen) berechnet. Dazu muss jede Randsumme zuerst durch $n$ dividiert werden. Danach wird zu jeder Kategorie das Produkt der Spalten und Zeilensumme gebildet, mit welchem anschließend die Summe der Kategorien berechnet wird. Die komplette Berechnungsformel von $pe$ sieht wie folgt aus:
+
+\vspace{-1.5em}
+\begin{equation}	
+	p_e = \left(  \left(\frac{  r_{-1} }{ n } \cdot \frac{ c_{-1} }{ n } \right) +   \left(\frac{  r_0 }{ n } \cdot \frac{ c_0  }{ n } \right) +   \left(\frac{  r_1 }{ n } \cdot \frac{ c_1 }{ n } \right)  +  \left(\frac{ r_2 }{ n } \cdot \frac{   c_2 }{ n }\right) \right)
+\end{equation}
+\vspace{-2em}
+
+\paragraph{Kappa-Koeffizienten gewichten um Abweichungen der Bewertungen in Relation zu derer Relevanzdifferenz zu stellen}
+Relevanz-Bewertungen werden meist sehr subjektiv gefällt. Wir müssen darum davon ausgehen, dass die Redakteure häufig kleinere Abweichungen in den Bewertungen haben werden. Weichen sie mehrere Kategorien voneinander ab, sollten wir diese Abweichung schwerer wiegen als die, bei benachbarten Kategorien. Unsere bisherige Formel stuft alle Abweichungen gleich ein. Mithilfe der Erweiterung des Kappa-Koeffizienten um eine Gewichtung der Abweichungsstärke zwischen 0 und 1, können wir unsere Formel in das gewichtete Kappa $K_w$~(siehe \cite{KappaWerte}) transformieren. Dazu müssen wir bei der Berechnung der Spalten- und Zeilensummen \textit{die Anzahl der Kategorien}, die das Matrixelement zur Hauptdiagonalen abweicht, berücksichtigen und diese Abweichung gewichten. Für unsere Berechnung definieren wir die Gewichte wie folgt:
+
+\begin{table}[H]
+\centering
+\vspace{-.5em}
+\caption[Gewichtung der Abweichungsstärke einer Kategorie zur Hauptdiagonalen]{Gewichtung der Abweichungsstärke einer Kategorie zur Hauptdiagonalen}
+\label{tab:GewichtungAbweichungenKappaBerechnung}
+\vspace{-.5em}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\begin{tabular}{cl}
+\hline
+\multicolumn{1}{l}{\textbf{Gewichtung}} & \textbf{Anzahl Kategorien Abweichung} \\ \hline
+\textit{0.25}                                     & 0 \textit{(auf Hauptdiagonal)}                 \\ 
+\textit{0.5}                                      & 1 \textit{(benachbarte Kategorie)}             \\ 
+\textit{0.75}                                     & 2                                     \\ 
+\textit{1}                                        & 3                                     \\ \hline
+\end{tabular}
+\vspace{-1.5em}
+\end{table}
+
+\paragraph{Kappa interpretieren}
+
+Wie in \cite{KappaWerte} beschrieben, müssen die Kappa-Werte individuell interpretiert werden. Es gibt jedoch Richtlinien. In \cite{Kappa} wird bei einem Kappa-Wert ab 0.60 von einer guten Übereinstimmung ausgegangen. Da wir bei unserer Evaluation nur mit einer begrenzten Anzahl von Bewertungen arbeiten können, müssen wir das Mindestmaß der Übereinstimmungsgüte anhand der Kappa-Koeffizienten der Bewertungen definieren. Wir werden es so definieren, dass wir mindestens 80 Prozent der Bewertungen auswerten können. Die unter dem Mindestmaß liegenden Bewertung werden wir in der Auswertung ignorieren. 
 
 \subsection{Metrik}
 \label{sec:Evaluation:Aufbau:Metrik}
 
-\subsubsection{Evaluationsdaten mittels NDCG-Algorithmus auswerten}
-\label{sec:Evaluation:Aufbau:Metrik:EvaluationsdatenNDCG}
-
-Um das Qualitätsmaß der beiden Suchen vergleichen zu können werden wir den Bewertungsalgorithmus \textit{NDCG}~(siehe \cite{NDCG}) einsetzen. Dieser geht davon aus, dass besser positionierte Suchergebnisse eine höhere Relevanz als schlechter positionierte haben. Der NDCG vergleicht die Reihenfolge der Relevanzbewertungen der Suchergebnisse mit der idealen Reihenfolge derselben Relevanzbewertungen. Im Idealfall entspricht die Reihenfolge der Suchergebnisse der Relevanz der Suchergebnisse.
-
 \subsubsection{Qualitätsmaß einer Suchvariante bestimmen}
 \label{sec:Evaluation:Aufbau:Metrik:QualitaetMessen}
 
-In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die Springermedizin-Suche und zwei Bewertungen für die Suche mit dem hier zu untersuchenden Lösungsansatz abgegeben. Um das Qualitätsmaß einer Suchvariante zu einem Suchterm zu bestimmen, berechnen wir den NDCG der beiden Bewertungen. Nehmen wir den Mittelwert der beiden resultierenden NDCG-Werte, erhalten wir den effektiven NDCG-Wert. Die NDCG-Werte der beiden Suchen können wir dann miteinander vergleichen.
+In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die aktuelle Springermedizin-Suche und zwei Bewertungen für die Springermedizin-Suche mit dem Reranking-Algorithmus abgegeben. Um das Qualitätsmaß einer Suche zu bestimmen, werden wir den \textit{Normalized Discounted Cumulative Gain} (nDCG, siehe \cite{nDCG}) verwenden. Der nDCG misst die Qualität des Rankings der Suche und wird in der Information Retrieval\footnote{Mit Information Retrieval werden Methoden und Verfahren, die der Aufbereitung und Speicherung von Wissen und der Gewinnung von Informationen dienen bezeichnet} oft eingesetzt um die Effektivität eines Such-Algorithmus zu messen.  Um das Qualitätsmaß der beiden in der Evaluation verwendeten Suchvarianten zum Suchterm zu bestimmen, berechnen wir zu jeder Suchvariante den nDCG der beiden Bewertungen des Suchterms. Nehmen wir den Mittelwert der beiden resultierenden nDCG-Werte, erhalten wir den effektiven nDCG-Wert. Die nDCG-Werte der beiden Suchvarianten können wir dann miteinander vergleichen.
+
+\subsubsection{Evaluationsdaten mittels nDCG auswerten}
+\label{sec:Evaluation:Aufbau:Metrik:EvaluationsdatennDCG}
+
+Der nDCG verfolgt die Grundidee, Suchergebnislisten dahingehend zu untersuchen, ob Dokumente mit hoher Relevanz zum Suchterm vor denen mit weniger Relevanz stehen. Der nDCG vergleicht dazu die Relevanz der Dokumente mit ihrer Reihenfolge im Suchresultat. Diese Metrik macht für unseren Reranking-Algorithmus insofern Sinn, dass sie nicht von bestimmten Relevanz-Werten für die Suchresultate ausgeht, sondern wie unser Algorithmus sich nur auf die Reihenfolge der Relevanz-Werte konzentriert. 
+
+\subsubsection{Berechnung des Qualitätsmaß einer Suchvariante mittels nDCG}
+\label{sec:Evaluation:Aufbau:Metrik:BerechnungnDCG}
+
+\paragraph{Der nDCG baut auf dem DCG auf} Um den nDCG-Wert zu bestimmen, müssen wir zuerst den \textit{Discount Cumulative Gain} (DCG) jeder Position des untersuchten Suchresultats berechnen. Der DCG zielt darauf ab, das Qualitätsmaß einer Suchergebnisliste herunterzustufen, wenn relevante Dokumente schlechter als weniger relevante positioniert sind. Die Formel des DCG wird wie folgt definiert:
+
+\vspace{-1.5em}
+\begin{equation}	
+DCG_{r} = \sum\limits_{i=1}^r \frac{2^{rel_{i}} - 1}{\log_2(i+1)}
+\end{equation}
+\vspace{-1em}
+
+Wie wir erkennen können, werden Dokumente umso geringer bewertet, je weiter hinten sie im Suchresultat erscheinen. Dafür sorgt $\log_2(i+1)$ als Divisor in der Summenfunktion, dessen Wert mit steigenden Dokumentposition größer wird.
+
+\paragraph{Der DCG muss normalisiert werden, um das Qualitätsmaß einer Suche über unterschiedliche Anfragen zu bewerten}
+Der DCG ist auf den Vergleich von Suchanfragen mit gleicher Resultatslänge ausgelegt. Haben die zu untersuchenden Suchanfragen eine unterschiedliche Anzahl der zu untersuchenden Positionen, variiert die maximal erreichbare Punktzahl. Der nDCG normalisiert diese Punktewerte, indem er die Reihenfolge der Relevanz-Werte des Suchergebnisses mit der \textit{idealen Reihenfolge} derselben Relevanz-Werte vergleicht. Die Formel des nDCG wird wie folgt definiert:
+
+\vspace{-.25em}
+\begin{spacing}{.25}
+\begin{align}
+  &&	nDCG_{r} &= \frac{DCG_r}{IDCG_r} &\\
+  \intertext{wobei:}
+  &&	IDCG_{r} 	&= \sum\limits_{i=1}^{\vert REL \vert} \frac{2^{rel_{i}} - 1}{\log_2(i+1)}
+\end{align}
+\end{spacing}
+\vspace{.25em}
+
+Der resultierende Ergebnis-Wert des $nDCG_r$ bewegt sich zwischen 0 und 1. Entspricht die Reihenfolge der Suchergebnisse, der Relevanz der Suchergebnisse, so gilt $DCG_r = IDCG_r$. Dies entspricht dem Idealfall, die Suche besitzt in diesem Fall den $nDCG_r$-Wert 1 und somit das maximal mögliche Qualitätsmaß für den getesteten Suchterm.
 
 \subsection{Vorgehen}
 \label{sec:Evaluation:Aufbau:Vorgehen}
@@ -63,7 +202,7 @@ Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebu
 Nach Ablauf der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluationssystem statt. 
 \\
 \\
-Dazu werden die Daten aus der Datenbank gelesen und mit dem Cohens Kappa Koeffizienten die nutzbaren Daten gefiltert. 
+Dazu werden die Daten aus der Datenbank gelesen und mit dem Cohens-Kappa-Koeffizienten die nutzbaren Daten gefiltert. 
 
 \subsection{Durchführung}
 \label{sec:Evaluation:Aufbau:Durchfuehrung}
@@ -71,7 +210,7 @@ Dazu werden die Daten aus der Datenbank gelesen und mit dem Cohens Kappa Koeffiz
 \subsubsection{Verschiedene Varianten des neuen Lösungsansatzes werden evaluiert}
 \label{sec:Evaluation:Aufbau:Durchfuehrung:EvaluationsdatenVarianteLoesungsansatzes}
 
-Der in dieser Arbeit zu untersuchende Lösungsansatz kann verschieden konfiguriert werden. Wir können den Einfluss des Zufallsfaktors bestimmen. Um verschiedene Konstellationen testen zu können, werden wir mit zwei verschiedenen Werten für den Einfluss des Zufallsfaktor evaluieren. Die Click-Trough-Daten von an der Applikation angemeldeten Benutzern können wir von den Click-Trough-Daten von anonymen Benutzern unterscheiden.
+Der in dieser Arbeit zu untersuchende Lösungsansatz kann verschieden konfiguriert werden. Wir können den Einfluss des Zufallsfaktors bestimmen. Um verschiedene Konstellationen testen zu können, werden wir mit zwei verschiedenen Werten für den Einfluss des Zufallsfaktor evaluieren. Die Click-Through-Daten von an der Applikation angemeldeten Benutzern können wir von den Click-Through-Daten von anonymen Benutzern unterscheiden.
 \\
 \\
 Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und anonymen Benutzern, ergeben sich vier Konstellationen, die evaluiert werden können. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Mithilfe des Evaluationssystems werden wir die Zuteilung der Suchterme zufällig generieren lassen.
@@ -112,9 +251,6 @@ Hier folgend die Aufteilung der generierten Analysen:
 
 \section{Zusammenfassung}
 \label{sec:Evaluation:Zusammenfassung}
-
-
-
 
 %--------------------
 

@@ -3,7 +3,7 @@
 %************************************************
 % Kern der Arbeit
 %************************************************
-\chapter{Reranking mittels Click-Trough-Rate Ergebnis}
+\chapter{Reranking mittels CTR}
 \label{sec:Reranking}
 
 In Kapitel \ref{sec:Grundlagen:Grundbegriffe} haben wir die Grundlagen zu unserem Reranking-Algorithmus kennengelernt. Wir haben die daraus resultierenden Problemstellungen diskutiert und mögliche Lösungsansätze vorgestellt. Nun können wir mit diesem Wissen unseren Lösungsansatz zusammenstellen. Dazu werden wir uns zuerst den Prozess des neuen Reranking-Algorithmus anschauen. Wie wir zu diesem Prozess kommen, lernen wir in der Methodik. Am Schluss werden wir den aus der Methodik resultierenden Algorithmus anschauen. Im nächsten Kapitel folgt dann die Implementierung des hier ausgearbeiteten Lösungsansatzes.
@@ -32,12 +32,12 @@ In Kapitel \ref{sec:Grundlagen:Grundbegriffe} haben wir die Grundlagen zu unsere
 \section{Methodik}
 \label{sec:Reranking:Methodik}
 
-Wie bereits in der Einführung zu diesem Kapitel besprochen, haben wir gelernt wie Click-Trough-Daten entstehen, wie sie zu lesen sind und wie wir Aussagen zu ihnen treffen können. Nun werden wir mithilfe dieses Wissens die Click-Trough-Rate der Dokumente berechnen. Mithilfe der berechneten Click-Trough-Daten werden wir dann ein \textit{Reranking} der Suchresultate durchführen, bevor diese dem User präsentiert werden. So wollen wir die Userrelevanz CTR in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
+Wie bereits in der Einführung zu diesem Kapitel besprochen, haben wir gelernt wie Click-Through-Daten entstehen, wie sie zu lesen sind und wie wir Aussagen zu ihnen treffen können. Nun werden wir mithilfe dieses Wissens die CTR der Dokumente berechnen. Mithilfe der berechneten Click-Through-Daten werden wir dann ein \textit{Reranking} der Suchresultate durchführen, bevor diese dem User präsentiert werden. So wollen wir die Userrelevanz CTR in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
 
 \subsection{Suchterm Segmentierung}
 \label{sec:Reranking:Methodik:SuchtermSegmentierung}
 
-Um alle relevanten Click-Trough-Daten lesen zu können, müssen wir zunächst den Suchterm auftrennen, wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:ProblemstellungenClick-Trough-Daten} angesprochen. Der Prozess dazu sieht wie folgt aus:
+Um alle relevanten Click-Through-Daten lesen zu können, müssen wir zunächst den Suchterm auftrennen, wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:ProblemstellungenClick-Through-Daten} angesprochen. Der Prozess dazu sieht wie folgt aus:
 
 \begin{figure}[H]
 \centering
@@ -56,111 +56,120 @@ Die Auftrennung des Suchterms in die einzelne Worte können wir mithilfe einer S
 \subsubsection{Suchterm semantisch erweitern mittels Thesaurus}
 \label{sec:Reranking:Methodik:SuchtermSegmentierung:SuchtermThesaurus}
 
-Wie ebenfalls in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:ProblemstellungenClick-Trough-Daten} thematisiert, wollen wir die Click-Trough-Daten zu unserem Suchterm um Click-Trough-Daten zu verwandten Begriffen erweitern. Für diese semantische Erweiterung eines Suchwortes werden wir einen Thesaurus verwenden. Die Erweiterung umfasst zum Suchterm gleichbedeutende Begriffe (\textit{Synonyme}), sehr ähnliche Begriffe (\textit{Narrow Terms}), ähnliche Begriffe im weiteren Sinne (\textit{Broader Terms}) und verwandte Begriffe (\textit{Related Terms}).
+Wie ebenfalls in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:ProblemstellungenClick-Through-Daten} thematisiert, wollen wir die Click-Through-Daten zu unserem Suchterm um Click-Through-Daten zu verwandten Begriffen erweitern. Für diese semantische Erweiterung eines Suchwortes werden wir einen Thesaurus verwenden. Die Erweiterung umfasst zum Suchterm gleichbedeutende Begriffe (\textit{Synonyme}), sehr ähnliche Begriffe (\textit{Narrow Terms}), ähnliche Begriffe im weiteren Sinne (\textit{Broader Terms}) und verwandte Begriffe (\textit{Related Terms}). 
 
 \paragraph{Mittels Webservice einen UMLS-Thesaurus nach relevanten Begriffen durchsuchen}
-Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{Unified Medical Language System}~(UMLS, siehe \cite{UMLS}) zugegriffen werden kann. Der Webservice nimmt einzelne Wörter und Wörter-Listen entgegen. Zu jedem dieser Wörter durchsucht der Webservice den Thesaurus nach den oben erwähnten Arten von verwandten Begriffen. Der Webservice verwendet für diese Suche eine Elasticsearch~(siehe \cite{elasticsearch})\footnote{Eine Elasticsearch ist eine Volltextsuchmaschine}. Die dabei gefundenen Begriffe, liefert der Webservice als Antwort zurück. Um alle relevanten Click-Trough-Daten zu finden, werden wir mit dem segmentierten Suchterm eine Anfrage gegen diesen Webservice stellen und anschließend den segmentierten Suchterm um die gefundenen Begriffe erweitern. Mithilfe des erweiterten Suchterms können wir dann anschließend eine Analyse in Webtrekk starten und alle relevanten Click-Trough-Daten lesen. 
+Springer Nature besitzt einen Webservice mit welchem auf den Thesaurus \textit{Unified Medical Language System}~(UMLS, siehe \cite{UMLS}) zugegriffen werden kann. Der Webservice nimmt einzelne Wörter und Wörter-Listen entgegen. Zu jedem dieser Wörter durchsucht der Webservice den Thesaurus nach den oben erwähnten Arten von verwandten Begriffen. Der Webservice verwendet für diese Suche eine Elasticsearch~(siehe \cite{elasticsearch})\footnote{Eine Elasticsearch ist eine Volltextsuchmaschine}. Die dabei gefundenen Begriffe, liefert der Webservice als Antwort zurück. Um alle relevanten Click-Through-Daten zu finden, werden wir mit dem segmentierten Suchterm eine Anfrage gegen diesen Webservice stellen und anschließend den segmentierten Suchterm um die gefundenen Begriffe erweitern. Mithilfe des erweiterten Suchterms können wir dann anschließend eine Analyse in Webtrekk starten und alle relevanten Click-Through-Daten lesen. 
 
-\subsection{Aufbereitung Click-Trough-Daten}
-\label{sec:Reranking:Methodik:Click-Trough-Daten}
+\subsection{Aufbereitung Click-Through-Daten}
+\label{sec:Reranking:Methodik:Click-Through-Daten}
 
 \subsubsection{Jeder Klick auf ein Dokument ist relevant}
-\label{sec:Reranking:Methodik:Click-Trough-Daten:Click-Trough-DatenAuswertungen}
+\label{sec:Reranking:Methodik:Click-Through-Daten:Click-Through-DatenAuswertungen}
 
-Wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:UserverhaltensFeedback} beschrieben, reichen Webtrekk-Analysen für komplexe Auswertungen der Click-Trough-Daten nicht aus. Wir können darum in dieser Arbeit \textit{Feedback-Strategien} für die Click-Trough-Rate Auswertung, wie in \cite{Joachims} beschrieben, nicht verwenden. Stattdessen greifen wir wie ebenfalls in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:UserverhaltensFeedback} beschrieben auf die Click-Trough Features zu, die uns Webtrekk zur Verfügung stellt. Daraus entsteht das in Tabelle \ref{tab:Feature-Set} folgende, interpretierbares Feature-Set. 
+Wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten:UserverhaltensFeedback} beschrieben, reichen Webtrekk-Analysen für komplexe Auswertungen der Click-Through-Daten nicht aus. Wir können darum in dieser Arbeit \textit{Feedback-Strategien} für die CTR Auswertung, wie in \cite{Joachims} beschrieben, nicht verwenden. Stattdessen greifen wir wie ebenfalls in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten:UserverhaltensFeedback} beschrieben auf die Click-Through Features zu, die uns Webtrekk zur Verfügung stellt. Daraus entsteht das in Tabelle \ref{tab:Feature-Set} folgende, interpretierbares Feature-Set. 
 
 \begin{table}[H]
 \vspace{-.75em}
- \caption[Interpretierbares Feature-Set aus den Webtrekk Click-Trough-Daten]{Interpretierbares Feature-Set aus den Webtrekk Click-Trough-Daten}
+ \caption[Interpretierbares Feature-Set aus den Webtrekk Click-Through-Daten]{Interpretierbares Feature-Set aus den Webtrekk Click-Through-Daten}
 \label{tab:Feature-Set}
 \vspace{-.5em}
+\footnotesize
 \renewcommand*{\arraystretch}{1.2}
-\begin{tabular}{|l|l|l}
-\cline{1-2}
-\multicolumn{2}{|l|}{\textit{\textbf{Click-Through Features}}}                                                                                                                                                       &  \\ \cline{1-2}
-Position         & Position dieses Dokumentes im Suchergebnis (angeklickte Position)                                                                                                                                 &  \\ \cline{1-2}
-ClickFrequency   & Anzahl Klicks für dieses Dokument zum angefragten Suchterm (Klick-Häufigkeit)                                                                                                                                &  \\ \cline{1-2}
-ClickProbability & \begin{tabular}[c]{@{}l@{}}Klick-Wahrscheinlichkeit zum Suchterm\\ (ClickFrequency / Gesamtanzahl Klicks zum angefragten Suchterm)\end{tabular} &  \\ \cline{1-2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\hline
+\multicolumn{2}{l}{\textit{\textbf{Click-Through Features}}}                                                                      \\ \hline
+\textbf{Feature}          & \textbf{Beschreibung}                                                                                 \\ \hline
+\textit{Position}         & Position dieses Dokumentes im Suchergebnis (angeklickte Position)                                     \\
+\textit{ClickFrequency}   & Anzahl Klicks für dieses Dokument zum angefragten Suchterm (Klick-Häufigkeit)                         \\
+\textit{ClickProbability} & Klick-Wahrscheinlichkeit zum Suchterm (ClickFrequency / Gesamtanzahl Klicks zum angefragten Suchterm) \\ \hline
 \end{tabular}
+}
 \vspace{-2em}
 \end{table}
 
 Wie wir sehen können ist unser Feature-Set im Vergleich zu dem in \cite{IWUSBI} beschriebenen sehr stark eingeschränkte und enthält keine Informationen um ein Relevanz-Feedback zu den Klick-Häufigkeiten daraus lesen zu können. Wir müssen wir darum davon ausgehen, dass jeder Klick auf ein Dokument relevant ist.
 
-\subsubsection{Gewichtung der Click-Trough-Daten}
-\label{sec:Reranking:Methodik:Click-Trough-Daten:Gewichtung}
+\subsubsection{Gewichtung der Click-Through-Daten}
+\label{sec:Reranking:Methodik:Click-Through-Daten:Gewichtung}
 
-Durch die semantische Aufschlüsselung des Suchterms haben wir verschieden starke Relationen zwischen Click-Trough-Daten und dem Suchterm. Die Gewichtung der Stärke dieser Relation ist aber nicht Kern dieser Arbeit. Wir gehen darum davon aus, dass unabhängig der stärke der Relation zum Suchterm, alle Click-Trough-Daten eine gleiche Relevanz besitzen.
+Durch die semantische Aufschlüsselung des Suchterms haben wir verschieden starke Relationen zwischen Click-Through-Daten und dem Suchterm. Die Gewichtung der Stärke dieser Relation ist aber nicht Kern dieser Arbeit. Wir gehen darum davon aus, dass unabhängig der stärke der Relation zum Suchterm, alle Click-Through-Daten eine gleiche Relevanz besitzen.
 
-\subsubsection{Berechnung der Click-Trough-Rate}
-\label{sec:Reranking:Methodik:Click-Trough-Daten:Gewichtung}
+\subsubsection{Berechnung der CTR}
+\label{sec:Reranking:Methodik:Click-Through-Daten:Gewichtung}
 
-Die Click-Trough-Rate wird vor allem im Bereich des Internet-Marketing verwendet und stellt grundsätzlich die Anzahl der Klicks auf ein Dokument oder Link im Verhältnis zu den gesamten Impressionen dar. Bezogen auf das in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Trough-Daten:UserverhaltensFeedback} angesprochene Feature-Set, würden die \textit{ClickProbability}~(Klick-Wahrscheinlichkeit) direkt als Click-Trough-Rate verwenden. Dazu müssten wir nur die Click-Trough-Daten eines Dokuments ins Verhältnis zu allen Click-Trough-Daten für einer Suchanfrage stellen. Wie wir aber bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:ProblemstellungenClick-Trough-Daten} gelernt haben, würden wir damit viele Problemstellungen der Interaktion der User mit der Suche ignorieren. Deswegen verwenden wir den Position-Based Modell basierten Algorithmus um mithilfe dieses angesprochenen Feature-Sets die Click-Trough-Rate zu berechnen.
+\paragraph{Einfache CTR ignoriert viele Problemstellungen der Interaktion der User mit der Suche} 
+Wie wir bereits wissen, stellt die CTR die Anzahl der Klicks auf ein Dokument im Verhältnis zu den gesamten Impressionen dar. Bezogen auf das in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten:UserverhaltensFeedback} angesprochene Feature-Set, würden wir die \textit{ClickProbability} direkt als CTR verwenden. Dazu müssten wir nur die Click-Through-Daten eines Dokuments ins Verhältnis zu allen Click-Through-Daten für einer Suchanfrage stellen. Wie wir aber bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:ProblemstellungenClick-Through-Daten} gelernt haben, würden wir damit viele Problemstellungen der Interaktion der User mit der Suche ignorieren. Deswegen haben wir uns für eine Lösung basierend auf einem Klick-Modell entschieden. 
+
+\paragraph{Klick-Wahrscheinlichkeit als CTR für Reranking verwenden} 
+Klick-Modelle versuchen die Click-Through-Daten zu interpretieren und aus ihnen ein Relevanz-Feedback zu schlussfolgern. Das machen sie mithilfe des bereits angesprochenen Feature-Set der Click-Through-Daten. Aus dem Feature-Set von Springermedizin können wir zwei wichtige Informationen zu jeder Suchanfrage ermitteln. Wir wissen welches Dokument auf welcher Position im Suchresultat angeklickt worden ist und wir kennen die Reihenfolge der Dokumente im Suchresultat der Solr. Der \textit{PBM} basierte Algorithmus baut genau auf diesen Click-Through-Informationen auf und berechnet daraus eine Klick-Wahrscheinlichkeit, welche wir anstelle der einfachen CTR für das Reranking der Suchergebnisliste verwenden können. 
 
 \subsection{Result-Reranking mittels PBM basiertem Algorithmus}
 \label{sec:Reranking:Methodik:Result-RerankingPBM}
 
-\subsubsection{Click-Trough-Daten für Positions- und Dokument-Wahrscheinlichkeit abfragen}
+\subsubsection{Click-Through-Daten für Positions- und Dokument-Wahrscheinlichkeit abfragen}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:PositionDokumentWahrscheinlichkeiten}
 
-In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} haben wir gelernt, dass sich das PBM aus der Dokument-Wahrscheinlichkeit $P(A_{u})$ und der Positions-Wahrscheinlichkeit $P(E_{u})$ zusammensetzt. Die dabei vorgestellten Formeln zur Berechnung der beiden Wahrscheinlichkeiten verwenden unterschiedliche Click-Trough-Daten. Der Prozess für das Lesen der relevanten Click-Trough-Daten sieht wie folgt aus:
+In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} haben wir gelernt, dass sich das PBM aus der Dokument-Wahrscheinlichkeit $P(A_{u})$ und der Positions-Wahrscheinlichkeit $P(E_{r_u})$ zusammensetzt. Die dabei vorgestellten Formeln zur Berechnung der beiden Wahrscheinlichkeiten verwenden unterschiedliche Click-Through-Daten. Der Prozess für das Lesen der relevanten Click-Through-Daten sieht wie folgt aus:
 
 \begin{figure}[H]
 \centering
 \vspace{-1em}
-\caption[Click-Trough-Daten für Wahrscheinlichkeitswerte lesen]{Click-Trough-Daten für Wahrscheinlichkeitswerte lesen}
+\caption[Click-Through-Daten für Wahrscheinlichkeitswerte lesen]{Click-Through-Daten für Wahrscheinlichkeitswerte lesen}
 \label{fig:WahrscheinlichkeitswerteCTDaten}
 \includegraphics[width=\linewidth]{gfx/WahrscheinlichkeitswerteCTDaten}
 \vspace{-2.5em}
 \end{figure}
 
-\paragraph{Click-Trough-Daten der Dokument-Wahrscheinlichkeit $P(A_{u})$ filtern}
-Für die Berechnung der Dokument-Wahrscheinlichkeit verwenden wir das weiter oben in Kapitel \ref{sec:Reranking:Methodik:Click-Trough-Daten:Click-Trough-DatenAuswertungen} angesprochene Verfahren zur Suchterm-Segmentierung, um \textit{alle für die Suchanfrage relevanten Click-Trough-Daten} zu lesen. Aus diesen Click-Trough-Daten können wir dann mithilfe der vorgestellten Formel für $P(A_{u})$ die Wahrscheinlichkeit berechnen, dass ein Dokument aufgrund seines Suchsnippets im Suchergebnis angeschaut wird.  
+\paragraph{Click-Through-Daten der Dokument-Wahrscheinlichkeit $P(A_{u})$ filtern}
+Für die Berechnung der Dokument-Wahrscheinlichkeit verwenden wir das weiter oben in Kapitel \ref{sec:Reranking:Methodik:Click-Through-Daten:Click-Through-DatenAuswertungen} angesprochene Verfahren zur Suchterm-Segmentierung, um \textit{alle für die Suchanfrage relevanten Click-Through-Daten} zu lesen. Aus diesen Click-Through-Daten können wir dann mithilfe der vorgestellten Formel für $P(A_{u})$ die Wahrscheinlichkeit berechnen, dass ein Dokument aufgrund seines Suchsnippets im Suchergebnis angeschaut wird.  
 
-\paragraph{Click-Trough-Daten der Positions-Wahrscheinlichkeit $P(E_{u})$ filtern}
+\paragraph{Click-Through-Daten der Positions-Wahrscheinlichkeit $P(E_{u})$ filtern}
 Für die Berechnung der Positions-Wahrscheinlichkeit filtern wir aus den für die Dokument-Wahrscheinlichkeit
-gelesenen Click-Trough-Daten \textit{alle angeklickten Positionen} heraus. Zu diesen Positionen lesen wir dann unabhängig des Suchterms, alle Click-Trough-Daten in denen auf diese Positionen geklickt wurde. Aus den resultierenden Click-Trough-Daten können wir dann mithilfe der vorgestellten Formel für $P(E_{u})$ die Wahrscheinlichkeit berechnen, dass ein Dokument aufgrund aufgrund seiner Position im Suchergebnis angeschaut wird.
+gelesenen Click-Through-Daten \textit{alle angeklickten Positionen} heraus. Zu diesen Positionen lesen wir dann unabhängig des Suchterms, alle Click-Through-Daten in denen auf diese Positionen geklickt wurde. Aus den resultierenden Click-Through-Daten können wir dann mithilfe der vorgestellten Formel für $P(E_{r_u})$ die Wahrscheinlichkeit berechnen, dass ein Dokument aufgrund aufgrund seiner Position im Suchergebnis angeschaut wird.
 
-\subsubsection{Klick-Wahrscheinlichkeit mit Position-Based Modell berechnen}
+\subsubsection{Klick-Wahrscheinlichkeit mit PBM berechnen}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:Klick-Wahrscheinlichkeit}
 
-Wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden} angesprochen, werden wir unseren Reranking-Algorithmus in die Aufbereitung der Suchresultate aus der Solr-Suche integrieren. Wir werden die Click-Trough-Daten wie im vorherigen Teil der Methodik besprochen aufbereiten und dann darauf unseren Reranking-Algorithmus anwenden um die Click-Trough-Rates der einzelnen Dokumente des Suchergebnisses zu berechnen. Wie sich die Berechnung der Click-Trough-Rates zusammensetzt, sehen wir hier:
-
-\begin{figure}[H]
-\centering
-\vspace{-1em}
-\caption[Berechnung der Click-Trough-Rate mittels PBM]{Berechnung der Click-Trough-Rate mittels PBM}
-\label{fig:BerechnungCTRmittelsPBM}
-\includegraphics[width=.5\linewidth]{gfx/BerechnungCTRmittelsPBM}
-\vspace{-2.5em}
-\end{figure}
+Wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden} angesprochen, werden wir unseren Reranking-Algorithmus in die Aufbereitung der Suchresultate aus der Solr-Suche integrieren. Wir werden die Click-Through-Daten wie im vorherigen Teil der Methodik besprochen aufbereiten und dann darauf unseren Reranking-Algorithmus anwenden um die CTRs der einzelnen Dokumente des Suchergebnisses zu berechnen. 
 
 \paragraph{Reranking-Algorithmus kann nur die Top-N-Ergebnisse betrachten}
 Wir müssen bei unserem Ansatz beachten, dass die Solr durch die Pagination-Funktion~(siehe \cite{Pagination}) nur die Top-N-Ergebnisse zurückgibt. Dadurch sehen wir nur einen Teil der Suchergebnisse. Um sicherzustellen, dass wir möglichst viele relevante Suchergebnisse berücksichtigen, werden wir die ersten 100 Suchergebnisse der Solr im Reranking-Algorithmus verarbeiten. Aus der daraus resultierenden Liste der Suchergebnisse, filtern wir die ersten 20 Ergebnisse und stellen diese dar. Für die Untersuchung des Reranking-Algorithmus werden wir uns bei der Auswertung jeweils auf die Seite 1 der Suchergebnisse konzentrieren. Bei Springermedizin somit auf die ersten 20 Suchresultate. Die Pagination der Folgeseiten der Suchresultate werden wir nicht untersuchen. Würden wir diesen Algorithmus in einer Live-Applikation\footnote{Mit Live-Applikation wird hier eine öffentliche, für Kunden zugängliches Applikation beschrieben} implementieren wollen, müssten wir uns für die Ausspielung der Folgeseiten des Suchresultats zusätzlich einen Lösungsansatz überlegen, damit die Solr die durch den Reranking-Algorithmus bereits ausgespielten Suchresultate nicht mehrfach ausspielt.
 
 \paragraph{Ausarbeitung des effektiven Algorithmus}
-Unseren Reranking-Algorithmus bauen wir auf der in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} vorgestellten Formel des Position-Based Modells auf. Wie wir in der Analyse der Grundlagen in Kapitel \ref{sec:Grundlagen:Grundbegriffe} festgestellt haben, reicht die triviale Umsetzung unseres Klick-Modells für unseren Algorithmus nicht aus. Wir haben darum verschiedene Lösungsansätze für die Problemstellungen vorgestellt. Mithilfe einiger dieser Lösungsansätzen, wollen wir nun den effektiven Algorithmus ausarbeiten.
+Unseren Reranking-Algorithmus bauen wir auf der in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} vorgestellten Formel des PBMs auf. Wie wir in der Analyse der Grundlagen in Kapitel \ref{sec:Grundlagen:Grundbegriffe} festgestellt haben, reicht die triviale Umsetzung unseres Klick-Modells für unseren Algorithmus nicht aus. Wir haben darum verschiedene Lösungsansätze für die Problemstellungen vorgestellt. Mithilfe einiger dieser Lösungsansätzen, wollen wir nun den effektiven Algorithmus ausarbeiten.
 
-\subsubsection{Smoothing-Faktor in Position-Based Modell einführen}
+\subsubsection{Smoothing-Faktor in PBM einführen}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:SmoothingPBM}
 
-Wir wissen dass eine Wahrscheinlichkeit einen Wert zwischen 1 und 0 besitzt. Dadurch können Nullwerte entstehen. Das PBM multipliziert die Positions- und Dokument-Wahrscheinlichkeit miteinander, um die Klick-Wahrscheinlichkeit zu berechnen. Wir müssen aber davon ausgehen, dass es Dokumente geben kann, deren Position nie angeklickt worden ist und umgekehrt. 
+Wir wissen dass eine Wahrscheinlichkeit einen Wert zwischen 0 und 1 besitzt. Dadurch können Nullwerte entstehen. Das PBM multipliziert die Positions- und Dokument-Wahrscheinlichkeit miteinander, um die Klick-Wahrscheinlichkeit zu berechnen. Wir müssen aber davon ausgehen, dass es Dokumente im Suchresultat geben kann, deren Position nie angeklickt worden ist und umgekehrt. Multiplikationen mit Null ergeben immer einen Nullwert.  Wir führen darum an dieser Stelle einen \textit{Smoothing-Faktor} ein:
+
+\begin{figure}[H]
+\centering
+\vspace{-1em}
+\caption[Berechnung der CTR mittels PBM]{Berechnung der CTR mittels PBM}
+\label{fig:BerechnungCTRmittelsPBM}
+\includegraphics[width=.5\linewidth]{gfx/BerechnungCTRmittelsPBM}
+\vspace{-2.5em}
+\end{figure}
 
 \paragraph{Mit Smoothing-Faktor Wahrscheinlichkeitswerte gewichten}
-Multiplikationen mit Null ergeben immer einen Nullwert. An dieser Stelle führen wir einen \textit{Smoothing-Faktor} ein. Der Smoothing-Faktor soll zwei Probleme lösen. Zum Einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten (1). Zum Anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanz-Feedbacks in den Algorithmus einbeziehen (2). Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe indem wir eine \textit{Smooting-Konstante} einführen. Die Smoothing-Konstante $\lambda$ soll die Gewichte der beiden Klick-Wahrscheinlichkeiten $P(E_{u})$ und $P(A_{u})$ zu eins aufsummieren. Wir verwenden dazu das \textit{Exponential Smoothing Modell}~(siehe \cite{ExpSmoothing}). Bilden wir dieses Modell auf den Position-Based Modell basierten Algorithmus ab, sieht die Formel für die Click-Trough-Rate (CTR = $P(C_{u})$) wie folgt aus:
+Der Smoothing-Faktor soll zwei Probleme lösen. Zum Einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten (1). Zum Anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanz-Feedbacks in den Algorithmus einbeziehen (2). Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe indem wir eine \textit{Smooting-Konstante} einführen. Die Smoothing-Konstante $\lambda$ soll die Gewichte der beiden Klick-Wahrscheinlichkeiten $P(E_{r_u})$ und $P(A_{u})$ zu eins aufsummieren. Wir verwenden dazu das \textit{Exponential Smoothing Modell}~(siehe \cite{ExpSmoothing}). Bilden wir dieses Modell auf den PBM basierten Algorithmus ab, sieht die Formel für die CTR (CTR = $P(C_{u})$) wie folgt aus:
   
+\vspace{-1.5em}
 \begin{equation}
-	P(C_{u}) = \lambda\cdot P(E_{u}) + (1 - \lambda)\cdot P(A_{u})
+	P(C_{u}) = \lambda\cdot P(E_{r_u}) + (1 - \lambda)\cdot P(A_{u})
 \end{equation}
-
+\vspace{-1.5em}
 
 \subsubsection{Smoothing-Faktor abhängig der Position im Suchresultat definieren}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:VerhaeltnisKlick-Wahrscheinlichkeiten}
 
-Aus eigener Erfahrung wissen wir, dass die ersten Dokumente im Suchresultat immer zuerst gesehen werden. Die dahinter gelisteten Dokumente werden fortlaufend analysiert. Dies bestätigt die in Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} dargestellte Analyse der Klicks auf die ersten 20 Positionen eines Suchergebnisses. Wir sollten darum darauf achten, dass je \textit{schlechter} die Position des angeklickten Dokumentes im Suchresultat der Solr ist, desto \textit{höher} das Relevanz-Feedback zu bewerten ist. 
+Die in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} angesprochene Studie \cite{pbm} hat aufgezeigt, dass das PBM sich stark an der Position eines Dokumentes im Suchresultat orientiert und dies negative Einflüsse auf die Prognose der CTR haben kann. Die Klick-Wahrscheinlichkeit $P(E_{r_u})$ darf darum nicht zu viel Einfluss haben. Aus eigener Erfahrung wissen wir zudem, dass die ersten Dokumente im Suchresultat immer zuerst gesehen werden. Die dahinter gelisteten Dokumente werden fortlaufend analysiert. Dies bestätigt die in Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} dargestellte Analyse der Klicks auf die ersten 20 Positionen eines Suchergebnisses. Wir sollten darum darauf achten, dass je \textit{schlechter} die Position des angeklickten Dokumentes im Suchresultat der Solr ist, desto \textit{höher} das Relevanz-Feedback zu bewerten ist. 
 \\
 \\
-Das machen wir, indem wir für die Berechnung der Click-Trough-Rate des Dokumentes den Smoothing-Faktor abhängig der Position im Suchresultat definieren. Dadurch können wir das Verhältnis zwischen Klick-Wahrscheinlichkeit der Position und Klick-Wahrscheinlichkeit des Dokumentes steuern. Als Grundlage hierbei dient uns die Position des Suchresultats der Solr. Wie die Aufteilung dazu aussehen wird, sehen wir folgend:
+Das machen wir, indem wir für die Berechnung der CTR des Dokumentes den Smoothing-Faktor abhängig der Position im Suchresultat definieren. Dadurch können wir das Verhältnis zwischen Klick-Wahrscheinlichkeit der Position und Klick-Wahrscheinlichkeit des Dokumentes steuern. Als Grundlage hierbei dient uns die Position des Suchresultats der Solr. Wie die Aufteilung dazu aussehen wird, sehen wir folgend:
 
 \begin{table}[H]
 \centering
@@ -168,6 +177,7 @@ Das machen wir, indem wir für die Berechnung der Click-Trough-Rate des Dokument
  \caption[Smoothing-Faktor abghängig der Position im Suchergebnis]{Smoothing-Faktor abghängig der Position im Suchergebnis}
 \label{tab:VerhaeltnisKlick-WahrscheinlichkeitenPositionDokument}
 \vspace{-.5em}
+\footnotesize
 \renewcommand*{\arraystretch}{1.2}
 \begin{tabular}{lcc} \hline
 	\textbf{Position} & \textbf{Verhältnis Position zu Dokument} & \textbf{Wert des Smoothing-Faktors $\lambda$}\\ \hline
@@ -193,7 +203,7 @@ Durch Webtrekk haben wir eine Wissensbasis, die sich stetig und zeitnah aktualis
 \subsubsection{Die Klick-Wahrscheinlichkeit ist kein absoluter Wert für die Userrelevanz}
 \label{sec:Reranking:Methodik:Vergessen:Relevanzfeedback}
 
-Nun könnten wir die Klick-Wahrscheinlichkeit als absoluten Wert für die \textit{Userrelevanz} betrachten. Dies wäre jedoch falsch, wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination} analysiert, müssen wir davon ausgehen, dass viele User der Qualität der Suchmaschine vertrauen. Diese betrachten die \glqq Top-Suchresultate\grqq{} als die relevanten Suchresultate. Denkbar wäre auch, dass User unabsichtlich das falsche Dokument anklicken und dadurch die Click-Trough-Rate eines Dokumentes verfälschen. Dadurch kann ein \textit{Overfitting} des Algorithmus entstehen.
+Nun könnten wir die Klick-Wahrscheinlichkeit als absoluten Wert für die \textit{Userrelevanz} betrachten. Dies wäre jedoch falsch, wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination} analysiert, müssen wir davon ausgehen, dass viele User der Qualität der Suchmaschine vertrauen. Diese betrachten die \glqq Top-Suchresultate\grqq{} als die relevanten Suchresultate. Denkbar wäre auch, dass User unabsichtlich das falsche Dokument anklicken und dadurch die CTR eines Dokumentes verfälschen. Dadurch kann ein \textit{Overfitting} des Algorithmus entstehen.
 
 \subsubsection{Overfitting vermeiden}
 \label{sec:Reranking:Methodik:Vergessen:Overfitting}
@@ -203,14 +213,16 @@ Um ein Overfitting zu vermeiden, darf der Algorithmus nicht immer anschlagen. Wi
 \paragraph{Zusätzliche Varianz durch Zufallsfaktor} 
 Mithilfe eines Zufallsfaktors kann eine solche Varianz\footnote{Mit Varianz bezeichnen wir hierbei eine Abweichung vom berechneten Erfahrungswert} in den Klick-Modell basierten Algorithmus gebracht werden. Konkret wollen wir den Reranking-Algorithmus beeinflussen, indem wir mithilfe eines Zufallsfaktors, Abweichungen von der berechneten Klick-Wahrscheinlichkeit eines Dokumentes provozieren. Den dazu verwendeten Zufallswert $X_{u}$  lassen wir uns als positive ganze Zahl generieren. Sie soll eine Zufallsposition im Suchergebnis darstellen:
 
+\vspace{-1.5em}
 \begin{equation}	
 	X_{u} \in \lbrace \text{Positionen im Suchresultat} \rbrace \subset \mathbb{N}
 \end{equation}
+\vspace{-1.5em}
 
 \subsubsection{Zufallsfaktor mittels Smoothing-Faktor in 	die Sortierung der Suchergebnisse einbauen}
 \label{sec:Reranking:Methodik:Vergessen:ZufallsfaktorSmoothing}
 
-Mit unserem berechneten Zufallswert können wir nun die angesprochenen Abweichungen in die Klick-Wahrscheinlichkeiten der Dokumente einbauen. Wie bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:DocumentAttraction} und \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination} thematisiert, werden viele Suchresultate nie und deren Position selten bis gar nicht angeklickt. Sie haben darum keine Click-Trough-Daten. Deren Klick-Wahrscheinlichkeit ist entweder Null oder sehr klein. Der Zufallswert soll darum nur leichte Einflüsse in die Klick-Wahrscheinlichkeit haben.
+Mit unserem berechneten Zufallswert können wir nun die angesprochenen Abweichungen in die Klick-Wahrscheinlichkeiten der Dokumente einbauen. Wie bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:DocumentAttraction} und \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination} thematisiert, werden viele Suchresultate nie und deren Position selten bis gar nicht angeklickt. Sie haben darum keine Click-Through-Daten. Deren Klick-Wahrscheinlichkeit ist entweder Null oder sehr klein. Der Zufallswert soll darum nur leichte Einflüsse in die Klick-Wahrscheinlichkeit haben.
 
 \paragraph{Effektive Position im Suchergebnis mittels Smoothing-Faktor berechnen} 
 Ein direkter Einbau in die Klick-Wahrscheinlichkeitsberechnung ist jedoch schwierig, da die Wahrscheinlichkeitsverteilungen auf die Dokumente im Suchergebnis stark schwanken und sich der Einfluss des Zufallswertes dadurch stetig verändert. Wir werden darum die Klick-Wahrscheinlichkeit und den Zufallswert der Dokumente separat verarbeiten und zum Schluss die zwei daraus resultierenden Werte eines Dokumentes, mithilfe eines Smoothing-Faktors gewichtet aufsummieren. Diese Summe dient dann als Relevanz-Wert eines Dokumentes. Das Reranking der Dokumente werden wir anhand dieser Relevanz-Werte durchführen. Die Verarbeitung sieht wie folgt aus:
@@ -224,13 +236,15 @@ Ein direkter Einbau in die Klick-Wahrscheinlichkeitsberechnung ist jedoch schwie
 \vspace{-2.5em}
 \end{figure}
 
-
 Aus den Klick-Wahrscheinlichkeiten und den Zufallswerten der Dokumente des Suchergebnisses erzeugen wir zwei Listen und sortieren diese wie in der Abbildung beschrieben. Aus diesen Listen können wir für jedes Dokument $u$ jeweils eine Position aus der Liste der Klick-Wahrscheinlichkeiten $r_{P(C_{u})}$ und eine Position aus der Liste der Zufallswerte $r_{X_{u}}$ lesen. Aus diesen beiden Positionswerten des Dokumentes berechnen wir den effektiven Relevanz-Wert des Dokumentes $R_{u}$. Dazu verwenden wir wieder das \textit{Exponential Smoothing Modell} für den Smoothing-Faktor und berechnen damit die gewichtete Summe der beiden Positionswerte. Wie bereits weiter oben erwähnt setzen wir den Smoothing-Faktor so an, dass der Zufallswert nur leichte Einflüsse in den effektiven Relevanz-Wert hat. Wir verwenden dazu einen Smoothing-Faktor zwischen 0.05 und 0.1. Den genauen Einfluss-Wert werden wir in der später folgenden Evaluation evaluieren. Folgend die Formel zur Berechnung des effektiven Relevanz-Wertes eines Dokumentes $R_{u}$:
 
+\vspace{-1.5em}
 \begin{equation}
 	R_{u} = \frac{1}{\lambda\cdot r_{X_{u}} + (1 - \lambda)\cdot r_{P(C_{u})}}
 \end{equation}
+\vspace{-1em}
 
+\paragraph{Reranking des Suchresultats nach $R_{u}$-Wert der Dokumente}
 Mithilfe dieser Berechnung erzeugen wir eine Liste von Tupeln mit zwei Komponenten ($R_{u}$, $u$), bestehend aus dem Relevanz-Wert $R_{u}$ und dem Dokument $u$. Diese Liste sortieren wir nach $R_{u}$ absteigend und erzeugen daraus eine neue Liste der in den Tupeln enthaltenen Dokumente. Diese Liste ist die durch des Reranking-Algorithmus mittels CTR umsortierte Liste. Diese präsentieren wir zum Schluss dem User als Suchresultat zur Suchanfrage. 
 
 %Zusammenfassung

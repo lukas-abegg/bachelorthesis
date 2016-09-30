@@ -15,7 +15,7 @@
 	parskip=full,				% spacing value / method for paragraphs
 	chapterprefix=true,			% prefix for chapter marks
 	10pt,						% font size
-	headings=small,				% size of headings
+	headings=small,				% size of headings		
 %	bibliography=totoc,			% include bib in toc
 %	listof=totoc,				% include listof entries in toc
 	titlepage=on,				% own page for each title page
@@ -33,6 +33,7 @@
 \usepackage{listings} 				% Code Listings
 \usepackage{float} 					% exaktes Figure Placement mit H
 \usepackage[center]{caption}          		% Figure-Captions formatieren
+\usepackage[table,xcdraw]{xcolor}
 
 \lstset{
   breaklines=true,
@@ -69,7 +70,12 @@
 \usepackage{textcomp}
 \usepackage{amsmath}
 \usepackage{amssymb}
-
+\usepackage{mathtools} 
+\usepackage{array}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
 % **************************************************
 % Information and Commands for Reuse
 % **************************************************
@@ -159,6 +165,14 @@
 \renewcommand{\cftlottitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 \renewcommand{\cftloftitlefont}{\color{ctcolorblack}\huge \fontfamily{phv}\selectfont}
 
+% --------------------------
+% Formulas
+% --------------------------
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+    
 % --------------------------
 % itemize
 % --------------------------
