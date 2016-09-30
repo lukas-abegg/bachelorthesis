@@ -6,7 +6,7 @@
 \chapter{Reranking mittels CTR}
 \label{sec:Reranking}
 
-In Kapitel \ref{sec:Grundlagen:Grundbegriffe} haben wir die Grundlagen zu unserem Reranking-Algorithmus kennengelernt. Wir haben die daraus resultierenden Problemstellungen diskutiert und mögliche Lösungsansätze vorgestellt. Nun können wir mit diesem Wissen unseren Lösungsansatz zusammenstellen. Dazu werden wir uns zuerst den Prozess des neuen Reranking-Algorithmus anschauen. Wie wir zu diesem Prozess kommen, lernen wir in der Methodik. Am Schluss werden wir den aus der Methodik resultierenden Algorithmus anschauen. Im nächsten Kapitel folgt dann die Implementierung des hier ausgearbeiteten Lösungsansatzes.
+Aufgrund der Diskussionen zu den Problemstellungen des Lösungsansatzes im vorhergehenden Kapitel \ref{sec:Grundlagen}, kennen wir verschiedene Varianten der Lösungsansätze und deren Eigenschaften. In diesem Kapitel geht es nun darum, aus diesem Wissen unseren detaillierten Lösungsansatz des Reranking-Algorithmus zusammenzubauen. Dazu werden wir uns zuerst den Prozess des neuen Reranking-Algorithmus anschauen. Wie wir zu diesem Prozessbild kommen, lernen wir anschließend in der Methodik kennen. Diese baut auf der Methodik aus Kapitel \ref{sec:Einführung:Methodik} auf. Dabei werden wir ausführlich die Beweggründe zum gewählten Lösungsansatz kennenlernen und die theoretische Umsetzung diskutieren. Im nächsten Kapitel folgt dann die praktische Umsetzung des hier ausgearbeiteten Lösungsansatzes.
 
 %Prozessaufbau des Lösungsansatzes
 %----------------------------------------------------------------
@@ -238,11 +238,13 @@ Ein direkter Einbau in die Klick-Wahrscheinlichkeitsberechnung ist jedoch schwie
 
 Aus den Klick-Wahrscheinlichkeiten und den Zufallswerten der Dokumente des Suchergebnisses erzeugen wir zwei Listen und sortieren diese wie in der Abbildung beschrieben. Aus diesen Listen können wir für jedes Dokument $u$ jeweils eine Position aus der Liste der Klick-Wahrscheinlichkeiten $r_{P(C_{u})}$ und eine Position aus der Liste der Zufallswerte $r_{X_{u}}$ lesen. Aus diesen beiden Positionswerten des Dokumentes berechnen wir den effektiven Relevanz-Wert des Dokumentes $R_{u}$. Dazu verwenden wir wieder das \textit{Exponential Smoothing Modell} für den Smoothing-Faktor und berechnen damit die gewichtete Summe der beiden Positionswerte. Wie bereits weiter oben erwähnt setzen wir den Smoothing-Faktor so an, dass der Zufallswert nur leichte Einflüsse in den effektiven Relevanz-Wert hat. Wir verwenden dazu einen Smoothing-Faktor zwischen 0.05 und 0.1. Den genauen Einfluss-Wert werden wir in der später folgenden Evaluation evaluieren. Folgend die Formel zur Berechnung des effektiven Relevanz-Wertes eines Dokumentes $R_{u}$:
 
-\vspace{-1.5em}
+\vspace{-1em}
 \begin{equation}
 	R_{u} = \frac{1}{\lambda\cdot r_{X_{u}} + (1 - \lambda)\cdot r_{P(C_{u})}}
 \end{equation}
 \vspace{-1em}
+
+\pagebreak
 
 \paragraph{Reranking des Suchresultats nach $R_{u}$-Wert der Dokumente}
 Mithilfe dieser Berechnung erzeugen wir eine Liste von Tupeln mit zwei Komponenten ($R_{u}$, $u$), bestehend aus dem Relevanz-Wert $R_{u}$ und dem Dokument $u$. Diese Liste sortieren wir nach $R_{u}$ absteigend und erzeugen daraus eine neue Liste der in den Tupeln enthaltenen Dokumente. Diese Liste ist die durch des Reranking-Algorithmus mittels CTR umsortierte Liste. Diese präsentieren wir zum Schluss dem User als Suchresultat zur Suchanfrage. 
@@ -253,3 +255,11 @@ Mithilfe dieser Berechnung erzeugen wir eine Liste von Tupeln mit zwei Komponent
 \section{Zusammenfassung}
 \label{sec:Reranking:Zusammenfassung}
 
+\paragraph{Stark modifizierter Reranking-Algorithmus}
+Mithilfe des PBM können wir trotz stark begrenzter Click-Trough-Informationen ein relativ gutes Relevanz-Feedback gewinnen, welches wir im Reranking-Algorithmus verwenden können. Das Grundgerüst der ausgearbeiteten Algorithmus basiert immer noch auf dem PBM. Wir mussten jedoch einige Modifikationen vornehmen, um den Algorithmus zu erhalten, mit welchem wir nun im nächsten Kapitel die Implementierung durchführen wollen. Diese Modifikationen sind auf die vielen identifizierten Problemstellungen und den daraus folgenden Einarbeitungen der Lösungsansätze in den Algorithmus zurückzuführen. Einige der Modifikationen sind sicherlich der Implementierung im Springermedizin-Umfeld geschuldet. Wir sollten aber davon ausgehen, dass in jedem anderen realistischen Umfeld, ähnliche Problemstellungen auftreten können. Diese praxisnahe Ausarbeitung des Algorithmus ist daher ein guter Test, um die praktische Einsatzfähigkeit des in diesem Kapitel vorgestellten theoretischen Ansatzes zu evaluieren. 
+
+\paragraph{Mittels Smoothing-Faktor Maximum an Informationen verwerten}
+Ein wichtiges Hilfsmittel bei der Einarbeitung der Lösungsansätze in der Algorithmus, war der in diesem Kapitel eingeführte Smoothing-Faktor. Mithilfe des Smoothing-Faktors konnten wir die Nullwert-Problematik der Wahrscheinlichkeitsberechnung lösen und die Einflüsse der verschiedenen Faktoren in den Algorithmus besser kontrollieren. Dadurch konnten wir das Maximum an Informationen aus unserem PBM basierten Algorithmus herausholen. 
+\\
+\\
+In der Implementierung und der anschließenden Evaluation wird sich nun zeigen, ob der Lösungsansatz wie angedacht umgesetzt werden kann und die gewünschten Verbesserungen des Qualitätsmaßes der Suche erreicht werden können.
