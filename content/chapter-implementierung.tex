@@ -6,17 +6,109 @@
 \chapter{Implementierung}
 \label{sec:Implementierung}
 
-\section{Technologie-Stack}
-\label{sec:Implementierung:Technologie-Stack}
+Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er nun implementiert werden kann. In diesem Kapitel geht es nun darum, diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren. In diesem Kapitel werden wir nicht den Code der Lösung vorstellen. Wir werden aber beschreiben wo wir in die Suche eingreifen, wie wir eingreifen und was wir da genau machen. Das Ziel dieses Kapitels soll es sein, eine Überblick über den implementiert Lösungsansatz zu schaffen. Auf  der Suche mit dem implementierten Lösungsansatz, können wir im nächsten Kapitel dann die Evaluation durchführen.
 
 \section{Architektur der Implementierung}
 \label{sec:Implementierung:Architektur}
 
+Um zu verdeutlichen an welcher Stelle des Suchprozesses der Springermedizin-Suche wir eingreifen, sehen wir unten folgend das Prozessbild der Implementierung unseres Lösungsansatzes. Warum wir genau an dieser Stelle eingreifen, haben wir bereits in \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM} ausdiskutiert. Der Suchprozess ist im Prozessbild in mehrere Komponenten aufgeteilt. Die grau hinterlegten Komponenten zeigen bereits bestehende, vom Lösungsansatz unabhängige Teile der Architektur. Die blau hinterlegten Komponenten sind die in der Implementierung neu hinzugefügte Komponenten des Lösungsansatzes. Sie sind in die drei Hauptschritte des Reranking-Algorithmus unterteilt.
+
+\begin{figure}[H]
+\centering
+\vspace{-1em}
+\caption[Prozessbild der Implementierung]{Prozessbild der Implementierung}
+\label{fig:ProzessbildImplementierung}
+\includegraphics[width=\linewidth]{gfx/ImplementierungProzessbild}
+\vspace{-2.5em}
+\end{figure}
+
+Wie bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden} angesprochen, werden wir den Algorithmus als ein, in sich geschlossenes, unabhängiges Modul zwischen dem Suchprozess und der Aufbereitung des Suchresultats einbinden. Wie wir in der Abbildung sehen können, wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben dann der Suche als Suchresultat zurück. 
+
+\section{Highlight: PBM basierter Reranking-Algorithmus}
+\label{sec:Implementierung:PBM}
+
+Der grafisch dargestellte Prozess in Abb. \ref{fig:ProzessbildImplementierung} entspricht hier nicht nicht der Reihenfolge, wie die Komponenten in der Suche aufgerufen werden, sondern der Reihenfolge der Verarbeitungsschritte im Prozess. In der effektiven Implementierung, übernimmt die Reranking-Komponente die Koordination der Verarbeitungsschritte. Sie wird im Suchprozess direkt \textit{vor der Aufbereitung} der Suchergebnisse aufgerufen und nimmt die Liste der Suchergebnisse der Solr entgegen. Sind alle Schritte des Reranking-Algorithmus verarbeitet, gibt die Reranking-Komponente die \textit{neu sortierte Liste} der Suchergebnisse zurück. Diese wird dann wieder von der Springermedizin-Suche für die Ausgabe als Suchergebnisse aufbereitet.
+
+\subsubsection{Pseudo-Code der Reranking-Komponente}
+\label{sec:Implementierung:PBM:Pseudocode}
+
+Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verstehen, sehen wir hier folgend den Programm-Ablauf der Reranking-Komponente als Pseudo-Code beschrieben:
+
+\begin{figure}[H]
+\centering
+\vspace{-1em}
+\caption[Pseudcode Reranking-Algorithmus]{Pseudcode Reranking-Algorithmus}
+\label{fig:PseudcodeRerankingAlgorithmus}
+\vspace{.5em}
+\begin{algorithm}[H]
+\caption{PBM basierter Reranking-Algorithmus}
+\BlankLine
+\Daten{$searchTerm$ (Suchterm der Suchanfrage), $searchResult$ (zu verarbeitende Suchergebnisliste)}
+\Ergebnis{$rerankedSearchResult \leftarrow$ durch Reranking-Algorithmus sortierte Suchergebnisliste}
+\BlankLine
+
+\Begin{
+	$keywords \leftarrow$ Segmentiere und erweitere Suchterm mittels Thesaurus\;
+	$ctrClickDataBySearchTerm \leftarrow$  Lese Click-Through-Daten aus Webtrekk mithilfe von $keywords$\;
+
+	\BlankLine
+	\eIf{$ctrClickDataBySearchTerm$ ist gefüllt}{
+		$ranks \leftarrow$ Lese die angeklickten Positionen aus  $ctrClickDataBySearchTerm$\;
+		$ctrClickDataByRanks \leftarrow$ Lese Click-Through-Daten aus Webtrekk mithilfe von $ranks$\;
+		
+		\BlankLine
+		\eIf{$ctrClickDataByRanks$ ist gefüllt}{
+			\BlankLine
+			\tcc{Berechne Klick-Wahrscheinlichkeit $P(C_{u})$ aller Dokumente $u$}
+			\For{ $u \in searchResult$}{
+				$\lambda \leftarrow$ Definiere $\lambda$ anhand der Position $r$ des Dokumentes $u$\;
+				$P(E_{r_{u}}) \leftarrow$ Berechne Klick-Wahrscheinlichkeit für Position $r$ des Dokumentes $u$\;
+				$P(A_{u}) \leftarrow$ Berechne Klick-Wahrscheinlichkeit für Dokument $u$ zu Suchterm $searchTerm$\;
+				\BlankLine
+    			$P(C_{u}) \leftarrow \lambda\cdot P(E_{r_{u}}) + (1 - \lambda)\cdot P(A_{u})$\; 
+			}
+			$ranksByClickProbability \leftarrow$ Sortiere Liste $searchResult$ anhand der $P(C_{u})$ Werte
+			
+			\BlankLine
+			\tcc{Berechne Zufallswert $X_{u}$ aller Dokumente $u$}
+			\For{ $u \in searchResult$}{
+    			$X_{u} \leftarrow$ Berechne Zufallswert zwischen 1 und $maxPosition(searchResult)$\; 
+			}
+			$ranksByRandomValue \leftarrow$ Sortiere Liste $searchResult$ anhand der $X_{u}$ Werte
+			
+			\BlankLine
+			\tcc{Berechne effektiven Relevanz-Wert  $R_{u}$ aller Dokumente $u$}
+			\For{ $u \in searchResult$}{
+				$\lambda \leftarrow$ Lese Wert für $\lambda$ aus Applikations-Konfiguration\;
+				$r_{P(C_{u})} \leftarrow$ Lese Position des Wertes $P(C_{u})$ aus $ranksByClickProbability$\;
+				$r_{X_{u}} \leftarrow$ Lese Position des Zufallswertes $X_{u}$ aus $ranksByRandomValue$\;
+				\BlankLine
+    			$R_{u} = 1 / \left(\lambda\cdot r_{X_{u}} + (1 - \lambda)\cdot r_{P(C_{u})}\right)$\;
+			}
+			$rerankedSearchResult \leftarrow$ Sortiere Liste $searchResult$ anhand der $R_{u}$ Werte\;
+			\KwRet{die ersten 20 Elemente von $rerankedSearchResult$}
+		}{	
+			\tcc{Keine Click-Through-Daten für die angeklickten Positionen gefunden $\Rightarrow$\\
+			Problem mit Webtrekk-Schnittstelle}
+			\KwRet{die ersten 20 Elemente von $searchResult$}
+		}
+	}{
+		\tcc{Keine Click-Through-Daten für Suchterm gefunden $\Rightarrow$\\
+		Keine Umsortierung der Suchergebnisse mit Reranking-Algorithmus}
+		\KwRet{die ersten 20 Elemente von $searchResult$}
+	}
+}
+\end{algorithm}
+\end{figure}
+
 \section{Highlight: Webtrekk-Analysen}
 \label{sec:Implementierung:Webtrekk}
 
-\section{Highlight: PBM Rerank-Algorithmus}
-\label{sec:Implementierung:PBM}
+Wie in der Einführung dieser Arbeit in \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk} angesprochen, speichert Springermedizin seine Tracking-Daten auf Webtrekk und bietet einen Webserver zum Speichern und Analysieren der Tracking-Daten an. In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten} haben wir besprochen wie aus den Analysen der Tracking-Daten die Click-Through-Daten gelesen und interpretiert werden können. Für die Implementierung des Reranking-Algorithmus müssen wir die Click-Trough-Daten für die Wahrscheinlichkeits-Berechnungen wie in \ref{sec:Reranking:Methodik:Result-RerankingPBM} besprochen, mithilfe von Analysen aus Webtrekk abfragen und auswerten. Wie wir diese Analysen abfragen und wie wir diese im Reranking-Algorithmus nutzen, sehen wir folgend.
+
+\paragraph{Abfrage von Analysen}
+
+
 
 \section{Zusammenfassung}
 \label{sec:Implementierung:Zusammenfassung}

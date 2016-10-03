@@ -111,7 +111,7 @@ Klick-Modelle versuchen die Click-Through-Daten zu interpretieren und aus ihnen 
 \subsubsection{Click-Through-Daten für Positions- und Dokument-Wahrscheinlichkeit abfragen}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:PositionDokumentWahrscheinlichkeiten}
 
-In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} haben wir gelernt, dass sich das PBM aus der Dokument-Wahrscheinlichkeit $P(A_{u})$ und der Positions-Wahrscheinlichkeit $P(E_{r_u})$ zusammensetzt. Die dabei vorgestellten Formeln zur Berechnung der beiden Wahrscheinlichkeiten verwenden unterschiedliche Click-Through-Daten. Der Prozess für das Lesen der relevanten Click-Through-Daten sieht wie folgt aus:
+In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} haben wir gelernt, dass sich das PBM aus der Dokument-Wahrscheinlichkeit $P(A_{u})$ und der Positions-Wahrscheinlichkeit $P(E_{r_{u}})$ zusammensetzt. Die dabei vorgestellten Formeln zur Berechnung der beiden Wahrscheinlichkeiten verwenden unterschiedliche Click-Through-Daten. Der Prozess für das Lesen der relevanten Click-Through-Daten sieht wie folgt aus:
 
 \begin{figure}[H]
 \centering
@@ -127,7 +127,7 @@ Für die Berechnung der Dokument-Wahrscheinlichkeit verwenden wir das weiter obe
 
 \paragraph{Click-Through-Daten der Positions-Wahrscheinlichkeit $P(E_{u})$ filtern}
 Für die Berechnung der Positions-Wahrscheinlichkeit filtern wir aus den für die Dokument-Wahrscheinlichkeit
-gelesenen Click-Through-Daten \textit{alle angeklickten Positionen} heraus. Zu diesen Positionen lesen wir dann unabhängig des Suchterms, alle Click-Through-Daten in denen auf diese Positionen geklickt wurde. Aus den resultierenden Click-Through-Daten können wir dann mithilfe der vorgestellten Formel für $P(E_{r_u})$ die Wahrscheinlichkeit berechnen, dass ein Dokument aufgrund aufgrund seiner Position im Suchergebnis angeschaut wird.
+gelesenen Click-Through-Daten \textit{alle angeklickten Positionen} heraus. Zu diesen Positionen lesen wir dann unabhängig des Suchterms, alle Click-Through-Daten in denen auf diese Positionen geklickt wurde. Aus den resultierenden Click-Through-Daten können wir dann mithilfe der vorgestellten Formel für $P(E_{r_{u}})$ die Wahrscheinlichkeit berechnen, dass ein Dokument aufgrund aufgrund seiner Position im Suchergebnis angeschaut wird.
 
 \subsubsection{Klick-Wahrscheinlichkeit mit PBM berechnen}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:Klick-Wahrscheinlichkeit}
@@ -155,18 +155,18 @@ Wir wissen dass eine Wahrscheinlichkeit einen Wert zwischen 0 und 1 besitzt. Dad
 \end{figure}
 
 \paragraph{Mit Smoothing-Faktor Wahrscheinlichkeitswerte gewichten}
-Der Smoothing-Faktor soll zwei Probleme lösen. Zum Einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten (1). Zum Anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanz-Feedbacks in den Algorithmus einbeziehen (2). Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe indem wir eine \textit{Smooting-Konstante} einführen. Die Smoothing-Konstante $\lambda$ soll die Gewichte der beiden Klick-Wahrscheinlichkeiten $P(E_{r_u})$ und $P(A_{u})$ zu eins aufsummieren. Wir verwenden dazu das \textit{Exponential Smoothing Modell}~(siehe \cite{ExpSmoothing}). Bilden wir dieses Modell auf den PBM basierten Algorithmus ab, sieht die Formel für die CTR (CTR = $P(C_{u})$) wie folgt aus:
+Der Smoothing-Faktor soll zwei Probleme lösen. Zum Einen wollen wir einen Wahrscheinlichkeitswert trotz der Multiplikation mit Null beachten (1). Zum Anderen wollen wir die im vorherigen Absatz beschriebene Gewichtung abhängig des Relevanz-Feedbacks in den Algorithmus einbeziehen (2). Wir transformieren dazu das Produkt der beiden Wahrscheinlichkeiten in eine gewichtete Summe indem wir eine \textit{Smooting-Konstante} einführen. Die Smoothing-Konstante $\lambda$ soll die Gewichte der beiden Klick-Wahrscheinlichkeiten $P(E_{r_{u}})$ und $P(A_{u})$ zu eins aufsummieren. Wir verwenden dazu das \textit{Exponential Smoothing Modell}~(siehe \cite{ExpSmoothing}). Bilden wir dieses Modell auf den PBM basierten Algorithmus ab, sieht die Formel für die CTR (CTR = $P(C_{u})$) wie folgt aus:
   
 \vspace{-1.5em}
 \begin{equation}
-	P(C_{u}) = \lambda\cdot P(E_{r_u}) + (1 - \lambda)\cdot P(A_{u})
+	P(C_{u}) = \lambda\cdot P(E_{r_{u}}) + (1 - \lambda)\cdot P(A_{u})
 \end{equation}
 \vspace{-1.5em}
 
 \subsubsection{Smoothing-Faktor abhängig der Position im Suchresultat definieren}
 \label{sec:Reranking:Methodik:Result-RerankingPBM:VerhaeltnisKlick-Wahrscheinlichkeiten}
 
-Die in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} angesprochene Studie \cite{pbm} hat aufgezeigt, dass das PBM sich stark an der Position eines Dokumentes im Suchresultat orientiert und dies negative Einflüsse auf die Prognose der CTR haben kann. Die Klick-Wahrscheinlichkeit $P(E_{r_u})$ darf darum nicht zu viel Einfluss haben. Aus eigener Erfahrung wissen wir zudem, dass die ersten Dokumente im Suchresultat immer zuerst gesehen werden. Die dahinter gelisteten Dokumente werden fortlaufend analysiert. Dies bestätigt die in Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} dargestellte Analyse der Klicks auf die ersten 20 Positionen eines Suchergebnisses. Wir sollten darum darauf achten, dass je \textit{schlechter} die Position des angeklickten Dokumentes im Suchresultat der Solr ist, desto \textit{höher} das Relevanz-Feedback zu bewerten ist. 
+Die in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} angesprochene Studie \cite{pbm} hat aufgezeigt, dass das PBM sich stark an der Position eines Dokumentes im Suchresultat orientiert und dies negative Einflüsse auf die Prognose der CTR haben kann. Die Klick-Wahrscheinlichkeit $P(E_{r_{u}})$ darf darum nicht zu viel Einfluss haben. Aus eigener Erfahrung wissen wir zudem, dass die ersten Dokumente im Suchresultat immer zuerst gesehen werden. Die dahinter gelisteten Dokumente werden fortlaufend analysiert. Dies bestätigt die in Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} dargestellte Analyse der Klicks auf die ersten 20 Positionen eines Suchergebnisses. Wir sollten darum darauf achten, dass je \textit{schlechter} die Position des angeklickten Dokumentes im Suchresultat der Solr ist, desto \textit{höher} das Relevanz-Feedback zu bewerten ist. 
 \\
 \\
 Das machen wir, indem wir für die Berechnung der CTR des Dokumentes den Smoothing-Faktor abhängig der Position im Suchresultat definieren. Dadurch können wir das Verhältnis zwischen Klick-Wahrscheinlichkeit der Position und Klick-Wahrscheinlichkeit des Dokumentes steuern. Als Grundlage hierbei dient uns die Position des Suchresultats der Solr. Wie die Aufteilung dazu aussehen wird, sehen wir folgend:
