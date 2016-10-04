@@ -18,12 +18,12 @@ Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der ne
 
 \subsubsection{Methodik}
 \label{sec:Evaluation:Einfuehrung:Methodik}
-Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluationssystem und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springer-Suche und einmal auf der Springer-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
+Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluationssystem und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springermedizin-Suche und einmal auf der Springermedizin-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
 
 \section{Aufbau der Analyse}
 \label{sec:Evaluation:Aufbau}
 
-Mithilfe der Relevanz-Bewertungen wollen wir das Qualitätsmaß der Suchvarianten bestimmen. Dazu müssen wir zuerst die \glqq zuverlässigen\grqq{} Bewertungen filtern und dann mithilfe der nDCG-Metrik auswerten. Der Prozess dazu sieht wie folgt aus:
+Mithilfe der Relevanz-Bewertungen wollen wir das Qualitätsmaß der Suchvarianten bestimmen. Dazu müssen wir zuerst die \glqq zuverlässigen\grqq{} Bewertungen mittels \textit{Kappa-Koeffizienten} filtern und dann mithilfe der \textit{nDCG-Metrik} auswerten. Der Prozess dazu sieht wie folgt aus:
 
 \begin{figure}[H]
 \centering

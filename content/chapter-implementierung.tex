@@ -6,7 +6,7 @@
 \chapter{Implementierung}
 \label{sec:Implementierung}
 
-Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er nun implementiert werden kann. In diesem Kapitel geht es nun darum, diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren. In diesem Kapitel werden wir nicht den Code der Lösung vorstellen. Wir werden aber beschreiben wo wir in die Suche eingreifen, wie wir eingreifen und was wir da genau machen. Das Ziel dieses Kapitels soll es sein, eine Überblick über den implementiert Lösungsansatz zu schaffen. Auf  der Suche mit dem implementierten Lösungsansatz, können wir im nächsten Kapitel dann die Evaluation durchführen.
+Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er nun implementiert werden kann. In diesem Kapitel geht es nun darum, diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren. In diesem Kapitel werden wir nicht den Code der Lösung vorstellen. Wir werden aber beschreiben wo wir in die Suche eingreifen, wie wir eingreifen und was wir da genau machen. Das Ziel dieses Kapitels soll es sein, eine Überblick über den implementiert Lösungsansatz zu schaffen.
 
 \section{Architektur der Implementierung}
 \label{sec:Implementierung:Architektur}
@@ -22,7 +22,7 @@ Um zu verdeutlichen an welcher Stelle des Suchprozesses der Springermedizin-Such
 \vspace{-2.5em}
 \end{figure}
 
-Wie bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden} angesprochen, werden wir den Algorithmus als ein, in sich geschlossenes, unabhängiges Modul zwischen dem Suchprozess und der Aufbereitung des Suchresultats einbinden. Wie wir in der Abbildung sehen können, wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben dann der Suche als Suchresultat zurück. 
+Wie bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden} angesprochen, binden wir den Algorithmus als ein, in sich geschlossenes, unabhängiges Modul zwischen dem Suchprozess und der Aufbereitung des Suchresultats ein. Wie wir in der Abbildung sehen können, wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben dann der Suche als Suchresultat zurück. 
 
 \section{Highlight: PBM basierter Reranking-Algorithmus}
 \label{sec:Implementierung:PBM}
@@ -40,6 +40,7 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 \caption[Pseudcode Reranking-Algorithmus]{Pseudcode Reranking-Algorithmus}
 \label{fig:PseudcodeRerankingAlgorithmus}
 \vspace{.5em}
+\DontPrintSemicolon
 \begin{algorithm}[H]
 \caption{PBM basierter Reranking-Algorithmus}
 \BlankLine
@@ -53,6 +54,7 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 
 	\BlankLine
 	\eIf{$ctrClickDataBySearchTerm$ ist gefüllt}{
+		\BlankLine
 		$ranks \leftarrow$ Lese die angeklickten Positionen aus  $ctrClickDataBySearchTerm$\;
 		$ctrClickDataByRanks \leftarrow$ Lese Click-Through-Daten aus Webtrekk mithilfe von $ranks$\;
 		
@@ -61,7 +63,7 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 			\BlankLine
 			\tcc{Berechne Klick-Wahrscheinlichkeit $P(C_{u})$ aller Dokumente $u$}
 			\For{ $u \in searchResult$}{
-				$\lambda \leftarrow$ Definiere $\lambda$ anhand der Position $r$ des Dokumentes $u$\;
+				$\lambda \leftarrow$ Definiere $\lambda$ anhand des vordefinierten Gewichtungsfaktors für die Position $r$ des Dokumentes $u$\;
 				$P(E_{r_{u}}) \leftarrow$ Berechne Klick-Wahrscheinlichkeit für Position $r$ des Dokumentes $u$\;
 				$P(A_{u}) \leftarrow$ Berechne Klick-Wahrscheinlichkeit für Dokument $u$ zu Suchterm $searchTerm$\;
 				\BlankLine
@@ -77,19 +79,20 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 			$ranksByRandomValue \leftarrow$ Sortiere Liste $searchResult$ anhand der $X_{u}$ Werte
 			
 			\BlankLine
-			\tcc{Berechne effektiven Relevanz-Wert  $R_{u}$ aller Dokumente $u$}
+			\tcc{Berechne effektiven Relevanz-Wert $R_{u}$ aller Dokumente $u$}
 			\For{ $u \in searchResult$}{
-				$\lambda \leftarrow$ Lese Wert für $\lambda$ aus Applikations-Konfiguration\;
-				$r_{P(C_{u})} \leftarrow$ Lese Position des Wertes $P(C_{u})$ aus $ranksByClickProbability$\;
+				$\lambda \leftarrow$ Definiere $\lambda$ anhand des vordefinierten Gewichtungsfaktors für den Zufallswert $X_{u}$\;
+				$r_{P(C_{u})} \leftarrow$ Lese Position des Wahrscheinlichkeits-Wertes $P(C_{u})$ aus $ranksByClickProbability$\;
 				$r_{X_{u}} \leftarrow$ Lese Position des Zufallswertes $X_{u}$ aus $ranksByRandomValue$\;
 				\BlankLine
-    			$R_{u} = 1 / \left(\lambda\cdot r_{X_{u}} + (1 - \lambda)\cdot r_{P(C_{u})}\right)$\;
+    			$R_{u} \leftarrow 1 / \left(\lambda\cdot r_{X_{u}} + (1 - \lambda)\cdot r_{P(C_{u})}\right)$\;
 			}
 			$rerankedSearchResult \leftarrow$ Sortiere Liste $searchResult$ anhand der $R_{u}$ Werte\;
+			\tcc{Rückgabe der durch den Reranking-Algorithmus umsortierten Suchergebnisse}
 			\KwRet{die ersten 20 Elemente von $rerankedSearchResult$}
 		}{	
 			\tcc{Keine Click-Through-Daten für die angeklickten Positionen gefunden $\Rightarrow$\\
-			Problem mit Webtrekk-Schnittstelle}
+			Keine Umsortierung der Suchergebnisse mit Reranking-Algorithmus}
 			\KwRet{die ersten 20 Elemente von $searchResult$}
 		}
 	}{
@@ -104,11 +107,67 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 \section{Highlight: Webtrekk-Analysen}
 \label{sec:Implementierung:Webtrekk}
 
-Wie in der Einführung dieser Arbeit in \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk} angesprochen, speichert Springermedizin seine Tracking-Daten auf Webtrekk und bietet einen Webserver zum Speichern und Analysieren der Tracking-Daten an. In Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten} haben wir besprochen wie aus den Analysen der Tracking-Daten die Click-Through-Daten gelesen und interpretiert werden können. Für die Implementierung des Reranking-Algorithmus müssen wir die Click-Trough-Daten für die Wahrscheinlichkeits-Berechnungen wie in \ref{sec:Reranking:Methodik:Result-RerankingPBM} besprochen, mithilfe von Analysen aus Webtrekk abfragen und auswerten. Wie wir diese Analysen abfragen und wie wir diese im Reranking-Algorithmus nutzen, sehen wir folgend.
+Wie in der Einführung dieser Arbeit in \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk} angesprochen, speichert Springermedizin seine Tracking-Daten auf Webtrekk. Für die Implementierung des Reranking-Algorithmus müssen wir die Click-Trough-Daten für die Wahrscheinlichkeits-Berechnungen wie in \ref{sec:Reranking:Methodik:Result-RerankingPBM} besprochen, mithilfe von Analysen aus Webtrekk abfragen und auswerten. Wie wir diese Analysen abfragen, sehen wir folgend.
 
-\paragraph{Abfrage von Analysen}
+\subsubsection{Abfrage von Analysen}
+\label{sec:Implementierung:Webtrekk:AnalysenAbfragen}
 
+Der Webservice von Webtrekk bietet verschiedene Schnittstellenmethoden zum Export und Herunterladen der Tracking-Daten an. Die für uns relevante Schnittstellenmethode lautet \textit{getAnalysisData}. Mithilfe dieser Methode können die Daten der verschiedenen Analysen per REST-Schnittstelle\footnote{Representational State Transfer, ist ein Architekturmodell mit dem Webservices mit den Standard-HTTP-Methoden (GET, POST, PUT und DELETE) realisiert werden können} abgerufen werden. Um zu definieren, welche Analyse und mit welchen Filtern diese Analyse abgefragt werden soll, müssen wir folgende Parameter der Methode mitgeben: 
+
+\textbf{Request:} \textit{Springermedizin-Suche $\rightarrow$ Webtrekk REST-Webservice}
+
+\begin{table}[H]
+\centering
+\vspace{-.75em}
+\caption[Beschreibung Analyse-Aufbau Webtrekk-Schnittstelle]{Beschreibung Analyse-Aufbau Webtrekk-Schnittstelle}
+\vspace{-.5em}
+\label{tab:BeispielCTDaten}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\hline
+\textbf{Parameter}   & \textbf{Beschreibung}                                                                              \\ \hline
+\textit{analysis}    & gewünschte Analyse, alle Analysen der Weboberfläche von Webtrekk sind so abrufbar                  \\
+\textit{time\_start} & Startzeit des Analysezeitraumes                                                                    \\
+\textit{time\_stop}  & Stopzeit des Analysezeitraumes                                                                     \\
+\textit{column}               & Ausgabe bestimmter in der Standard-Analyse nicht vorhandene Datenspalten                           \\
+\textit{analysis\_filter}     & Komplexe Filter bestehen aus einem oder mehreren Filtern, die logisch miteinander verknüpft werden \\ \hline
+\end{tabular}
+}
+\vspace{-2em}
+\end{table}
+
+Zur Berechnung der Klick-Wahrscheinlichkeiten benötigen wir zwei verschieden Analysen. Beispiel-Anfragen für diese beiden Analysen sehen wie folgt aus:
+
+\textbf{Suchanfrage:} \textit{Krebs $\rightarrow$ Springermedizin-Suche}
+
+\begin{table}[H]
+\centering
+\vspace{-.75em}
+\caption[Beispiel Analyse-Aufbau Webtrekk-Schnittstelle]{Beispiel Analyse-Aufbau Webtrekk-Schnittstelle}
+\vspace{-.5em}
+\label{tab:BeispielCTDaten}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lll}
+\hline
+\textbf{Parameter}        & \textbf{Wahrscheinlichkeit $P(A_{u})$}                                                                                                                                                            & \textbf{Wahrscheinlichkeit $P(E_{r_{u}})$}                                                                                                                              \\ \hline
+\textit{analysis}         & Navigation|Events                                                                                                                                                                                & Navigation|Events                                                                                                                                                      \\ \hline
+\textit{time\_start}      & 2016-08-01                                                                                                                                                                                       & 2016-08-01                                                                                                                                                             \\ \hline
+\textit{time\_stop}       & 2016-08-31                                                                                                                                                                                       & 2016-08-31                                                                                                                                                             \\ \hline
+\textit{column}           & {[}Page Impressions,\% Visits,Ø - Suchtreffer{]}                                                                                                                                                 & {[}Page Impressions,\% Visits,Ø - Suchtreffer{]}                                                                                                                       \\ \hline
+\textit{analysis\_filter} & \begin{tabular}[c]{@{}l@{}}{[} {[},Events,LIKE,searchresult-*{]},\\ {[}AND,Internal Search Phrases,LIKE,*Krebs*{]},\\ {[}OR,Internal Search Phrases,LIKE,*Maligne Tumoren*{]} {]}\end{tabular} & \begin{tabular}[c]{@{}l@{}}{[} {[},Events,LIKE,searchresult-1.*{]},\\ {[}OR,Events,LIKE,searchresult-4.*{]},\\ {[}OR,Events,LIKE,searchresult-29.*{]} {]}\end{tabular} \\ \hline
+\end{tabular}
+}
+\vspace{-2em}
+\end{table}
+
+In der Antwort für diese Analysen werden die Click-Trough-Daten als JSON-Array\footnote{Die JavaScript Object Notation (JSON) ist ein kompaktes Format zum Austausch von Daten} zurückgegeben. Wie der ausgewertete JSON-Array aussehen kann, haben wir in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten:AussehenClick-Through-Daten} angeschaut. 
 
 
 \section{Zusammenfassung}
 \label{sec:Implementierung:Zusammenfassung}
+
+In diesem Kapitel haben wir eine Übersicht über die Architektur und die wichtigsten Highlights der Implementierung gekriegt. Wir wissen nun \textit{wie} der Lösungsansatz des Reranking-Algorithmus implementiert werden kann. Verknüpfen wir dieses Wissen mit dem aus Kapitel \ref{sec:Reranking}, haben wir eine gute Übersicht über den Lösungsansatz und dessen Implementierung in einer Suche. Mit dieser Implementierung der Suche wollen wir nun im nächsten Kapitel evaluieren, welche Verbesserung für das Qualitätsmaß der Suche von Springermedizin der Lösungsansatz bringt.
