@@ -18,7 +18,7 @@ Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der ne
 
 \subsubsection{Methodik}
 \label{sec:Evaluation:Einfuehrung:Methodik}
-Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluationssystem und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springermedizin-Suche und einmal auf der Springermedizin-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
+Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluations-System und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springermedizin-Suche und einmal auf der Springermedizin-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
 
 \section{Aufbau der Analyse}
 \label{sec:Evaluation:Aufbau}
@@ -191,54 +191,140 @@ Der resultierende Ergebnis-Wert des $nDCG_r$ bewegt sich zwischen 0 und 1. Entsp
 \subsection{Vorgehen}
 \label{sec:Evaluation:Aufbau:Vorgehen}
 
-\subsubsection{Evaluationssystem aufbauen}
+\subsubsection{Testumgebung aufbauen}
 \label{sec:Evaluation:Aufbau:Vorgehen:Aufbau}
 
-Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluationssystem, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluationssystem sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse  der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils besten zehn Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
+Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluations-System, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluations-System sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils ersten zehn Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
 
-\subsubsection{Evaluationssystem auswerten}
+\paragraph{Aufbau des Evaluations-Systems}
+Für die Analysen der Beurteiler implementieren wir selber ein kleines Evaluations-System als Web-Applikation. Das hat den Vorteil, dass wir selber definieren können, wie der Analyse-Prozess und wie die Datenstruktur der Analyse-Ergebnisse aussehen sollen. Das System umfasst eine Administrationsoberfläche zur Verwaltung der Analysedaten und eine Anwenderoberfläche, zur Analyse der zugeteilten Suchterme. Der Beurteiler soll nur seine, ihm zugeteilten Suchterm-Analysen sehen. Um Analysen durchführen zu können, muss sich der Beurteiler darum an der Applikation anmelden. So können wir jedem Beurteiler ein eigenes Profil anlegen und ihm seine zu analysierenden Suchterme zuweisen. 
+
+\paragraph{Analyse eines Suchterms}
+Wir wollen zu jedem Suchterm eine Bewertung der aktuellen Springermedizin-Suche und eine der Suche mit dem implementierten Reranking-Algorithmus. Wir bauen die Analysen darum so, dass der Benutzer beide Bewertungen nacheinander in derselben Analyse ausführt. Zur Bewertung implementieren wir ein Maske, bestehend aus der zu beurteilende Suchvariante und einem Formular zur Bewertung der ersten zehn Suchresultate des Suchergebnisses. Die Bewertung besteht aus einer Skala von vier Relevanz-Werten:
+
+\begin{table}[H]
+\centering
+\vspace{-.5em}
+\caption[Relevanz-Werte für Bewertung der Suchresultate]{Relevanz-Werte für Bewertung der Suchresultate}
+\label{tab:RelevanzWerteBewertungEvaluation}
+\vspace{-.5em}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\begin{tabular}{llc}
+\hline
+\textbf{Relevanz}            & \textbf{Beschreibung}           & \textbf{Relevanz-Wert} \\ \hline
+\textit{not relevant}        & Ergebnis hat \textbf{\textit{gar keine}} Relevanz & -1 \\
+\textit{moderately relevant} & Ergebnis ist \textbf{\textit{eher irrelevant}}    & 0 \\
+\textit{relevant}            & Ergebnis ist \textbf{\textit{eher relevant}}      & 1 \\
+\textit{highly relevant}     & Ergebnis ist \textbf{\textit{sehr relevant}}      & 2 \\ \hline
+\end{tabular}
+\vspace{-2em}
+\end{table}
+
+Ist eine Bewertung gespeichert, wird die zweite Variante der Suche geladen. Eine Analyse ist dann abgeschlossen, wenn beide Suchvarianten bewertet sind. Der gesamte Prozessablauf einer Analyse sieht wie folgt aus:
+
+\begin{figure}[H]
+\centering
+\vspace{-.5em}
+\caption[Analyseprozess für Bewertung einer Suchvariante]{Analyseprozess für Bewertung einer Suchvariante}
+\vspace{.5em}
+\label{fig:AnalysemaskeEvaluation}
+\includegraphics[width=\linewidth]{gfx/AnalysemaskeEvaluation}
+\vspace{-1em}
+\end{figure}
+
+\subsubsection{Evaluations-Daten speichern}
+\label{sec:Evaluation:Aufbau:Vorgehen:Speichern}
+
+Zu jeder Analyse werden wir neben den Relevanz-Bewertungen und den Suchterm-Informationen auch wichtige Informationen zu den Click-Through-Daten und den Suchergebnissen speichern. Folgende Informationen liegen uns am Ende einer Analyse vor:
+
+\begin{table}[H]
+\centering
+\vspace{-.5em}
+\caption[Gespeicherte Evaluations-Daten zur Suchterm-Analyse]{Gespeicherte Evaluations-Daten zur Suchterm-Analyse}
+\label{tab:EvaluationsDatenSpeicherung}
+\vspace{-.5em}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+\textbf{Objekt}                                        & \textbf{Beide Suchvarianten}             & \textbf{Suche mit Reranking-Algorithmus} & \textbf{Beschreibung}                              \\ \hline
+\multirow{4}{*}{\textit{\textbf{Analyse}}}             & \textit{Suchterm}                        & \textit{}                                & Analysierter Suchterm                              \\
+                                                       & \textit{Beurteiler}                      & \textit{}                                & User-Informationen des Beurteilers                 \\
+                                                       & \textit{Suchvariante}                    & \textit{}                                & Suche mit / ohne Reranking-Algorithmus             \\
+                                                       & \textit{}                                & \textit{Wert des Zufallsfaktors}         & Einfluss-Wert Zufallsfaktor                        \\ \hline
+\textit{\textbf{Bewertungen}}                          & \textit{Relevanz-Werte der Positionen}   & \textit{}                                & Relevanz-Bewertungen der ersten zehn Suchresultate \\ \hline
+\multirow{2}{*}{\textit{\textbf{Click-Through-Daten}}} & \textit{}                                & \textit{User-Filter}                     & Alle Benutzer / eingeloggte Benutzer der Suche     \\
+                                                       & \textit{}                                & \textit{Anzahl Klicks Gesamt}            & Anzahl gelesener Klicks aus Click-Through-Daten    \\ \hline
+\textit{\textbf{Suchergebnis}}                         & \textit{Dokument-ID's der Suchresultate} & \textit{}                                & Dokument-ID's der ersten zehn Suchergebnisse       \\ \hline
+\end{tabular}
+}
+\vspace{-2em}
+\end{table}
+
+\subsubsection{Evaluations-System auswerten}
 \label{sec:Evaluation:Aufbau:Vorgehen:Auswerten}
 
-Nach Ablauf der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluationssystem statt. 
-\\
-\\
-Dazu werden die Daten aus der Datenbank gelesen und mit dem Cohens-Kappa-Koeffizienten die nutzbaren Daten gefiltert. 
+Nach Abschluss der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluations-System statt. Dazu werden wir die Relevanz-Bewertungen aus der Datenbank lesen und wie oben beschrieben mit dem Cohens-Kappa-Koeffizienten und der nCDG-Metrik auswerten. Mithilfe der Evaluations-Daten können wir dann auch weitere Auswertungen zu den Click-Through-Daten und den Suchergebnissen der Suchterme machen.
 
 \subsection{Durchführung}
 \label{sec:Evaluation:Aufbau:Durchfuehrung}
 
-\subsubsection{Verschiedene Varianten des neuen Lösungsansatzes werden evaluiert}
+\subsubsection{Zu analysierende Suchterme}
+\label{sec:Evaluation:Aufbau:Durchfuehrung:Aufgabenstellung}
+
+Um die Evaluation praxisrelevant und mit genügend Click-Through-Daten ausführen zu können, wurden die Suchanfragen der letzten zwei Monate auf der Springermedizin-Suche analysiert und 80 oft gesuchte Suchterme ausgewählt. Springermedizin hat ein breites Spektrum an medizinischen Fachgebieten. Um fachlich gute Bewertungen zu kriegen, haben wir die Suchterme nach Fachrichtung unterteilt und jeweils zwei Beurteilern zugeteilt, die aus der Fachrichtung kommen:
+
+\begin{table}[H]
+\centering
+\vspace{-.5em}
+\caption[Fachrichtungen der Suchterme der Evaluation]{Fachrichtungen der Suchterme der Evaluation}
+\label{tab:FachrichtungenSuchtermeEvaluation}
+\vspace{-.5em}
+\footnotesize
+\renewcommand*{\arraystretch}{1.2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llc}
+\hline
+\textbf{Fachrichtung}            		& \textbf{Medizinisches Gebiet / Medizinischer Zweig}                  	& \multicolumn{1}{l}{\textbf{Anzahl zugeteilte Suchterme}} \\ \hline
+\textit{Onkologie}               		& Tumorerkrankungen                                                    					& 10                                                       \\ \hline
+\textit{Zahnmedizin}             		& Fachgebiet der Zahn-, Mund- und Kieferheilkunde                      		& 20                                                       \\ \hline
+\textit{Gynäkologie}             		& Spezifischen Erkrankungen des weiblichen Körpers                    		& 10                                                       \\ \hline
+\textit{AINS}                    			& Anästhesiologie, Intensivmedizin, Notfallmedizin und Schmerztherapie & 10                                                       \\ \hline
+\textit{Neurologie, Psychiatrie} 	& Erkrankungen des Nervensystems und der Psyche                        	& 10                                                       \\ \hline
+\textit{Innere Medizin}          		& Erkrankungen der inneren Organe                                      			& 10                                                        \\ \hline
+\textit{Orthopädie}              		& Aufbau der Knochen und Muskeln des Menschen                          	& \multirow{3}{*}{10}                                      \\
+\textit{Urologie}               			& Erkrankungen der Niere, Harnblase, Harnleiter und Harnröhre         	&                                                          \\
+\textit{HNO}               				& Hals-Nasen-Ohren-Heilkunde                                           				&                                                          \\ \hline
+\textbf{Gesamt:}                 		& \textbf{}                                                            							& \textbf{80}                                              \\ \hline
+\end{tabular}
+}
+\vspace{-2em}
+\end{table}
+
+\subsubsection{Aufgabenstellung der Analyse}
+\label{sec:Evaluation:Aufbau:Durchfuehrung:Aufgabenstellung}
+
+Die Aufgabe der Analyse darin, die jeweils ersten zehn Suchergebnisse nach Relevanz zum Suchterm zu bewerten. Insgesamt, soll jeder Beurteiler die ihm zugeteilten 20 Suchterme analysieren. Eine Analyse beinhaltet jeweils eine Bewertung des Suchterms auf beiden Suchvarianten. In welcher Reihenfolge die Suchvarianten den Beurteilern während der Analyse präsentiert werden, ist rein \textit{zufällig} und \textit{variiert}. Es soll nicht ersichtlich sein, welche Variante jeweils bewertet wird. Dadurch können wir ausschließen, dass der Beurteiler durch die Bekanntgabe der Suchvariante subjektiv beeinflusst wird. 
+
+\subsubsection{Verschiedene Varianten des neuen Lösungsansatzes evaluieren}
 \label{sec:Evaluation:Aufbau:Durchfuehrung:EvaluationsdatenVarianteLoesungsansatzes}
 
-Der in dieser Arbeit zu untersuchende Lösungsansatz kann verschieden konfiguriert werden. Wir können den Einfluss des Zufallsfaktors bestimmen. Um verschiedene Konstellationen testen zu können, werden wir mit zwei verschiedenen Werten für den Einfluss des Zufallsfaktor evaluieren. Die Click-Through-Daten von an der Applikation angemeldeten Benutzern können wir von den Click-Through-Daten von anonymen Benutzern unterscheiden.
-\\
-\\
-Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und anonymen Benutzern, ergeben sich vier Konstellationen, die evaluiert werden können. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Mithilfe des Evaluationssystems werden wir die Zuteilung der Suchterme zufällig generieren lassen.
-\\
-\\
-Hier folgend die Aufteilung der generierten Analysen:
+Wie wir wissen, hat der Reranking-Algorithmus einige Faktoren, die variabel definiert werden können. Zu diesen Faktoren gehört der Einfluss des Zufallswertes in das Reranking ($\lambda$) und der \glqq Login-Status der User\grqq{} während der Suche, für die Selektion der Click-Through-Daten. Wir werden darum verschiedene Konstellationen testen, um die optimale Konstellation finden zu können. 
 
+\paragraph{Definition der variablen Faktoren für den Reranking-Algorithmus}
+Für den \textit{Einfluss des Zufallsfaktors} werden wir zwei Werte für $\lambda$ definieren. Diese sind 0.1 (zehn Prozent) und 0.01 (ein Prozent). Für die \textit{Selektion der Click-Through-Daten} werden wir zwischen an der Applikation angemeldeten Benutzern und allen Benutzern (inkl. anonymen Benutzern) unterscheiden. Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und allen Benutzern, ergeben sich vier Konstellationen. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Die Zuteilung der Suchterme werden wir mithilfe des Evaluations-Systems zufällig generieren lassen:
+
+\begin{figure}[H]
 \centering
-\begin{myitemize}
-\setlength\itemsep{0em}
-\item Springermedizin.de Suche 
-\begin{myitemize}
-\item 50\% aller Analysen
-\end{myitemize}
-\item Reranking Suche 
-\begin{myitemize}
-\item CTR-Daten der angemeldeten User: 25\% aller Analysen
-\begin{myitemize}
-\item Einfluss Zufallsranking 0.1: 50\% dieser Analysen 
-\item Einfluss Zufallsranking 0.01: 50\% dieser Analysen 
-\end{myitemize}
-\item CTR-Daten aller User: 25\% aller Analysen
-\begin{myitemize}
-\item Einfluss Zufallsranking 0.1: 50\% dieser Analysen 
-\item Einfluss Zufallsranking 0.01: 50\% dieser Analysen 
-\end{myitemize}
-\end{myitemize}
-\end{myitemize}
+\vspace{-.5em}
+\caption[Aufteilung der Analysen für Evaluation]{Aufteilung der Analysen für Evaluation}
+\vspace{.5em}
+\label{fig:AufteilungAnalysenEvaluation}
+\includegraphics[width=0.7\linewidth]{gfx/EvaluationsvariantenRerankingSuche}
+\vspace{-2em}
+\end{figure}
 
 \section{Auswertung der Suchergebnis-Qualität}
 \label{sec:Evaluation:Auswertung}

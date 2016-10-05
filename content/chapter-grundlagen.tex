@@ -155,7 +155,7 @@ Eine Beispiel einer Klick-Häufigkeit, wie sie von einer Webtrekk-Analyse ausges
 \footnotesize
 \renewcommand*{\arraystretch}{1.2}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{ll}\hline
+\begin{tabular}{|ll|}\hline
 	\textbf{Click-Through-Daten} & \textbf{Klick-Häufigkeit} \\ \hline
 	searchresult-1.Course.chronische Dyspnoe bei Erwachsenen.10621768.chronische Dyspnoe & 5 \\ \hline
  \end{tabular}
@@ -174,7 +174,7 @@ Hier die Aufschlüsselung der Click-Through-Daten:
 \footnotesize
 \renewcommand*{\arraystretch}{1.2}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lllll}\hline
+\begin{tabular}{|lllll|}\hline
 	\textbf{Position} & \textbf{Dokumenttyp} & \textbf{Titel} & \textbf{ID} & \textbf{Suchterm} \\ \hline
 	searchresult-1 & Course & chronische Dyspnoe bei Erwachsenen & 10621768 & chronische Dyspnoe \\ \hline
 \end{tabular}
@@ -240,7 +240,7 @@ Das RCTR berechnet die Wahrscheinlichkeit $P(E_{r_{u}})$, dass ein Dokument aufg
 
 \vspace{-1.5em}
 \begin{equation}	
-	P(E_{r_{u}}) = \frac{1}{\vert S \vert} \cdot \sum{s \in S^{c_r}}
+	P(E_{r_{u}}) = \frac{1}{\vert S \vert} \cdot \sum{s \in S^{\ c_r}}
 \end{equation}
 \vspace{-1em}
 
@@ -251,7 +251,7 @@ Das DCTR berechnet die Wahrscheinlichkeit $P(A_{u})$, dass ein Dokument aufgrund
 
 \vspace{-1.5em}
 \begin{equation}	
-	P(A_{u}) = \frac{1}{\vert S_{uq} \vert} \cdot \sum{s_q \in S_{uq}^{C_{u}\text{, where, } S_{uq} = \lbrace s_q : u \in s_q \rbrace}}
+	P(A_{u}) = \frac{1}{\vert S_{uq} \vert} \cdot \sum{s_q \in S_{uq}^{\ C_{u}\text{, where, } S_{uq}\ =\ \lbrace s_q\ :\ u\ \in\ s_q \rbrace}}
 \end{equation}
 \vspace{-1em}
 
