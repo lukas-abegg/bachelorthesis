@@ -9,7 +9,7 @@
 \section{Einführung}
 \label{sec:Evaluation:Einfuehrung}
 
-In vorherigen Kapitel haben wir unseren Lösungsansatz in der Springermedizin-Suche implementiert. Wir wissen nun wie und warum wir den Reranking-Algorithmus umgesetzt haben. Was wir bisher nicht wissen ist, wie gut er funktioniert. Mithilfe einer Evaluation wollen wir darum nun messen, wie gut die Suchergebnis-Qualität der aktuellen Springermedizin-Suche im Vergleich zur im Zuge dieser Arbeit entwickelten Lösung mit dem Reranking-Algorithmus ist. 
+In vorherigen Kapitel haben wir unseren Lösungsansatz in der Springermedizin-Suche implementiert. Wir wissen nun wie und warum wir den Reranking-Algorithmus umgesetzt haben. Was wir bisher nicht wissen ist, \textit{wie gut} er funktioniert. Mithilfe einer Evaluation wollen wir darum nun messen, wie gut die Suchergebnis-Qualität der aktuellen Springermedizin-Suche im Vergleich zur im Zuge dieser Arbeit entwickelten Lösung mit dem Reranking-Algorithmus ist. 
 
 \subsubsection{Ziel der Evaluation}
 \label{sec:Evaluation:Einfuehrung:Ziel}
@@ -18,7 +18,7 @@ Die Evaluation soll Informationen darüber liefern, wie viel Verbesserung der ne
 
 \subsubsection{Methodik}
 \label{sec:Evaluation:Einfuehrung:Methodik}
-Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluations-System und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springermedizin-Suche und einmal auf der Springermedizin-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
+Wir werden durch fachliche Experten (Redakteure von Springermedizin) die Suchergebnisse von oft gesuchten Suchanfragen bewerten lassen. Dazu werden wir eine Testumgebung mit einem Evaluations-System und den beiden oben angesprochenen Suchvarianten aufbauen. Die Redakteure sollen bei der Evaluation, zu jeder Suchanfrage die ersten zehn Suchergebnisse analysieren und anhand der Suchsnippets, die Relevanz bewerten. Diese Analyse sollen sie jeweils einmal auf der aktuellen Springermedizin-Suche und einmal auf der Springermedizin-Suche mit dem Reranking-Algorithmus durchführen. Am Ende werden wir die Ergebnisse auswerten und einen Vergleich der beiden Suchvarianten machen. 
 
 \section{Aufbau der Analyse}
 \label{sec:Evaluation:Aufbau}
@@ -55,7 +55,7 @@ In diesem Kapitel werden Formeln eingeführt. Folgend eine Legende der wichtigst
 $K$				& Cohens-Kappa-Koeffizient                          				& $r$                	& die Anzahl der zu prüfenden Positionen \\
 $p_0$			& Anteil tatsächlich beobachteter Übereinstimmungen 	& $i$                	& die zu prüfende Position               \\
 $p_e$			& Anteil zufälliger Übereinstimmungen               			& $rel_i$				& Relevanz-Wert der Position $i$             \\
-                   & 																						& $\vert REL \vert$				& die ideale Reihenfolge der Relevanz-Werte der Dokumente in $r$ \\
+                   & 																						& $REL$				& die Menge der Relevanz-Werte der Dokumente in $r$ in idealer Reihenfolge\\
                    & 																						& $DCG_r$     		& Discounted Cumulative Gain             \\
                    &                                                   								& $IDCG_r$    		& Ideal Discounted Cumulative Gain       \\
                    &                                                   								& $nDCG_r$  		& Normalized Discounted Cumulative Gain  \\ \hline
@@ -79,7 +79,7 @@ Um die Zuverlässigkeit der Relevanz-Bewertungen zu messen, werden wir die gleic
 \vspace{-1.5em}
 
 \paragraph{Die Übereinstimmungen der beiden Redakteure aus einer Übereinstimmungsmatrix lesen}
-Um die Stärke der Übereinstimmung der beiden Redakteuren bei der Relevanz-Bewertung eines Suchterms zu messen, erstellen wir zu jedem Suchterm eine Übereinstimmungsmatrix. Diese enthält die vier Relevanzstufen. Die Bewertungen der Suchergebnisse ordnen wir diesen vier Relevanzstufen zu:
+Um die Stärke der Übereinstimmung der beiden Redakteuren bei der Relevanz-Bewertung eines Suchterms zu messen, erstellen wir zu jedem Suchterm eine Übereinstimmungsmatrix. Diese enthält die vier Relevanzstufen aus der Bewertung. Die Bewertungen der Suchergebnisse ordnen wir diesen Relevanzstufen zu:
 
 \begin{table}[H]
 \centering
@@ -113,7 +113,7 @@ Den Anteil tatsächlich beobachteter Übereinstimmungen $p_0$ können wir direkt
 \end{equation}
 \vspace{-1em}
 
-Der daraus resultierende Wert müssen wir um den Anteil zufälliger Übereinstimmungen $pe$ korrigieren. Der Wert von $pe$ wird mithilfe der Randsummen der Matrix (Spalten- bzw. Zeilensummen) berechnet. Dazu muss jede Randsumme zuerst durch $n$ dividiert werden. Danach wird zu jeder Kategorie das Produkt der Spalten und Zeilensumme gebildet, mit welchem anschließend die Summe der Kategorien berechnet wird. Die komplette Berechnungsformel von $pe$ sieht wie folgt aus:
+Den daraus resultierenden Wert, müssen wir um den Anteil zufälliger Übereinstimmungen $pe$ korrigieren. Der Wert von $pe$ wird mithilfe der Randsummen der Matrix (Spalten- bzw. Zeilensummen) berechnet. Dazu muss jede Randsumme zuerst durch $n$ dividiert werden. Danach wird zu jeder Kategorie das \textit{Produkt der Spalten und Zeilensumme} gebildet, mit welchem anschließend die Summe der Kategorien berechnet wird. Die komplette Berechnungsformel von $pe$ sieht wie folgt aus:
 
 \vspace{-1.5em}
 \begin{equation}	
@@ -145,7 +145,7 @@ Relevanz-Bewertungen werden meist sehr subjektiv gefällt. Wir müssen darum dav
 
 \paragraph{Kappa interpretieren}
 
-Wie in \cite{KappaWerte} beschrieben, müssen die Kappa-Werte individuell interpretiert werden. Es gibt jedoch Richtlinien. In \cite{Kappa} wird bei einem Kappa-Wert ab 0.60 von einer guten Übereinstimmung ausgegangen. Da wir bei unserer Evaluation nur mit einer begrenzten Anzahl von Bewertungen arbeiten können, müssen wir das Mindestmaß der Übereinstimmungsgüte anhand der Kappa-Koeffizienten der Bewertungen definieren. Wir werden es so definieren, dass wir mindestens 80 Prozent der Bewertungen auswerten können. Die unter dem Mindestmaß liegenden Bewertung werden wir in der Auswertung ignorieren. 
+Wie in \cite{KappaWerte} beschrieben, müssen die Kappa-Werte individuell interpretiert werden. Es gibt jedoch Richtlinien. In \cite{Kappa} wird bei einem Kappa-Wert ab 0.60 von einer guten Übereinstimmung ausgegangen. Da wir bei unserer Evaluation nur mit einer begrenzten Anzahl von Bewertungen arbeiten können, müssen wir das Mindestmaß der Übereinstimmungsgüte anhand der Kappa-Koeffizienten der Bewertungen definieren. Wir werden es so definieren, dass wir mindestens 80 Prozent der Bewertungen auswerten können. Die unter dem Mindestmaß liegenden Bewertung, werden wir in der Auswertung ignorieren. 
 
 \subsection{Metrik}
 \label{sec:Evaluation:Aufbau:Metrik}
@@ -158,12 +158,12 @@ In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die aktuelle Sp
 \subsubsection{Evaluationsdaten mittels nDCG auswerten}
 \label{sec:Evaluation:Aufbau:Metrik:EvaluationsdatennDCG}
 
-Der nDCG verfolgt die Grundidee, Suchergebnislisten dahingehend zu untersuchen, ob Dokumente mit hoher Relevanz zum Suchterm vor denen mit weniger Relevanz stehen. Der nDCG vergleicht dazu die Relevanz der Dokumente mit ihrer Reihenfolge im Suchresultat. Diese Metrik macht für unseren Reranking-Algorithmus insofern Sinn, dass sie nicht von bestimmten Relevanz-Werten für die Suchresultate ausgeht, sondern wie unser Algorithmus sich nur auf die Reihenfolge der Relevanz-Werte konzentriert. 
+Der nDCG verfolgt die Grundidee, Suchergebnislisten dahingehend zu untersuchen, ob Dokumente mit hoher Relevanz zum Suchterm, vor denen mit weniger Relevanz stehen. Der nDCG vergleicht dazu die Relevanz der Dokumente mit ihrer Reihenfolge im Suchresultat. Diese Metrik macht für unseren Reranking-Algorithmus insofern Sinn, dass sie nicht von bestimmten Relevanz-Werten für die Suchresultate ausgeht, sondern wie unser Algorithmus, sich nur auf die Reihenfolge der Relevanz-Werte konzentriert. 
 
 \subsubsection{Berechnung des Qualitätsmaß einer Suchvariante mittels nDCG}
 \label{sec:Evaluation:Aufbau:Metrik:BerechnungnDCG}
 
-\paragraph{Der nDCG baut auf dem DCG auf} Um den nDCG-Wert zu bestimmen, müssen wir zuerst den \textit{Discount Cumulative Gain} (DCG) jeder Position des untersuchten Suchresultats berechnen. Der DCG zielt darauf ab, das Qualitätsmaß einer Suchergebnisliste herunterzustufen, wenn relevante Dokumente schlechter als weniger relevante positioniert sind. Die Formel des DCG wird wie folgt definiert:
+\paragraph{Der nDCG baut auf dem DCG auf} Um den nDCG-Wert zu bestimmen, müssen wir zuerst den \textit{Discount Cumulative Gain} (DCG) jeder Position des untersuchten Suchresultats berechnen. Der DCG zielt darauf ab, das Qualitätsmaß einer Suchergebnisliste herunterzustufen, wenn relevante Dokumente schlechter, als weniger relevante positioniert sind. Die Formel des DCG wird wie folgt definiert:
 
 \vspace{-1.5em}
 \begin{equation}	
@@ -171,10 +171,10 @@ DCG_{r} = \sum\limits_{i=1}^r \frac{2^{rel_{i}} - 1}{\log_2(i+1)}
 \end{equation}
 \vspace{-1em}
 
-Wie wir erkennen können, werden Dokumente umso geringer bewertet, je weiter hinten sie im Suchresultat erscheinen. Dafür sorgt $\log_2(i+1)$ als Divisor in der Summenfunktion, dessen Wert mit steigenden Dokumentposition größer wird.
+Wie wir sehen, werden Dokumente umso geringer bewertet, je weiter hinten sie im Suchresultat erscheinen. Dafür sorgt $\log_2(i+1)$ als Divisor in der Summenfunktion, dessen Wert mit steigendem Wert der Dokumentposition größer wird.
 
 \paragraph{Der DCG muss normalisiert werden, um das Qualitätsmaß einer Suche über unterschiedliche Anfragen zu bewerten}
-Der DCG ist auf den Vergleich von Suchanfragen mit gleicher Resultatslänge ausgelegt. Haben die zu untersuchenden Suchanfragen eine unterschiedliche Anzahl der zu untersuchenden Positionen, variiert die maximal erreichbare Punktzahl. Der nDCG normalisiert diese Punktewerte, indem er die Reihenfolge der Relevanz-Werte des Suchergebnisses mit der \textit{idealen Reihenfolge} derselben Relevanz-Werte vergleicht. Die Formel des nDCG wird wie folgt definiert:
+Der DCG ist auf den Vergleich von Suchanfragen mit gleicher Resultatslänge ausgelegt. Haben die zu untersuchenden Suchanfragen, eine unterschiedliche Anzahl der zu untersuchenden Positionen, variiert die maximal erreichbare Punktzahl. Der nDCG normalisiert diese Punktewerte, indem er die Reihenfolge der Relevanz-Werte des Suchergebnisses mit der \textit{idealen Reihenfolge} derselben Relevanz-Werte vergleicht. Die Formel des nDCG wird wie folgt definiert:
 
 \vspace{-.25em}
 \begin{spacing}{.25}
@@ -197,10 +197,10 @@ Der resultierende Ergebnis-Wert des $nDCG_r$ bewegt sich zwischen 0 und 1. Entsp
 Um eine Evaluation durchführen zu können, müssen wir eine passende Testumgebung aufbauen. Diese besteht aus einem Evaluations-System, einer Instanz der aktuellen Springermedizin-Applikation und einer Instanz des neu implementierten Lösungsansatzes. Auf dem Evaluations-System sollen fachliche Experten (Redakteure von Springermedizin) die Relevanz der Suchergebnisse der beiden Suchmaschinen vergleichen. Dazu sollen die jeweils ersten zehn Suchergebnisse nach Relevanz zum Suchterm bewertet werden. Der Ergebnisse werden in einer Datenbank gespeichert, um sie später auszuwerten. 
 
 \paragraph{Aufbau des Evaluations-Systems}
-Für die Analysen der Beurteiler implementieren wir selber ein kleines Evaluations-System als Web-Applikation. Das hat den Vorteil, dass wir selber definieren können, wie der Analyse-Prozess und wie die Datenstruktur der Analyse-Ergebnisse aussehen sollen. Das System umfasst eine Administrationsoberfläche zur Verwaltung der Analysedaten und eine Anwenderoberfläche, zur Analyse der zugeteilten Suchterme. Der Beurteiler soll nur seine, ihm zugeteilten Suchterm-Analysen sehen. Um Analysen durchführen zu können, muss sich der Beurteiler darum an der Applikation anmelden. So können wir jedem Beurteiler ein eigenes Profil anlegen und ihm seine zu analysierenden Suchterme zuweisen. 
+Für die Analysen der Beurteiler implementieren wir selber ein kleines Evaluations-System als Web-Applikation. Das hat den Vorteil, dass wir selber definieren können, wie der Analyse-Prozess und wie die Datenstruktur der Analyse-Ergebnisse aussehen sollen. Das System umfasst eine Administrationsoberfläche zur Verwaltung der Analysedaten und eine Anwenderoberfläche zur Analyse der zugeteilten Suchterme. Der Beurteiler soll nur seine, ihm zugeteilten Suchterm-Analysen sehen. Um Analysen durchführen zu können, muss sich der Beurteiler darum an der Applikation anmelden. So können wir jedem Beurteiler ein eigenes Profil anlegen und ihm seine zu analysierenden Suchterme zuweisen. 
 
 \paragraph{Analyse eines Suchterms}
-Wir wollen zu jedem Suchterm eine Bewertung der aktuellen Springermedizin-Suche und eine der Suche mit dem implementierten Reranking-Algorithmus. Wir bauen die Analysen darum so, dass der Benutzer beide Bewertungen nacheinander in derselben Analyse ausführt. Zur Bewertung implementieren wir ein Maske, bestehend aus der zu beurteilende Suchvariante und einem Formular zur Bewertung der ersten zehn Suchresultate des Suchergebnisses. Die Bewertung besteht aus einer Skala von vier Relevanz-Werten:
+Wir wollen zu jedem Suchterm eine Bewertung der aktuellen Springermedizin-Suche und eine, der Suche mit dem implementierten Reranking-Algorithmus. Wir bauen die Analysen darum so, dass der Benutzer beide Bewertungen nacheinander, in derselben Analyse ausführt. Zur Bewertung implementieren wir ein Maske, bestehend aus der zu beurteilende Suchvariante und einem Formular zur Bewertung der ersten zehn Suchresultate des Suchergebnisses. Die Bewertung besteht aus einer Skala von vier Relevanz-Werten, wobei \textit{nicht relevante} Ergebnisse bestraft werden sollen und darum einen negativen Relevanz-Wert erhalten:
 
 \begin{table}[H]
 \centering
@@ -221,7 +221,7 @@ Wir wollen zu jedem Suchterm eine Bewertung der aktuellen Springermedizin-Suche 
 \vspace{-2em}
 \end{table}
 
-Ist eine Bewertung gespeichert, wird die zweite Variante der Suche geladen. Eine Analyse ist dann abgeschlossen, wenn beide Suchvarianten bewertet sind. Der gesamte Prozessablauf einer Analyse sieht wie folgt aus:
+Ist eine Bewertung gespeichert, wird die zweite Variante der Suche geladen. Eine Analyse ist dann abgeschlossen, wenn beide Suchvarianten bewertet sind. Der Ablauf einer Analyse sieht wie folgt aus:
 
 \begin{figure}[H]
 \centering
@@ -266,7 +266,7 @@ Zu jeder Analyse werden wir neben den Relevanz-Bewertungen und den Suchterm-Info
 \subsubsection{Evaluations-System auswerten}
 \label{sec:Evaluation:Aufbau:Vorgehen:Auswerten}
 
-Nach Abschluss der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluations-System statt. Dazu werden wir die Relevanz-Bewertungen aus der Datenbank lesen und wie oben beschrieben mit dem Cohens-Kappa-Koeffizienten und der nCDG-Metrik auswerten. Mithilfe der Evaluations-Daten können wir dann auch weitere Auswertungen zu den Click-Through-Daten und den Suchergebnissen der Suchterme machen.
+Nach Abschluss der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluations-System statt. Dazu werden wir die Relevanz-Bewertungen aus der Datenbank lesen und wie oben beschrieben mit dem Cohens-Kappa-Koeffizienten und der nDCG-Metrik auswerten. Mithilfe der Evaluations-Daten können wir dann auch weitere Auswertungen zu den Click-Through-Daten und den Suchergebnissen der Suchterme machen.
 
 \subsection{Durchführung}
 \label{sec:Evaluation:Aufbau:Durchfuehrung}
@@ -306,7 +306,7 @@ Um die Evaluation praxisrelevant und mit genügend Click-Through-Daten ausführe
 \subsubsection{Aufgabenstellung der Analyse}
 \label{sec:Evaluation:Aufbau:Durchfuehrung:Aufgabenstellung}
 
-Die Aufgabe der Analyse darin, die jeweils ersten zehn Suchergebnisse nach Relevanz zum Suchterm zu bewerten. Insgesamt, soll jeder Beurteiler die ihm zugeteilten 20 Suchterme analysieren. Eine Analyse beinhaltet jeweils eine Bewertung des Suchterms auf beiden Suchvarianten. In welcher Reihenfolge die Suchvarianten den Beurteilern während der Analyse präsentiert werden, ist rein \textit{zufällig} und \textit{variiert}. Es soll nicht ersichtlich sein, welche Variante jeweils bewertet wird. Dadurch können wir ausschließen, dass der Beurteiler durch die Bekanntgabe der Suchvariante subjektiv beeinflusst wird. 
+Die Aufgabe der Analyse besteht darin, die jeweils ersten zehn Suchergebnisse nach Relevanz zum Suchterm zu bewerten. Insgesamt, soll jeder Beurteiler die ihm zugeteilten 20 Suchterme analysieren. Eine Analyse beinhaltet jeweils eine Bewertung des Suchterms, auf beiden Suchvarianten. In welcher Reihenfolge die Suchvarianten den Beurteilern während der Analyse präsentiert werden, ist rein \textit{zufällig} und \textit{variiert}. Es soll nicht ersichtlich sein, welche Variante jeweils bewertet wird. Dadurch können wir ausschließen, dass der Beurteiler durch die Bekanntgabe der Suchvariante subjektiv beeinflusst wird. 
 
 \subsubsection{Verschiedene Varianten des neuen Lösungsansatzes evaluieren}
 \label{sec:Evaluation:Aufbau:Durchfuehrung:EvaluationsdatenVarianteLoesungsansatzes}
@@ -314,7 +314,7 @@ Die Aufgabe der Analyse darin, die jeweils ersten zehn Suchergebnisse nach Relev
 Wie wir wissen, hat der Reranking-Algorithmus einige Faktoren, die variabel definiert werden können. Zu diesen Faktoren gehört der Einfluss des Zufallswertes in das Reranking ($\lambda$) und der \glqq Login-Status der User\grqq{} während der Suche, für die Selektion der Click-Through-Daten. Wir werden darum verschiedene Konstellationen testen, um die optimale Konstellation finden zu können. 
 
 \paragraph{Definition der variablen Faktoren für den Reranking-Algorithmus}
-Für den \textit{Einfluss des Zufallsfaktors} werden wir zwei Werte für $\lambda$ definieren. Diese sind 0.1 (zehn Prozent) und 0.01 (ein Prozent). Für die \textit{Selektion der Click-Through-Daten} werden wir zwischen an der Applikation angemeldeten Benutzern und allen Benutzern (inkl. anonymen Benutzern) unterscheiden. Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und allen Benutzern, ergeben sich vier Konstellationen. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Die Zuteilung der Suchterme werden wir mithilfe des Evaluations-Systems zufällig generieren lassen:
+Für den \textit{Einfluss des Zufallsfaktors} werden wir zwei Werte für $\lambda$ definieren. Diese sind 0.1 (zehn Prozent) und 0.01 (ein Prozent). Für die \textit{Selektion der Click-Through-Daten} werden wir zwischen an der Applikation angemeldeten Benutzern und allen Benutzern (\textit{inkl. anonymen Benutzern}) unterscheiden. Aus den beiden Einflusswerten des Zufallsfaktors und der Unterscheidung zwischen angemeldeten und allen Benutzern, ergeben sich vier Konstellationen. Jeder Konstellation werden wir jeweils 25 Prozent der Suchterme zuteilen. Die Zuteilung der Suchterme werden wir mithilfe des Evaluations-Systems zufällig generieren lassen:
 
 \begin{figure}[H]
 \centering
@@ -322,7 +322,7 @@ Für den \textit{Einfluss des Zufallsfaktors} werden wir zwei Werte für $\lambd
 \caption[Aufteilung der Analysen für Evaluation]{Aufteilung der Analysen für Evaluation}
 \vspace{.5em}
 \label{fig:AufteilungAnalysenEvaluation}
-\includegraphics[width=0.7\linewidth]{gfx/EvaluationsvariantenRerankingSuche}
+\includegraphics[width=0.9\linewidth]{gfx/EvaluationsvariantenRerankingSuche}
 \vspace{-2em}
 \end{figure}
 

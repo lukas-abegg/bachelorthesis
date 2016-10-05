@@ -20,12 +20,12 @@ Springer Nature sammelt viele User-Tracking-Daten und dadurch viel Wissen über 
 \subsubsection{White Label Applikation mit Solr-Suche}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:WhiteLabelApplikationSolr-Suche}
 
-Damit die verschiedenen Verlage und Zeitschriften der Verlagsgruppe Springer Nature ihre Produkte und Dienstleistungen online anbieten können nutzt Springer Nature eine eigens entwickelte White Label Applikation\footnote{Eine White Label Applikation ist eine wiederverwendbare und agil erweiterbare Applikation}. Die White Label Applikation verwendet \textit{Apache Solr}~(im Folgenden \glqq Solr\grqq{} genannt, siehe \cite{solr}) als Suchplattform. Die Solr dient hierbei als eine der Schnittstellen zwischen dem Content-Pool von Springer Nature und der White Label Applikation. Bei den vom Content-Pool gelieferten Inhalten, handelt es sich um von Springer Nature Verlag publizierte Zeitschriften, Artikel, Bücher und redaktionelle Inhalte.
+Damit die verschiedenen Verlage und Zeitschriften der Verlagsgruppe Springer Nature ihre Produkte und Dienstleistungen online anbieten können, nutzt Springer Nature eine eigens entwickelte White Label Applikation\footnote{Eine White Label Applikation ist eine wiederverwendbare und agil erweiterbare Applikation}. Die White Label Applikation verwendet \textit{Apache Solr}~(im Folgenden \glqq Solr\grqq{} genannt, siehe \cite{solr}) als Suchplattform. Die Solr dient hierbei als eine der Schnittstellen zwischen dem Content-Pool von Springer Nature und der White Label Applikation. Bei den vom Content-Pool gelieferten Inhalten, handelt es sich um von Springer Nature Verlag publizierte Zeitschriften, Artikel, Bücher und redaktionelle Inhalte.
 
 \subsubsection{User-Tracking mit Webtrekk}
 \label{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk}
 
-Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Springer Nature das Analysetool \textit{Webtrekk}~(siehe \cite{webtrekk}). Webtrekk wird als externer Webservice genutzt und speichert dadurch die Tracking-Daten ebenfalls extern. Über diesen Webservice von Webtrekk können die Tracking-Daten auch gelesen und ausgewertet werden. Die daraus resultierenden Berichte bieten unter anderem die Möglichkeit, \textit{Suchquery-Logs}\footnote{Protokoll über alle ausgeführten Suchanfragen auf der Applikation} und \textit{Click-Through-Rates} (CTR)\footnote{Kennzahl um die Anzahl der Klicks auf Links im Verhältnis zu den gesamten Impressionen darzustellen} der User auszuwerten.
+Um das Verhalten der User auf ihren Web-Applikationen zu tracken verwendet Springer Nature das Analysetool \textit{Webtrekk}~(siehe \cite{webtrekk}). Webtrekk wird als externer Webservice genutzt. Über diesen Webservice können die Tracking-Daten gelesen und ausgewertet werden. Die daraus resultierenden Berichte bieten unter anderem die Möglichkeit, \textit{Suchquery-Logs}\footnote{Protokoll über alle ausgeführten Suchanfragen auf der Applikation} und \textit{Click-Through-Rates} (CTR)\footnote{Kennzahl um die Anzahl der Klicks auf Links im Verhältnis zu den gesamten Impressionen darzustellen} der User auszuwerten.
 
 \pagebreak
 
@@ -65,7 +65,7 @@ Mithilfe von Webanalysten und Webtrekk versucht Springermedizin das Marketing se
 \subsubsection{Der fast gläserne User}
 \label{sec:Einfuehrung:Problemstellung:Glaeserne-User}
 
-Springermedizin sammelt Tracking-Daten über jegliche Aktivitäten auf deren Applikationen und investiert Zeit und Geld in die Individualisierung\footnote{Mit Individualisierung wird die Speicherung eigener Parameter bezeichnet} der Analysedaten auf Webtrekk. Mittlerweile sind knapp 30 Custom-Parameter\footnote{Individuell erzeugte Parameter für Berichte und Analysen} auf Webtrekk angelegt um genau die Daten zu tracken, die zur Analyse des Verhaltens der User auf ihrer Applikationen relevant sind. Dadurch entsteht ein fast \glqq gläsernen User\grqq{}. Dieses Wissen könnte zum Vorteil des Users eingesetzt werden, indem es in der Suche verwendet wird.
+Springermedizin sammelt Tracking-Daten über jegliche Aktivitäten auf deren Applikationen und investiert Zeit und Geld in die Individualisierung\footnote{Mit Individualisierung wird die Speicherung eigener Parameter bezeichnet} der Analysedaten auf Webtrekk. Mittlerweile sind knapp 30 Custom-Parameter\footnote{Individuell erzeugte Parameter für Berichte und Analysen} auf Webtrekk angelegt, um genau die Daten zu tracken, die zur Analyse des Verhaltens der User auf ihrer Applikationen relevant sind. Dadurch entsteht ein fast \glqq gläsernen User\grqq{}. Dieses Wissen könnte zum Vorteil des Users eingesetzt werden, indem es in der Suche verwendet wird.
 
 \pagebreak
 % Ziel der Arbeit
@@ -86,7 +86,7 @@ Wir gehen dabei von folgenden Annahmen aus. Relevante Dokumente sind wichtiger a
 \subsubsection{Anwendung auf das Springermedizin-Umfeld}
 \label{sec:Einfuehrung:ZielArbeit:Suchoptimierung:AnwendungSpringermedizin-Umfeld}
 
-Wir werden versuchen, die CTRs der Suchresultate mithilfe des oben angesprochenen Algorithmus zu berechnen und mit diesen ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein. Im Idealfall widerspiegeln die gesammelten Click-Through-Daten der Userrelevanz der einzelnen Dokumente\footnote{Als Dokumente werden die einzelnen Suchresultate bezeichnet}.
+Wir werden versuchen, die CTRs der Suchresultate mithilfe des oben angesprochenen Algorithmus zu berechnen und mit diesen ein \textit{Reranking}\footnote{Mit Reranking bezeichnen wie die Umsortierung einer Liste von Suchresultaten} der Suchresultate auf das Springermedizin-Umfeld abzubilden. Die Herausforderung wird hierbei die Adaptierung des Lösungsansatzes auf das Springermedizin-Umfeld sein. Im Idealfall widerspiegeln die gesammelten Click-Through-Daten die Userrelevanz der einzelnen Dokumente\footnote{Als Dokumente werden die einzelnen Suchresultate bezeichnet}.
 
 \subsection{Abbildung auf das Springermedizin-Umfeld}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld}
@@ -99,7 +99,7 @@ Die Analyse von User-Tracking-Daten bietet viel Potential bezogen auf Userreleva
 \subsubsection{Bekanntes und wirkungsvolles Information Retrieval Verfahren}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:InformationRetrievalVerfahren}
 
-Suchoptimierung mittels Userrelevanz ist ein bekanntes und nicht triviales, aber relativ wirkungsvolles Information Retrieval Verfahren~(siehe \cite{IWUSBI}). Seit Mitte der 2000er Jahre wird mithilfe dieses Verfahrens versucht, Suchmaschinen zu verbessern. Aus dieser Zeit stammen auch die ersten Ansätze um mithilfe von Click-Through-Daten die Userrelevanz der Suchergebnisse zu berechnen~(siehe \cite{Joachims}).
+Suchoptimierung mittels Userrelevanz ist ein bekanntes und nicht triviales, aber relativ wirkungsvolles Information Retrieval Verfahren~(siehe \cite{IWUSBI}). Seit Mitte der 2000er Jahre wird mithilfe dieses Verfahrens versucht, Suchmaschinen zu verbessern. Aus dieser Zeit stammen auch die ersten Ansätze, um mithilfe von Click-Through-Daten die Userrelevanz der Suchergebnisse zu berechnen~(siehe \cite{Joachims}).
 
 \subsubsection{Lösungsansatz basierend auf Click-Through-Daten aus Webtrekk}
 \label{sec:Einfuehrung:ZielArbeit:AbbildungSpringermedizinUmfeld:Loesungsansatz}
@@ -122,23 +122,23 @@ Wie in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung} angesprochen, wo
 \subsubsection{Suchterm semantisch aufschlüsseln}
 \label{sec:Einfuehrung:Methodik:SuchtermSegmentierung}
 
-Um mit den Click-Through-Daten arbeiten zu können, müssen wir zunächst die relevanten Click-Through-Daten herausfiltern. Dazu müssen wir die Click-Through-Daten dem \textit{Suchterm}\footnote{Als Suchterm wird eine Suchanfrage bezeichnet} der Anfrage zuordnen können. Zu den Click-Through-Daten wird immer der Suchterm gespeichert, mit dem dabei gesucht wurde. Das heißt wir können eine Relation zwischen dem Suchterm der Click-Through-Daten und dem Suchterm unserer Anfrage herstellen.
+Um mit den Click-Through-Daten arbeiten zu können, müssen wir zunächst die relevanten Click-Through-Daten herausfiltern. Dazu müssen wir die Click-Through-Daten dem \textit{Suchterm}\footnote{Als Suchterm wird die Sammlung aller, in der Suchanfrage verwendeten Wörter bezeichnet} der Anfrage zuordnen können. Zu den Click-Through-Daten wird immer der Suchterm gespeichert, mit dem dabei gesucht wurde. Das heißt wir können eine Relation zwischen dem Suchterm der Click-Through-Daten und dem Suchterm unserer Anfrage herstellen.
 \\
 \\
-Die Click-Through-Daten müssen aber nicht mit dem vollständigen Suchterm in Relation stehen. Sie können auch nur mit einem Wort, einem Teil des Suchterms oder einem Synonym eines dieser Worte in Relation stehen. Wir müssen darum den Suchterm semantisch aufschlüsseln um alle relevanten Click-Through-Daten filtern zu können. 
+Die Click-Through-Daten müssen aber nicht mit dem vollständigen Suchterm in Relation stehen. Sie können auch nur mit einem Wort, einem Teil des Suchterms oder einem Synonym eines dieser Worte in Relation stehen. Wir müssen darum den Suchterm semantisch aufschlüsseln, um alle relevanten Click-Through-Daten filtern zu können. 
 
 \subsubsection{Aufbereitung Click-Through-Daten}
 \label{sec:Einfuehrung:Methodik:Click-Through-Daten}
 
-Können wir alle relevanten Click-Through-Daten zu einer Suchanfrage filtern, müssen lernen wie wir diese richtig aufbereiten, um die Click-Through-Daten berechnen zu können.  Ein wichtiger Punkt bei der Aufbereitung der Click-Through-Daten ist die Interpretation des Relevanzfeedbacks der einzelnen Click-Through-Daten. Nicht jeder Klick ist gleich relevant zu interpretieren. Die Relevanz eines Klicks hängt davon ab, welche Aktionen der User während dem Suchvorgang vor und nach dem Klick durchgeführt hat. Wir müssen darum zuerst analysieren, welche Informationen wir zu den Click-Through-Daten aus Webtrekk lesen können.  Reichen die Informationen für detailliertere Interpretationen nicht aus, müssen wir alle Click-Through-Daten als gleich relevant lesen.
+Können wir alle relevanten Click-Through-Daten zu einer Suchanfrage filtern, müssen wir lernen diese richtig aufzubereiten, um die CTR berechnen zu können.  Ein wichtiger Punkt bei der Aufbereitung der Click-Through-Daten ist die Interpretation des Relevanzfeedbacks der einzelnen Click-Through-Daten. Nicht jeder Klick ist gleich relevant zu interpretieren. Die Relevanz eines Klicks hängt davon ab, welche Aktionen der User während dem Suchvorgang \textit{vor} und \textit{nach} dem Klick durchgeführt hat. Wir müssen darum zuerst analysieren, welche Informationen wir zu den Click-Through-Daten aus Webtrekk lesen können.  Reichen diese Informationen für detailliertere Interpretationen nicht aus, müssen wir alle Click-Through-Daten als gleich relevant lesen.
 
 \subsubsection{Result-Reranking mittels PBM basiertem Algorithmus}
 \label{sec:Einfuehrung:Methodik:Result-RerankingPBM}
 
-Wissen wir, wie wir die Click-Through-Daten aufbereiten, können wir diese zur Berechnung der CTR eines Dokumentes und somit dessen Userrelevanz einsetzen. Für die Verwendung dieser Userrelevanz müssen wir festlegen wann und in welcher Art wir sie einsetzen. Wie bereits in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung:AnwendungSpringermedizin-Umfeld} erwähnt, werden wir uns in dieser Arbeit auf die \textit{Aufbereitung} der Suchresultate aus der Solr konzentrieren und dort einen \textit{Reranking-Algorithmus} einbauen. 
+Wissen wir, wie wir die Click-Through-Daten aufbereiten, können wir diese zur Berechnung der CTR eines Dokumentes und somit dessen Userrelevanz einsetzen. Für die Verwendung dieser Userrelevanz müssen wir festlegen, wann und in welcher Art wir sie einsetzen. Wie bereits in Kapitel \ref{sec:Einfuehrung:ZielArbeit:Suchoptimierung:AnwendungSpringermedizin-Umfeld} erwähnt, werden wir uns in dieser Arbeit auf die \textit{Aufbereitung} der Suchresultate aus der Solr konzentrieren und dort einen \textit{Reranking-Algorithmus} einbauen. 
 \\
 \\
-Der Reranking-Algorithmus basiert auf dem \textit{Klick-Modell} PBM. Ein Klick-Modell verwendet die Click-Through-Daten, um daraus die CTR eines Dokumentes zu berechnen. Die Wahl des Klick-Modells hängt darum stark von den Click-Through-Daten und den darin enthaltenen Informationen ab. Das PBM setzt sich aus zwei Wahrscheinlichkeiten zusammen. Die Wahrscheinlichkeit für einen Klick auf die Position im Suchresultat und die Wahrscheinlichkeit für einen Klick auf das Dokument. In dieser Arbeit werden wir veranschaulichen, warum wir den Ansatz des PBMs~(siehe \cite{pbm}) gewählt haben und wie wir den Algorithmus umgesetzt haben.
+Der Reranking-Algorithmus basiert auf dem \textit{Klick-Modell PBM}. Ein Klick-Modell verwendet die Click-Through-Daten, um daraus die CTR eines Dokumentes zu berechnen. Die Wahl des Klick-Modells hängt darum stark von den Click-Through-Daten und den darin enthaltenen Informationen ab. Das PBM setzt sich aus zwei Wahrscheinlichkeiten zusammen. Die Wahrscheinlichkeit für einen Klick auf die Position im Suchresultat und die Wahrscheinlichkeit für einen Klick auf das Dokument. In dieser Arbeit werden wir veranschaulichen, warum wir den Ansatz des PBMs~(siehe \cite{pbm}) gewählt haben und wie wir den Algorithmus umgesetzt haben.
 
 \subsubsection{Vergessen der alten Daten}
 \label{sec:Einfuehrung:Vergessen}
@@ -157,14 +157,14 @@ Mit Webtrekk haben wir eine Wissensbasis, die durch die Springermedizin-Applikat
 \subsubsection{Der Lösungsansatz und deren Grundlagen}
 \label{sec:Einfuehrung:GliederungAufbau:Loesungsansatz}
 
-In diesem Kapitel wurde der zu untersuchenden Lösungsansatz vorgestellt und Problemstellung und deren Teilprobleme identifiziert. Dabei sind wir auf die Hintergründe dieser Arbeit und die Vorgehensweise eingegangen. Im zweiten Kapitel~(Grundlagen) folgt die Theorie des beschriebenen Lösungsansatzes. Hier werden wir uns auf die fachlichen Grundlagen konzentrieren, Problemstellungen analysieren und Lösungsansätze vorstellen.
+In diesem Kapitel wurde der zu untersuchende Lösungsansatz vorgestellt. Wir haben Problemstellungen und deren Teilprobleme identifiziert. Dabei sind wir auf die Hintergründe dieser Arbeit und die Vorgehensweise eingegangen. Im zweiten Kapitel~(Grundlagen) folgt die Theorie des beschriebenen Lösungsansatzes. Hier werden wir uns auf die fachlichen Grundlagen konzentrieren, Problemstellungen analysieren und Lösungsansätze vorstellen.
 
 \subsubsection{Umsetzung des Lösungsansatzes}
 \label{sec:Einfuehrung:GliederungAufbau:Umsetzung}
 
-In Kapitel \ref{sec:Reranking}~(Reranking mittels CTR Ergebnis) werden wir die in Kapitel \ref{sec:Einfuehrung:Methodik} angesprochene Methodik verfeinern und auf Basis der Grundlagen aus Kapitel \ref{sec:Grundlagen:Grundbegriffe} über die detaillierte Vorgehensweise bei der Umsetzung diskutieren. Die Umsetzung selbst folgt dann in Kapitel \ref{sec:Implementierung}~(Implementierung).
+In Kapitel \ref{sec:Reranking}~(Reranking mittels CTR) werden wir die in Kapitel \ref{sec:Einfuehrung:Methodik} angesprochene Methodik verfeinern und auf Basis der Grundlagen aus Kapitel \ref{sec:Grundlagen:Grundbegriffe}, über die detaillierte Vorgehensweise bei der Umsetzung diskutieren. Die Umsetzung selbst, folgt dann in Kapitel \ref{sec:Implementierung}~(Implementierung).
 
 \subsubsection{Erkenntnisse verarbeiten}
 \label{sec:Einfuehrung:GliederungAufbau:Erkenntnisse}
 
-Um zu prüfen ob der umgesetzte Lösungsansatz die erhofften Verbesserungen erzielt, werden wir diesen in Kapitel \ref{sec:Evaluation}~(Evaluation und Auswertung) in einer Evaluation mit der bisherigen Springermedizin-Suche vergleichen. Aufgrund der resultierenden Erkenntnisse werden wir in Kapitel \ref{sec:ZusammenfassungAusblick}~(Zusammenfassung und Ausblick) ein Fazit ziehen können und einen Ausblick auf mögliche zukünftige Arbeiten geben.
+Um zu prüfen ob der umgesetzte Lösungsansatz die erhofften Verbesserungen erzielt, werden wir diesen in Kapitel \ref{sec:Evaluation}~(Evaluation und Auswertung) in einer Evaluation mit der bisherigen Springermedizin-Suche vergleichen. Aufgrund der resultierenden Erkenntnisse, werden wir in Kapitel \ref{sec:ZusammenfassungAusblick}~(Zusammenfassung und Ausblick) ein Fazit ziehen können und einen Ausblick auf mögliche zukünftige Arbeiten geben.
