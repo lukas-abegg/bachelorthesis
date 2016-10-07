@@ -6,7 +6,7 @@
 \chapter{Implementierung}
 \label{sec:Implementierung}
 
-Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er nun implementiert werden kann. In diesem Kapitel geht es nun darum, diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren.Wir werden in diesem Kapitel nicht den Code der Lösung vorstellen. Wir werden aber beschreiben, wo wir in die Suche eingreifen, wie wir eingreifen und was wir genau machen. Das Ziel dieses Kapitels soll es sein, eine Überblick über den implementiert Lösungsansatz zu schaffen.
+Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er nun implementiert werden kann. In diesem Kapitel geht es nun darum, diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren.Wir werden in diesem Kapitel nicht den Code der Lösung vorstellen. Wir werden aber beschreiben, wo wir in die Suche eingreifen, wie wir eingreifen und was wir genau machen, um dadurch einen Überblick über den implementierten Lösungsansatz schaffen zu können.
 
 \section{Architektur der Implementierung}
 \label{sec:Implementierung:Architektur}
@@ -19,10 +19,13 @@ Um zu verdeutlichen, an welcher Stelle des Suchprozesses der Springermedizin-Suc
 \caption[Prozessbild der Implementierung]{Prozessbild der Implementierung}
 \label{fig:ProzessbildImplementierung}
 \includegraphics[width=\linewidth]{gfx/ImplementierungProzessbild}
-\vspace{-2.5em}
+\vspace{-3em}
 \end{figure}
 
-Wie bereits in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:AnsatzSucheEinbinden} angesprochen, binden wir den Algorithmus als ein, in sich geschlossenes, unabhängiges Modul zwischen dem Suchprozess und der Aufbereitung des Suchresultats ein. Wie wir in der Abbildung sehen können, wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben dann der Suche als Suchresultat zurück. 
+Wie wir in der Abbildung sehen können, wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben dann der Suche als Suchresultat zurück. 
+
+\paragraph{Verwendeter Technologiestack} 
+Die Springermedizin-Suche ist ein Teil der White Label Applikation von Springer Nature. Diese baut auf dem MVC-Framework \textit{Play}~\cite{Play} auf und verwendet \textit{Scala}~\cite{Scala} als Programmiersprache. Unsere Implementierung wird daher in Scala geschrieben und direkt in der White Label Applikation integriert.
 
 \section{Highlight: PBM basierter Reranking-Algorithmus}
 \label{sec:Implementierung:PBM}
