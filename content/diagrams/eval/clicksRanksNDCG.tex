@@ -1,0 +1,98 @@
+\begin{minipage}{0.40\linewidth}
+asdasdasdssssasdasdasdssssa sdasdas dssssasdasdasd ssssxcsd sdxfxfxff 
+\end{minipage}
+\hfill
+\begin{minipage}{0.55\linewidth}
+\begin{figure}[H]
+\centering 
+\vspace{-1em}
+\caption[Click-Through-Daten: Einfluss der Anzahl Klicks gesamt auf $nDCG$]{Click-Through-Daten: Einfluss der Anzahl Klicks gesamt auf $nDCG$}
+\label{fig:Evaluation:Auswertung:ClicksNDCG}
+
+\footnotesize
+\pgfplotstableread[col sep=semicolon]{content/diagrams/eval/clicksNDCG.csv}\clicks
+\pgfsetplotmarksize{.0pt}
+  
+\begin{tikzpicture}
+\begin{axis}[
+	width=7cm,
+	height=4cm,
+	scale only axis,
+	xmajorgrids,
+	xminorgrids,
+    ylabel=\textbf{$nDCG$}, 
+	xlabel=\textbf{Anzahl Klicks},
+    xtick={0,20,40,60,80,100},
+   	xmin=0,
+	xmax=100,
+    xlabel shift = 1in,
+    ylabel shift = 1in,
+    y label style={yshift=-4mm},
+    legend style={font=\tiny},
+    legend style={at={(axis cs:100,0.05)},anchor=south east}
+]
+\addplot table [
+    y=AVG,
+    x=Klicks
+] {\clicks};
+\addplot table [
+    y=NDCG,
+    x=Klicks
+] {\clicks};
+\legend{Durchschnittlicher $nDCG$, $nDCG$ abhängig der Anzahl Klicks gesamt}
+\end{axis}
+\end{tikzpicture}
+
+\vspace{-2.5em}
+\end{figure}
+\end{minipage}
+
+
+\begin{minipage}{0.40\linewidth}
+asdasdasdssssasdasdasd ssssa sdasdasdss ssasdasda sdssssssds dsd
+\end{minipage}
+\hfill
+\begin{minipage}{0.55\linewidth}
+\begin{figure}[H]
+\centering 
+\vspace{-1em}
+\caption[Click-Through-Daten: Einfluss der Anzahl unterschiedlicher Positionen auf nDCG]{Click-Through-Daten: Einfluss der Anzahl unterschiedlicher Positionen auf nDCG}
+\label{fig:Evaluation:Auswertung:RanksNDCG}
+
+\footnotesize
+\pgfplotstableread[col sep=semicolon]{content/diagrams/eval/ranksNDCG.csv}\ranks
+\pgfsetplotmarksize{.0pt}
+  
+\begin{tikzpicture}
+\begin{axis}[
+	width=7cm,
+	height=4cm,
+	scale only axis,
+	xmajorgrids,
+	xminorgrids,
+    ylabel=\textbf{$nDCG$}, 
+	xlabel=\textbf{Anzahl unterschiedlicher Positionen},
+    xtick={0,20,40,60,80},
+   	xmin=0,
+	xmax=80,
+    xlabel shift = 1in,
+    ylabel shift = 1in,
+    y label style={yshift=-4mm},
+    legend style={font=\tiny},
+    legend style={at={(axis cs:80,0.05)},anchor=south east}
+]
+\addplot table [
+    y=AVG,
+    x=Positionen
+] {\ranks};
+\addplot table [
+    y=NDCG,
+    x=Positionen
+] {\ranks};
+\legend{Durchschnittlicher $nDCG$, $nDCG$ abhängig der Anzahl unterschiedlicher Positionen}
+\end{axis}
+\end{tikzpicture}
+
+\vspace{-2.5em}
+\end{figure}
+\end{minipage}

@@ -1,0 +1,55 @@
+
+\begin{figure}[H]
+\centering 
+\vspace{-1em}
+\caption[Durchschnittliche Relevanz-Werte der Suchvarianten für die ersten zehn Suchpositionen]{Durchschnittliche Relevanz-Werte der Suchvarianten für die ersten zehn Suchpositionen}
+\label{fig:Evaluation:Auswertung:RelevanzVarianten}
+
+\footnotesize
+\pgfplotstableread[col sep=semicolon]{content/diagrams/eval/relevanceVarianten.csv}\rel
+  
+\begin{tikzpicture}
+\begin{axis}[
+	width=11cm,
+	height=4cm,
+	scale only axis,
+	xmajorgrids,
+	xminorgrids,
+    ylabel=\textbf{Relevanz-Wert}, 
+	xlabel=\textbf{Position},
+    xtick=data,
+    xlabel shift = 1in,
+    ylabel shift = 1in,
+    xmin=0,
+	xmax=10,
+    y label style={yshift=-4mm},
+   	legend pos=outer north east,
+    legend style={font=\tiny},
+    legend style={cells={align=left}}
+]
+\addplot table [
+    y=N,
+    x=Position
+] {\rel};
+\addplot table [
+    y=R1,
+    x=Position
+] {\rel};
+\addplot table [
+    y=R2,
+    x=Position
+] {\rel};
+\addplot table [
+    y=R3,
+    x=Position
+] {\rel};
+\addplot table [
+    y=R4,
+    x=Position
+] {\rel};
+\legend{aktuelle Springermedizin-Suche, {Reranking-Algorithmus mit:\\$X_u = 0.05$ \\ CTR = \textit{angemeldete User}}, {Reranking-Algorithmus mit:\\$X_u = 0.05$ \\ CTR = \textit{alle}}, {Reranking-Algorithmus mit:\\$X_u = 0.1$ \\ CTR = \textit{angemeldete User}}, {Reranking-Algorithmus mit:\\$X_u = 0.1$ \\ CTR = \textit{alle}}}
+\end{axis}
+\end{tikzpicture}
+
+\vspace{-2em}
+\end{figure}
