@@ -72,6 +72,7 @@
 
 \usepackage{minted} % needed for the inclusion of source code
 \usepackage{pgfplots} % needed for drawing diagrams
+\usepackage{pgfplotstable}
 \usepackage{textcomp}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -81,6 +82,7 @@
 \usepackage{colortbl}
 \usepackage{multirow}
 \usepackage{hhline}
+\usepackage{filecontents} 
 % **************************************************
 % Information and Commands for Reuse
 % **************************************************
@@ -149,7 +151,8 @@
 	bookmarksopen=true					%
 }
 
-	\sloppy
+\sloppy
+
 
 % **************************************************
 % Document CONTENT
@@ -214,33 +217,12 @@
 \input{content/chapter-evaluation}			% INCLUDE: Evaluation
 \input{content/chapter-zusammenfassung} 		% INCLUDE: Zusammenfassung
 
-\cleardoublepage
+\pagebreak
 
 %************************************************
 % Anhang
 %************************************************
-\addcontentsline{toc}{chapter}{Anhang}
-\addcontentsline{toc}{section}{Literatur-Verzeichnis}
-{%
-\setstretch{1.1}
-\renewcommand{\bibfont}{\normalfont\small}
-\setlength{\biblabelsep}{0pt}
-\setlength{\bibitemsep}{0.5\baselineskip plus 0.5\baselineskip}
-\printbibliography[nottype=online]
-\printbibliography[heading=subbibliography,title={Webseiten},type=online,prefixnumbers={@}]
-}
-\cleardoublepage
-
-\addcontentsline{toc}{section}{Abbildungs-Verzeichnis}
-\listoffigures
-\cleardoublepage
-
-\addcontentsline{toc}{section}{Tabellen-Verzeichnis}
-\listoftables
-\cleardoublepage
-
-%\clearpage
-%\newpage
+\input{content/chapter-anhang} 			% INCLUDE: Anhang
 
 % **************************************************
 % End of Document CONTENT

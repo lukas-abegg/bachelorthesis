@@ -83,7 +83,7 @@ Die genaue semantische Analyse eines Suchterms beinhaltet unter anderem die Erke
 \end{figure}
 
 \paragraph{Keine Aktualität in der Suche}
-Der von uns verfolgte Reranking-Algorithmus nimmt keine Rücksicht auf die \glqq Aktualität\grqq{} eines Beitrages sondern nur auf die Klick-Wahrscheinlichkeit und kann dadurch, aktuellere Dokumente trotz Relevanz, schlecht positionieren im Suchresultat.  Die Klick-Wahrscheinlichkeit kann durch zwei Faktoren beeinflusst werden. Hohe Relevanz in der Solr-Suche (1) - wird in der Volltextsuche die Aktualität des Dokumentes in die Berechnung der Relevanz einbezogen, werden aktuelle Beiträge im Suchergebnis der Solr weit vorne eingestuft. Wie wir aus Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} erkennen können, haben niedrige Positionen eine höhere Klick-Wahrscheinlichkeit. Das könnte die Berechnung des Reranking-Algorithmus positiv beeinflussen. Reranking-Algorithmus um Zufallsfaktor erweitern (2) - mithilfe eines Zufallsfaktor ist die Reihenfolge der Suchresultate weniger vom Algorithmus abhängig und die Wahrscheinlichkeit, aktuelle Dokumente ohne Click-Through-Daten weit vorne im Suchergebnis zu finden, wird erhöht.
+Der von uns verfolgte Reranking-Algorithmus nimmt keine Rücksicht auf die \glqq Aktualität\grqq{} eines Beitrages sondern nur auf die Klick-Wahrscheinlichkeit und kann dadurch, aktuellere Dokumente trotz Relevanz, schlecht positionieren im Suchresultat.  Die Klick-Wahrscheinlichkeit kann durch zwei Faktoren beeinflusst werden. Hohe Relevanz in der Solr-Suche (1) - wird in der Volltextsuche die Aktualität des Dokumentes in die Berechnung der Relevanz einbezogen, werden aktuelle Beiträge im Suchergebnis der Solr weit vorne eingestuft. Wie wir aus Abb. \ref{fig:Grundlage:AnalyseKlicksPositionen} erkennen können, haben die ersten Positionen des Suchergebnisses eine höhere Klick-Wahrscheinlichkeit. Das könnte die Berechnung des Reranking-Algorithmus positiv beeinflussen. Reranking-Algorithmus um Zufallsfaktor erweitern (2) - mithilfe eines Zufallsfaktor ist die Reihenfolge der Suchresultate weniger vom Algorithmus abhängig und die Wahrscheinlichkeit, aktuelle Dokumente ohne Click-Through-Daten weit vorne im Suchergebnis zu finden, wird erhöht.
 
 \paragraph{Interessante Dokumente werden nie gesehen}
 Wie bereits oben erwähnt, beachtet der Reranking-Algorithmus Dokumente ohne Click-Through-Daten nur, wenn die Position im Suchresultat eine Klick-Wahrscheinlichkeit aufweist. Dadurch kann es sein, dass interessante Dokumente nie gesehen werden. Dem entgegenwirken können wir ebenfalls mit dem oben erwähnten Zufallsfaktor. Dadurch wird die Klick-Wahrscheinlichkeit für interessante Dokumente zufallsbedingt erhöht.
@@ -112,7 +112,7 @@ Das PBM berechnet die Klick-Wahrscheinlichkeit, also die \textit{Attraktivität}
 
 \input{content/diagrams/pruneOfClicksOfTopSearchphrases}
 
-\subsubsection{Analyse der angeklickten Positionen: Niedrige Positionen werden häufiger angeklickt}
+\subsubsection{Analyse der angeklickten Positionen: Die ersten Positionen werden häufiger angeklickt}
 \label{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination}
 
 \input{content/diagrams/pruneOfClicksOfRankExamination}

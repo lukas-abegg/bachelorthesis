@@ -1,0 +1,79 @@
+
+\begin{figure}[H]
+\centering 
+\vspace{-1em}
+\caption[nDCG-Auswertung]{nDCG-Auswertung aller Suchvarianten}
+\label{fig:Evaluation:Auswertung:NDCGVarianten}
+
+\footnotesize
+\pgfplotstableread[col sep=semicolon]{content/diagrams/eval/nDCG.csv}\ndcg
+\pgfsetplotmarksize{2pt}
+
+\begin{tikzpicture}
+\begin{axis}[
+	ybar,
+    ymin=0,
+    ymax=1.1,
+	xtick=data,
+	xticklabel style={align=center},
+	xticklabels={{$X_u = 0.05$ \\ CTR = \textit{angemeldete User}}, {$X_u = 0.05$ \\ CTR = \textit{alle}}, {$X_u = 0.1$ \\ CTR = \textit{angemeldete User}}, {$X_u = 0.1$ \\ CTR = \textit{alle}}},
+	width=11cm,
+	height=4cm,
+	scale only axis,
+	ymajorgrids,
+	yminorgrids,
+	x label style={yshift=-5mm},
+    ylabel=\textbf{$nDCG$}, 
+	xlabel=\textbf{Variante des Reranking-Algorithmus},
+    legend style={font=\tiny},
+   	legend pos=outer north east
+]
+\addplot[nodes near coords, 
+	every node near coord/.append style={xshift=-5pt,yshift=-1pt}, draw = blue,
+       fill = blue!30!white] table [
+    y=AVG_S,
+    x=Index
+] {\ndcg};
+\addlegendentry{aktuelle Springermedizin-Suche}
+\addplot[nodes near coords, 
+	every node near coord/.append style={xshift=5pt,yshift=-1pt}, draw = red,
+       fill=red!30!white] table [
+    y=AVG_R,
+    x=Index
+] {\ndcg};
+\addlegendentry{Suche mit Reranking-Algorithmus}
+\end{axis}
+\begin{axis}[
+    ymin=0,
+    ymax=1.1,
+	xtick=\empty,
+	ytick=\empty,
+	width=11cm,
+	height=4cm,
+	scale only axis,
+	ymajorgrids,
+	yminorgrids,
+    legend style={font=\tiny},
+   	legend pos=outer north east
+]
+\addplot[draw=blue] table [
+    y=AVG_S_Min,
+    x=Index
+] {\ndcg};
+\addplot[draw=red] table [
+    y=AVG_R_Min,
+    x=Index
+] {\ndcg};
+\addplot[draw=blue] table [
+    y=AVG_S_Max,
+    x=Index
+] {\ndcg};
+\addplot[draw=red] table [
+    y=AVG_R_Max,
+    x=Index
+] {\ndcg};
+\end{axis}
+\end{tikzpicture}
+
+\vspace{-2em}
+\end{figure}

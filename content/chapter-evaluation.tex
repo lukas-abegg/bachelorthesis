@@ -64,6 +64,21 @@ $C_i$		& Spaltensumme der Spalte $i$ in Übereinstimmungsmatrix				& $nDCG_r$  	
 \vspace{-2.5em}
 \end{table}
 
+\subsection{Hypothesen}
+\label{sec:Evaluation:Aufbau:Hypothese}
+
+\paragraph{Springermedizin-Content bietet keine optimale Grundlage für Relevanz-Bewertungen}
+Aufgrund der Analysen der Click-Through-Daten und des Springermedizin-Contents in Kapitel \ref{sec:Grundlagen:Grundbegriffe}, wissen wir, dass wir keine optimale Grundlage für unseren Reranking-Algorithmus haben. Das liegt vor allem an den nicht beeinflussbaren Faktoren, wie die Ausspielung von Teasern mit geringer Aussagekraft und könnte sich vor allem in den Relevanz-Bewertungen der Suchergebnisse widerspiegeln. Da dieses Problem aber denselben Einfluss auf die aktuelle, sowie die neu implementierte Suche hat, sollte das Qualitätsmaß der nDCG-Auswertung davon nicht stark beeinflusst werden. 
+
+\paragraph{Falsche Aussagen in den Click-Through-Daten verringern Qualitätsmaß des Reranking-Algorithmus}
+Bei der Messung des Qualitätsmaßes mittels nDCG wird der Einfluss der Click-Through-Daten interessanter sein. Grundsätzlich müsste davon ausgegangen werden, dass viele Click-Through-Daten das Ergebnis positiv beeinflussen. Es sei denn, die verwendeten Click-Through-Daten beinhalten falsche Aussagen, da sie durch viele Klicks auf wenig relevante Suchergebnisse entstanden sind und wir die User-Aktivitäten nach einem Klick nicht messen können. Wir gehen darum davon aus, dass diese Daten das Ergebnis negativ beeinflussen werden. 
+
+\paragraph{Stärkere Userrelevanz im Suchergebnis verbessert nDCG-Ergebnis}
+Grundsätzlich sollte der Reranking-Algorithmus in der nDCG-Auswertung dennoch Verbesserungen im Vergleich zur aktuellen Suche zeigen, aufgrund der stärkeren Userrelevanz im Suchergebnis. Wir gehen darum von fünf bis zehn Prozent Verbesserung in der nDCG-Auswertung aus. Da bereits kleine Verbesserungen in der nDCG-Auswertung psychologisch wertvoll sind für den Endnutzer, könnten wir bei einem Wert in diesem Bereich bereits von einem Erfolg reden. 
+
+\paragraph{Gute Kappa-Werte durch fachgebietsspezifische Zuteilungen der Redakteure zu den Suchtermen}
+In der Aufteilung der Analysen zu den Suchtermen haben wir darauf geachtet, dass die zugeteilten Redakteure entweder aus dem spezifischen Fachgebiet kommen oder fachgebietsnahes Wissen aufweisen. Das ähnlich gute Fachwissen der Beurteiler, sollte sich positiv auf die Kappa-Werte der Bewertungen auswirken. Wir gehen darum davon aus, dass der Kappa-Wert in den meisten Fällen (mindestens 80 Prozent) gut sein wird. 
+
 \subsection{Datengrundlage}
 \label{sec:Evaluation:Aufbau:Datengrundlage}
 
@@ -113,11 +128,7 @@ Den Anteil tatsächlich beobachteter Übereinstimmungen $p_0$ können wir direkt
 \end{equation}
 \vspace{-1em}
 
-Den daraus resultierenden Wert, müssen wir um den Anteil zufälliger Übereinstimmungen $pe$ korrigieren. Der Wert von $pe$ wird mithilfe der Randsummen der Matrix (Spalten- bzw. Zeilensummen) berechnet. Dazu muss jede Randsumme zuerst durch $n$ dividiert werden. Danach wird zu jeder Kategorie das \textit{Produkt der Spalten und Zeilensumme} gebildet, mit welchem anschließend die Summe der Kategorien berechnet wird. 
-
-\pagebreak
-
-Die komplette Berechnungsformel von $pe$ sieht wie folgt aus:
+Den daraus resultierenden Wert, müssen wir um den Anteil zufälliger Übereinstimmungen $pe$ korrigieren. Der Wert von $pe$ wird mithilfe der Randsummen der Matrix (Spalten- bzw. Zeilensummen) berechnet. Dazu muss jede Randsumme zuerst durch $n$ dividiert werden. Danach wird zu jeder Kategorie das \textit{Produkt der Spalten und Zeilensumme} gebildet, mit welchem anschließend die Summe der Kategorien berechnet wird. Die komplette Berechnungsformel von $pe$ sieht wie folgt aus:
 
 \vspace{-1em}
 \begin{equation}	
@@ -168,7 +179,7 @@ Wir beachten hierbei, dass wir zwar die Spalten- und Zeilensummen gewichten, in 
 \textit{0.5}                                     			& \textit{0.75}                                     	& 2                                     \\ 
 \textit{0.25}                                        		& \textit{1}                                        		& 3                                     \\ \hline
 \end{tabular}
-\vspace{-1.5em}
+\vspace{-2em}
 \end{table}
 
 Um besser zu verstehen, wie diese Gewichtung eingebaut wird, sehen wir folgend den Zeilenausschnitt $R_0$ überführt in $R_{0_{w}}$ der angepassten Übereinstimmungsmatrix für den gewichteten Kappa $K_w$ in der Berechnung von $p_{0_{w}}$:
@@ -189,7 +200,7 @@ Um besser zu verstehen, wie diese Gewichtung eingebaut wird, sehen wir folgend d
 \multicolumn{1}{|l}{\cellcolor[HTML]{C0C0C0}}                                       & \multicolumn{1}{l|}{\cellcolor[HTML]{C0C0C0}\textbf{0}} & \multicolumn{1}{c|}{\cellcolor[HTML]{00D2CB}$a_{w} \leftarrow 1 \cdot a$}         & \multicolumn{1}{c|}{$b_{w} \leftarrow 0.75 \cdot b$}                                & \multicolumn{1}{c|}{$c_{w} \leftarrow 0.5 \cdot c$}                                & \multicolumn{1}{c|}{$d_{w} \leftarrow 0.25 \cdot d$}                                & \multicolumn{1}{c|}{$\underbrace{(a_{w}+b_{w}+c_{w}+d_{w})/n}_{\coloneqq R_{0_{w}}}$}                                                                                                          \\ \hhline{|*7{-}|}              
 \end{tabular}%
 }
-\vspace{-1em}
+\vspace{-1.5em}
 \end{table}
 
 \paragraph{Kappa interpretieren}
@@ -199,9 +210,7 @@ Wie in \cite{KappaWerte} beschrieben, müssen die Kappa-Werte individuell interp
 \subsection{Metrik}
 \label{sec:Evaluation:Aufbau:Metrik}
 
-\subsubsection{Qualitätsmaß einer Suchvariante bestimmen}
-\label{sec:Evaluation:Aufbau:Metrik:QualitaetMessen}
-
+\paragraph{Qualitätsmaß einer Suchvariante mittels nDCG bestimmen}
 In der Evaluation werden zu jedem Suchterm zwei Bewertungen für die aktuelle Springermedizin-Suche und zwei Bewertungen für die Springermedizin-Suche mit dem Reranking-Algorithmus abgegeben. Um das Qualitätsmaß einer Suche zu bestimmen, werden wir den \textit{Normalized Discounted Cumulative Gain} (nDCG, siehe \cite{nDCG}) verwenden. Der nDCG misst die Qualität des Rankings der Suche und wird in der Information Retrieval\footnote{Mit Information Retrieval werden Methoden und Verfahren, die der Aufbereitung und Speicherung von Wissen und der Gewinnung von Informationen dienen bezeichnet} oft eingesetzt um die Effektivität eines Such-Algorithmus zu messen.  Um das Qualitätsmaß der beiden in der Evaluation verwendeten Suchvarianten zum Suchterm zu bestimmen, berechnen wir zu jeder Suchvariante den nDCG der beiden Bewertungen des Suchterms. Nehmen wir den Mittelwert der beiden resultierenden nDCG-Werte, erhalten wir den effektiven nDCG-Wert. Die nDCG-Werte der beiden Suchvarianten können wir dann miteinander vergleichen.
 
 \subsubsection{Evaluationsdaten mittels nDCG auswerten}
@@ -223,11 +232,7 @@ DCG_{r} = \sum\limits_{i=1}^r \frac{2^{rel_{i}} - 1}{\log_2(i+1)}
 Wie wir sehen, werden Dokumente umso geringer bewertet, je weiter hinten sie im Suchresultat erscheinen. Dafür sorgt $\log_2(i+1)$ als Divisor in der Summenfunktion, dessen Wert mit steigendem Wert der Dokumentposition größer wird.
 
 \paragraph{Der DCG muss normalisiert werden, um das Qualitätsmaß einer Suche über unterschiedliche Anfragen zu bewerten}
-Der DCG ist auf den Vergleich von Suchanfragen mit gleicher Resultatslänge ausgelegt. Haben die zu untersuchenden Suchanfragen, eine unterschiedliche Anzahl der zu untersuchenden Positionen, variiert die maximal erreichbare Punktzahl. Der nDCG normalisiert diese Punktewerte, indem er die Reihenfolge der Relevanz-Werte des Suchergebnisses mit der \textit{idealen Reihenfolge} derselben Relevanz-Werte vergleicht. 
-
-\pagebreak
-
-Die Formel des nDCG wird wie folgt definiert:
+Der DCG ist auf den Vergleich von Suchanfragen mit gleicher Resultatslänge ausgelegt. Haben die zu untersuchenden Suchanfragen, eine unterschiedliche Anzahl der zu untersuchenden Positionen, variiert die maximal erreichbare Punktzahl. Der nDCG normalisiert diese Punktewerte, indem er die Reihenfolge der Relevanz-Werte des Suchergebnisses mit der \textit{idealen Reihenfolge} derselben Relevanz-Werte vergleicht. Die Formel des nDCG wird wie folgt definiert:
 
 \vspace{-.25em}
 \begin{spacing}{.25}
@@ -241,7 +246,7 @@ Die Formel des nDCG wird wie folgt definiert:
 
 Der resultierende Ergebnis-Wert des $nDCG_r$ bewegt sich zwischen 0 und 1. Entspricht die Reihenfolge der Suchergebnisse, der Relevanz der Suchergebnisse, so gilt $DCG_r = IDCG_r$. Dies entspricht dem Idealfall, die Suche besitzt in diesem Fall den $nDCG_r$-Wert 1 und somit das maximal mögliche Qualitätsmaß für den getesteten Suchterm. Um die nDCG-Metrik anhand eines Beispiels etwas besser zu verstehen, sehen wir hier folgend die nDCG-Auswertung zweier Ranking-Funktionen für vier Dokumente $d1, d2, d3, d4$ mit einer Relevanz-Skala von 0-3. Der $MaxDCG$ beschreibt hier den IDCG:
 
- \begin{figure}[H]
+\begin{figure}[H]
 \centering
 \vspace{-1em}
 \caption[Beispiel: nDCG-Auswertung für vier Dokumente -  Quelle des Bildes: http://
@@ -297,7 +302,11 @@ Wir wollen zu jedem Suchterm eine Bewertung der aktuellen Springermedizin-Suche 
 \vspace{-2em}
 \end{table}
 
-Ist eine Bewertung gespeichert, wird die zweite Variante der Suche geladen. Eine Analyse ist dann abgeschlossen, wenn beide Suchvarianten bewertet sind. Der Ablauf einer Analyse sieht wie folgt aus:
+Ist eine Bewertung gespeichert, wird die zweite Variante der Suche geladen. Eine Analyse ist dann abgeschlossen, wenn beide Suchvarianten bewertet sind. 
+
+\pagebreak 
+
+Der Ablauf einer Analyse sieht wie folgt aus:
 
 \begin{figure}[H]
 \centering
@@ -344,13 +353,15 @@ Zu jeder Analyse werden wir neben den Relevanz-Bewertungen und den Suchterm-Info
 
 Nach Abschluss der Evaluationsphase werden wir die Evaluations-Daten auswerten. Die Auswertung der Daten findet direkt im Evaluations-System statt. Dazu werden wir die Relevanz-Bewertungen aus der Datenbank lesen und wie oben beschrieben mit dem Cohens-Kappa-Koeffizienten und der nDCG-Metrik auswerten. Mithilfe der Evaluations-Daten können wir dann auch weitere Auswertungen zu den Click-Through-Daten und den Suchergebnissen der Suchterme machen.
 
+\pagebreak
+
 \subsection{Durchführung}
 \label{sec:Evaluation:Aufbau:Durchfuehrung}
 
 \subsubsection{Zu analysierende Suchterme}
 \label{sec:Evaluation:Aufbau:Durchfuehrung:Aufgabenstellung}
 
-Um die Evaluation praxisrelevant und mit genügend Click-Through-Daten ausführen zu können, wurden die Suchanfragen der letzten zwei Monate auf der Springermedizin-Suche analysiert und 80 oft gesuchte Suchterme ausgewählt. Springermedizin hat ein breites Spektrum an medizinischen Fachgebieten. Um fachlich gute Bewertungen zu kriegen, haben wir die Suchterme nach Fachrichtung unterteilt und jeweils zwei Beurteilern zugeteilt, die aus der Fachrichtung kommen:
+Um die Evaluation praxisrelevant und mit genügend Click-Through-Daten ausführen zu können, wurden die Suchanfragen der letzten zwei Monate auf der Springermedizin-Suche analysiert und 80 oft gesuchte Suchterme ausgewählt (siehe Anhang \ref{sec:Anhang:VerwendeteSuchtermeEvaluation}). Springermedizin hat ein breites Spektrum an medizinischen Fachgebieten. Um fachlich gute Bewertungen zu kriegen, haben wir die Suchterme nach Fachrichtung unterteilt und jeweils zwei Beurteilern zugeteilt, die aus der Fachrichtung kommen:
 
 \begin{table}[H]
 \centering
@@ -405,11 +416,44 @@ Für den \textit{Einfluss des Zufallsfaktors} werden wir zwei Werte für $\lambd
 \section{Auswertung der Suchergebnis-Qualität}
 \label{sec:Evaluation:Auswertung}
 
+Bei der Auswertung der Evaluationsdaten werden wir uns zuerst auf die Kappa-Werte fokussieren und analysieren, wie gut das Übereinstimmungsmaß der Beurteiler zu den Suchtermen $K_w$ ist. Danach folgt der Kern der Auswertung, die Bestimmung des Qualitätsmaßes der Suchvarianten mithilfe der nDCG-Metrik. Wir wollen herausfinden, welche Verbesserungen, mit welcher Konstellation des Reranking-Algorthmus gemacht werden können. Da der nDCG sich nur auf die Reihenfolge der Relevanz-Bewertungen konzentriert, wollen wir in einer weiteren Auswertung analysieren, welche durchschnittlichen Relevanz-Bewertungen die ersten zehn Suchresultate effektiv hatten. Zum Schluss werden wir die Einflüsse der Click-Through-Daten auf den nDCG analysieren und auswerten.
+
 \subsection{Quantitative Auswertung}
 \label{sec:Evaluation:Auswertung:QuantitativeAuswertung}
 
+\subsubsection{Auswertung des Übereinstimmungsmaßes der Beurteiler mittels Kappa}
+\label{sec:Evaluation:Auswertung:QuantitativeAuswertung:Kappa}
+
+In dieser Analyse werden wir sehen, wie gut das Übereinstimmungsmaß $K_w$ der Beurteiler ist und wie viele der Suchterm-Bewertungen für die nDCG-Auswertung überhaupt in Frage kommen. 
+
+\input{content/diagrams/eval/kappas}
+
+\paragraph{Zum Vergleich der ungewichtete Kappa}
+Wie bereits in der Datengrundlage im Kapitel \ref{sec:Evaluation:Aufbau:Datengrundlage} diskutiert, bewerten wir nicht den Cohens Kappa Koeffizienten $K$ sondern verwenden dessen gewichtete Variante $K_w$. Wir sind davon ausgegangen, dass die Wahrscheinlichkeit der genauen Übereinstimmung der Relevanz-Bewertung relativ klein ist, hingegen die der Bewertungen mit leichter Abweichung des Relevanz-Wertes, relativ groß sein könnte. Mithilfe dieser Analyse wollen wir herausfinden, ob wir mit unserer Vermutung richtig liegen.
+
+\input{content/diagrams/eval/kappasUnweighted}
+
+\subsubsection{Bestimmung des Qualitätsmaßes der Suchvarianten durch nDCG-Auswertungen}
+\label{sec:Evaluation:Auswertung:QuantitativeAuswertung:nDCG}
+
+\input{content/diagrams/eval/nDCG}
+
+\subsubsection{Auswertung des Einflusses der Click-Through-Daten auf den nDCG}
+\label{sec:Evaluation:Auswertung:QuantitativeAuswertung:EinflussNDCG}
+
+
 \subsection{Diskussion}
 \label{sec:Evaluation:Auswertung:Diskussion}
+
+\subsubsection{Auswertung des Übereinstimmungsmaßes der Beurteiler mittels Kappa}
+\label{sec:Evaluation:Auswertung:Diskussion:Kappa}
+
+\subsubsection{Bestimmung des Qualitätsmaßes der Suchvarianten durch nDCG-Auswertungen}
+\label{sec:Evaluation:Auswertung:Diskussion:nDCG}
+
+
+\subsubsection{Auswertung des Einflusses der Click-Through-Daten auf den nDCG}
+\label{sec:Evaluation:Auswertung:Diskussion:EinflussNDCG}
 
 \section{Zusammenfassung}
 \label{sec:Evaluation:Zusammenfassung}

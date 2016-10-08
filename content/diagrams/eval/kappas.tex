@@ -1,0 +1,48 @@
+
+\begin{figure}[H]
+\centering 
+\vspace{-1em}
+\caption[Kappa-Auswertung der Suchterm-Bewertungen]{Kappa-Auswertung der Suchterm-Bewertungen}
+\label{fig:Evaluation:Auswertung:Kappas}
+
+\footnotesize
+\pgfplotstableread[col sep=semicolon]{content/diagrams/eval/kappas.csv}\kappas
+\pgfsetplotmarksize{.5pt}
+  
+\begin{tikzpicture}
+\begin{axis}[
+	width=14cm,
+	height=4cm,
+	scale only axis,
+	xmajorgrids,
+	xminorgrids,
+    ylabel=\textbf{$K_w$}, 
+	xlabel=\textbf{Suchterm-Analysen},
+    xtick={0, 20, 40, 60, 80},
+    ymin=0.3,
+    xmin=0,
+    xmax=80,
+    xlabel shift = 1in,
+    ylabel shift = 1in,
+   	legend pos= south west,
+    legend style={font=\tiny}
+]
+\addplot table [
+    y=Normal,
+    x=Index
+] {\kappas};
+\addplot table [
+    y=Rerank,
+    x=Index
+] {\kappas};
+\addplot table [
+    y=Grenzwert,
+    x=Index,
+    no marks
+] {\kappas};
+\legend{aktuelle Springermedizin-Suche, Suche mit Reranking-Algorithmus, Grenzwert ($0.60$)}
+\end{axis}
+\end{tikzpicture}
+
+\vspace{-2em}
+\end{figure}
