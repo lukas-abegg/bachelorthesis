@@ -20,7 +20,7 @@
     xtick=data,
     xlabel shift = 1in,
     ylabel shift = 1in,
-    xmin=0,
+    xmin=1,
 	xmax=10,
     y label style={yshift=-4mm},
    	legend pos=outer north east,
@@ -47,9 +47,14 @@
     y=R4,
     x=Position
 ] {\rel};
-\legend{aktuelle Springermedizin-Suche, {Reranking-Algorithmus mit:\\$X_u = 0.05$ \\ CTR = \textit{angemeldete User}}, {Reranking-Algorithmus mit:\\$X_u = 0.05$ \\ CTR = \textit{alle}}, {Reranking-Algorithmus mit:\\$X_u = 0.1$ \\ CTR = \textit{angemeldete User}}, {Reranking-Algorithmus mit:\\$X_u = 0.1$ \\ CTR = \textit{alle}}}
+\legend{aktuelle Springermedizin-Suche, {Reranking-Algorithmus mit:\\$X_u: 0.05$ \\ CTR aller \textit{angemeldeten User}}, {Reranking-Algorithmus mit:\\$X_u: 0.05$ \\ CTR \textit{aller User}}, {Reranking-Algorithmus mit:\\$X_u: 0.1$ \\ CTR aller \textit{angemeldeten User}}, {Reranking-Algorithmus mit:\\$X_u: 0.1$ \\ CTR \textit{aller User}}}
 \end{axis}
 \end{tikzpicture}
 
 \vspace{-2em}
 \end{figure}
+
+Die oben sichtbare Darstellung eines Liniendiagramms, stellt die ersten zehn Positionswerte aller Suchvarianten miteinander ins Verhältnis. Die x-Achse beschreibt hierbei die dargestellte Position im Suchergebnis. Die y-Achse zeigt den Relevanz-Wert, mit welchem die Suchergebnisse auf dieser Position durchschnittlich bewertet werden. Der Relevanz-Wert kann einen Wert von minimal 0 bis und maximal 3 annehmen. Die Relevanz-Werte der Suchvarianten bewegen sich in einem Bereich zwischen 1 und 2.5. Die farbigen Linien beschreiben jeweils die Relevanz-Bewertungen für entweder die Springermedizin-Suche oder eine der verschiedenen Suchvarianten der Suche mit dem Reranking-Algorithmus. 
+
+\paragraph{Suchvarianten mit CTR der angemeldeten User weist die besten Relevanz-Werte auf}
+Wie bereits in der Auswertung des nDCG in Abb. \ref{fig:Evaluation:Auswertung:NDCGVarianten}, weist die Suchvariante des Reranking-Algorithmus mit dem kleineren Einfluss-Faktors $X_u$ und den CTR der angemeldeten User die höchsten Relevanz-Bewertungen auf. Die aktuelle Springermedizin-Suche hat eine fast linear abfallende Form der Relevanz-Werte. Sehr ähnlich verhält sich die vierte Suchvariante des Reranking-Algorithmus, mit dem größeren Einfluss-Faktor für $Xu$ und der CTR aller User. Die schlechteste Konstellation der Suchvarianten des Reranking-Algorithmus, stellt die braune Linie mit dem kleiner Einfluss von $X_u$ und der CTR aller User dar. Diese fällt ab Position fünf stark ab.

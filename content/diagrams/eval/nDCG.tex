@@ -16,7 +16,7 @@
     ymax=1.1,
 	xtick=data,
 	xticklabel style={align=center},
-	xticklabels={{$X_u = 0.05$ \\ CTR = \textit{angemeldete User}}, {$X_u = 0.05$ \\ CTR = \textit{alle}}, {$X_u = 0.1$ \\ CTR = \textit{angemeldete User}}, {$X_u = 0.1$ \\ CTR = \textit{alle}}},
+	xticklabels={{$X_u: 0.05$ \\ CTR aller \textit{angemeldeten User}}, {$X_u: 0.05$ \\ CTR \textit{aller User}}, {$X_u: 0.1$ \\ CTR aller \textit{angemeldeten User}}, {$X_u: 0.1$ \\ CTR \textit{aller User}}},
 	width=11cm,
 	height=4cm,
 	scale only axis,
@@ -24,7 +24,7 @@
 	yminorgrids,
 	y label style={yshift=-4mm},
 	x label style={yshift=-5mm},
-    ylabel=\textbf{$nDCG$}, 
+    ylabel=\textbf{$nDCG_{10}$}, 
 	xlabel=\textbf{Variante des Reranking-Algorithmus},
     legend style={font=\tiny},
    	legend pos=outer north east
@@ -78,3 +78,8 @@
 
 \vspace{-2em}
 \end{figure}
+
+Die oben dargestellte Abb. \ref{fig:Evaluation:Auswertung:NDCGVarianten} zeigt eine Mischform von Säulen- und Liniendiagramm. Die Säulen bezeichnen hierbei jeweils die verwendete Such-Implementierung. Die blauen Säulen beschreiben die aktuelle Springermedizin-Suche. Die roten stellen jeweils eine Suchvariante der Suche mit dem Reranking-Algorithmus dar. Die Werte der x-Achse beschreiben hierbei, welche dieser Suchvarianten jeweils mit der aktuellen Springermedizin-Suche verglichen wird. $X_u$ zeigt jeweils den Einfluss des Zufallswertes in den Reranking-Algorithmus und CTR beschreibt die Filterung der Click-Through-Daten anhand des Login-Status, bei der Berechnung der CTR. Die y-Achse beschreibt die Werteskala der NDCG-Auswertung. Diese bewegt sich zwischen 0 und 1. Die Linien stellen jeweils die Minimal- und Maximal-Werte der gleichfarbigen Säulen dar.
+
+\paragraph{Der Reranking-Algorithmus weist leichte Verbesserungen gegenüber der aktuelle Suche auf}
+Wie wir sehen, liegen alle nDCG-Werte nahe beieinander. Die größten Verbesserungen weist der kleinere Einflussfaktor $X_u$~(0.05) des Zufallswertes, in Verbindung mit den Click-Through-Daten der angemeldeten User auf. Die einzige Verschlechterung mittels Reranking-Algorithmus, tritt bei der Verwendung des höheren Einflussfaktors für $X_u$ und der Berechnung der CTR aus den Click-Through-Daten aller User auf. Die Minimal- und Maximal-Werte der beiden Suchen verhalten sich sehr ähnlich zu einander. Nur die letzte Konstellation, welche bereits beim durchschnittlichen nDCG-Wert Verschlechterungen zeigt, weist eine leichte Abweichung der Minimal-Werte auf. Hingegen nähern sich alle Maximal-Werte des nDCG, stark dem Maximal-Wert von 1. Anhand der Differenz der Minimal-Werte der Suchvarianten können wir feststellen, dass der größere Einfluss-Faktor des Zufallswertes bessere Minimal-Werte erzeugt.

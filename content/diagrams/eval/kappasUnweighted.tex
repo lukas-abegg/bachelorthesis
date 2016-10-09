@@ -1,12 +1,12 @@
 \begin{minipage}{0.4\linewidth}
-sadsdfsdfsdf dsfsfsdsdfsdf f sdfsdfsdfsdfsd sdfsdfsdfsdf afsd fsd f
+In der Abb. rechts dargestellt, sehen wir dasselbe Liniendiagramm wie bereits in Abb. \ref{fig:Evaluation:Auswertung:Kappas}, nur dieses Mal mit dem ungewichteten Cohens Kappa Koeffizienten $K$. Wie wir hier sehen, verhalten sich die Linien der beiden Such-Implementierungen wieder sehr ähnlich und zeigen nur wenige starke Abweichungen voneinander. Allerdings hat sich das Muster der Linien und deren Werte auf der y-Achse stark verändert. 
 \end{minipage}
 \hfill
 \begin{minipage}{0.55\linewidth}
 \begin{figure}[H]
 \centering 
-\vspace{-1em}
-\caption[Ungewichtete Kappa-Auswertung]{Ungewichtete Kappa-Auswertung}
+\vspace{-2em}
+\caption[Ungewichtete Kappa-Auswertung der Bewertungen]{Ungewichtete Kappa-Auswertung der Bewertungen} 
 \label{fig:Evaluation:Auswertung:KappasUnweighted}
 
 \footnotesize
@@ -15,13 +15,16 @@ sadsdfsdfsdf dsfsfsdsdfsdf f sdfsdfsdfsdfsd sdfsdfsdfsdf afsd fsd f
   
 \begin{tikzpicture}
 \begin{axis}[
-	width=7cm,
+	width=8cm,
 	height=4cm,
 	scale only axis,
 	xmajorgrids,
 	xminorgrids,
-    ylabel=\textbf{$K_w$}, 
+    ylabel=\textbf{$K$}, 
 	xlabel=\textbf{Suchterm-Analysen},
+	ytick={{-0.8}, {-0.6}, {-0.4}, {-0.2}, 0, {0.2}, {0.4}, {0.6}},
+	ymin={-0.8},
+	ymax= {0.7},
     xtick={0, 20, 40, 60, 80},
     xmin=0,
     xmax=80,
@@ -48,6 +51,8 @@ sadsdfsdfsdf dsfsfsdsdfsdf f sdfsdfsdfsdfsd sdfsdfsdfsdf afsd fsd f
 \end{axis}
 \end{tikzpicture}
 
-\vspace{-2.5em}
+\vspace{-1em}
 \end{figure}
 \end{minipage}
+
+Die Werte für $K$ bewegen sich dieses Mal zwischen -0.8 und 0.6 und gehen damit teilweise in den negativen Bereich. Das Mindestmaß an Übereinstimmungsgüte wird nie erreicht. Nur eine Suchtermanalyse auf der aktuellen Springermedizin-Suche, nähert sich stark dem Grenzwert an. 

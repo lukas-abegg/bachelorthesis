@@ -416,7 +416,7 @@ Für den \textit{Einfluss des Zufallsfaktors} werden wir zwei Werte für $\lambd
 \section{Auswertung der Suchergebnis-Qualität}
 \label{sec:Evaluation:Auswertung}
 
-Bei der Auswertung der Evaluationsdaten werden wir uns zuerst auf die Kappa-Werte fokussieren und analysieren, wie gut das Übereinstimmungsmaß der Beurteiler zu den Suchtermen $K_w$ ist. Danach folgt der Kern der Auswertung, die Bestimmung des Qualitätsmaßes der Suchvarianten mithilfe der nDCG-Metrik. Wir wollen herausfinden, welche Verbesserungen, mit welcher Konstellation des Reranking-Algorthmus gemacht werden können. Da der nDCG sich nur auf die Reihenfolge der Relevanz-Bewertungen konzentriert, wollen wir in einer weiteren Auswertung analysieren, welche durchschnittlichen Relevanz-Bewertungen die ersten zehn Suchresultate effektiv hatten. Zum Schluss werden wir die Einflüsse der Click-Through-Daten auf den nDCG analysieren und auswerten.
+Bei der Auswertung der Evaluationsdaten werden wir uns zuerst auf die Kappa-Werte fokussieren und analysieren, wie gut das Übereinstimmungsmaß $K_w$ der Beurteiler zu den Suchtermen ist. Danach folgt der Kern der Auswertung. Aus den Bewertungen, die das Mindestmaß für $K_w$ erfüllen, bestimmen wir das Qualitätsmaß der Suchvarianten mithilfe der nDCG-Metrik. Wir wollen herausfinden, welche Verbesserungen, mit welcher Konstellation des Reranking-Algorthmus möglich sind. Da der nDCG sich nur auf die Reihenfolge der Relevanz-Bewertungen konzentriert, wollen wir in einer weiteren Auswertung analysieren, welche durchschnittlichen Relevanz-Bewertungen die ersten zehn Suchresultate effektiv haben. So kriegen wir nicht nur ein Gefühl für die Ranking-Qualität der Suche sondern sehen auch gleich, wie gut die ausgespielten Ergebnisse effektiv sind. Zum Schluss werden wir die Einflüsse der Click-Through-Daten auf den nDCG analysieren und auswerten.
 
 \subsection{Quantitative Auswertung}
 \label{sec:Evaluation:Auswertung:QuantitativeAuswertung}
@@ -424,24 +424,31 @@ Bei der Auswertung der Evaluationsdaten werden wir uns zuerst auf die Kappa-Wert
 \subsubsection{Auswertung des Übereinstimmungsmaßes der Beurteiler mittels Kappa}
 \label{sec:Evaluation:Auswertung:QuantitativeAuswertung:Kappa}
 
-In dieser Analyse werden wir sehen, wie gut das Übereinstimmungsmaß $K_w$ der Beurteiler ist und wie viele der Suchterm-Bewertungen für die nDCG-Auswertung überhaupt in Frage kommen. 
+In dieser Analyse sehen wir, wie gut das Übereinstimmungsmaß $K_w$ der Beurteiler bei der Bewertung der Suchterme ist und wie viele der Suchterm-Bewertungen für die nDCG-Auswertung überhaupt in Frage kommen. 
 
 \input{content/diagrams/eval/kappas}
 
 \paragraph{Zum Vergleich der ungewichtete Kappa}
-Wie bereits in der Datengrundlage im Kapitel \ref{sec:Evaluation:Aufbau:Datengrundlage} diskutiert, bewerten wir nicht den Cohens Kappa Koeffizienten $K$ sondern verwenden dessen gewichtete Variante $K_w$. Wir sind davon ausgegangen, dass die Wahrscheinlichkeit der genauen Übereinstimmung der Relevanz-Bewertung relativ klein ist, hingegen die der Bewertungen mit leichter Abweichung des Relevanz-Wertes, relativ groß sein könnte. Mithilfe dieser Analyse wollen wir herausfinden, ob wir mit unserer Vermutung richtig liegen.
+Wie bereits in der Datengrundlage im Kapitel \ref{sec:Evaluation:Aufbau:Datengrundlage} diskutiert, bewerten wir nicht den Cohens Kappa Koeffizienten $K$, sondern verwenden dessen gewichtete Variante $K_w$. Wir sind davon ausgegangen, dass die Wahrscheinlichkeit der genauen Übereinstimmung der Relevanz-Bewertung relativ klein ist, hingegen die der Bewertungen mit leichter Abweichung des Relevanz-Wertes, relativ groß sein könnte. Mithilfe dieser Analyse wollen wir herausfinden, ob wir mit unserer Vermutung richtig liegen.
 
 \input{content/diagrams/eval/kappasUnweighted}
 
 \subsubsection{Bestimmung des Qualitätsmaßes der Suchvarianten durch nDCG-Auswertungen}
 \label{sec:Evaluation:Auswertung:QuantitativeAuswertung:nDCG}
 
+In der folgenden Analyse werden wir nun sehen, welche Suchvariante des Reranking-Algorithmus die beste Konstellation darstellt und welche Verbesserung der Ranking-Qualität der Suche, das Reranking der Suchresultate bewirkt. Wir vergleichen dazu den durchschnittlichen nDCG-Wert der jeweiligen Suchvariante des Reranking-Algorithmus, mit dem durchschnittlichen nDCG-Wert der aktuellen Springermedizin-Suche. Bei der Evaluation haben wir immer die ersten zehn Suchresultate verglichen. Wir berechnen darum den $nDCG_{10}$ der Suchterme für die Auswertung.
+
 \input{content/diagrams/eval/nDCG}
+
+\paragraph{Effektive Relevanz-Bewertungen aller Suchvarianten vergleichen}
+In der unten folgenden Abb. \ref{fig:Evaluation:Auswertung:RelevanzVarianten} vergleichen wir, wie relevant die Dokumente der Suchergebnisse zum Suchterm effektiv waren. Dazu berechnen wir den durchschnittlichen Relevanz-Wert der Positionen zu jeder Suchvariante.
 
 \input{content/diagrams/eval/relevanceVarianten}
 
 \subsubsection{Auswertung des Einflusses der Click-Through-Daten auf den nDCG}
 \label{sec:Evaluation:Auswertung:QuantitativeAuswertung:EinflussNDCG}
+
+Mit den unten folgenden Analysen untersuchen wir den Einfluss der Anzahl der Click-Through-Daten auf das Ergebnis der nDCG-Auswertung. Für die erste Analyse vergleichen wir die Anzahl der Klicks, die Gesamthaft zum Suchterm zur Verfügung stehen, mit den resultierenden nDCG-Werten. Die blaue Linie mit dem durchschnittlichen nDCG-Wert aller Suchvarianten des Reranking-Algorithmus, dient hier als Richtwert.
 
 \input{content/diagrams/eval/clicksRanksNDCG}
 
