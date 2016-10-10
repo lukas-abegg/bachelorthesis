@@ -1,12 +1,12 @@
 \begin{minipage}{0.4\linewidth}
-In der Abb. rechts dargestellt, sehen wir dasselbe Liniendiagramm wie bereits in Abb. \ref{fig:Evaluation:Auswertung:Kappas}, nur dieses Mal mit dem ungewichteten Cohens Kappa Koeffizienten $K$. Wie wir hier sehen, verhalten sich die Linien der beiden Such-Implementierungen wieder sehr ähnlich und zeigen nur wenige starke Abweichungen voneinander. Allerdings hat sich das Muster der Linien und deren Werte auf der y-Achse stark verändert. 
+In der Abb. rechts dargestellt, sehen wir dasselbe Liniendiagramm wie bereits in Abb. \ref{fig:Evaluation:Auswertung:Kappas}, nur dieses Mal mit dem ungewichteten Cohens Kappa Koeffizienten $K$. Wie wir hier sehen, verhalten sich die Linien der beiden Such-Implementierungen wieder sehr ähnlich und zeigen nur wenige starke Abweichungen voneinander. Allerdings hat sich das Muster der Linien und deren Werte auf der y-Achse, stark verändert. 
 \end{minipage}
 \hfill
 \begin{minipage}{0.55\linewidth}
 \begin{figure}[H]
 \centering 
-\vspace{-2em}
-\caption[Ungewichtete Kappa-Auswertung der Bewertungen]{Ungewichtete Kappa-Auswertung der Bewertungen} 
+\vspace{-2.5em}
+\caption[Auswertungen des ungewichteten Kappa $K$ der Suchterm-Bewertungen]{Auswertungen des ungewichteten Kappa $K$ der Suchterm-Bewertungen} 
 \label{fig:Evaluation:Auswertung:KappasUnweighted}
 
 \footnotesize
@@ -32,7 +32,8 @@ In der Abb. rechts dargestellt, sehen wir dasselbe Liniendiagramm wie bereits in
     ylabel shift = 1in,
     y label style={yshift=-4mm},
     legend style={font=\tiny},
-    legend style={at={(axis cs:20,-0.75)},anchor=south west}
+    legend style={cells={align=left}},
+    legend style={at={(axis cs:14,-0.78)},anchor=south west}
 ]
 \addplot table [
     y=Normal,
@@ -47,7 +48,7 @@ In der Abb. rechts dargestellt, sehen wir dasselbe Liniendiagramm wie bereits in
     x=Index,
     no marks
 ] {\kappas};
-\legend{aktuelle Springermedizin-Suche, Suche mit Reranking-Algorithmus, Grenzwert ($0.60$)}
+\legend{aktuelle Springermedizin-Suche, Suche mit Reranking-Algorithmus, {Grenzwert für Mindestmaß an $K_w$ (Übereinstimmungsgüte $\geq 0.60$)}}
 \end{axis}
 \end{tikzpicture}
 
@@ -55,4 +56,4 @@ In der Abb. rechts dargestellt, sehen wir dasselbe Liniendiagramm wie bereits in
 \end{figure}
 \end{minipage}
 
-Die Werte für $K$ bewegen sich dieses Mal zwischen -0.8 und 0.6 und gehen damit teilweise in den negativen Bereich. Das Mindestmaß an Übereinstimmungsgüte wird nie erreicht. Nur eine Suchtermanalyse auf der aktuellen Springermedizin-Suche, nähert sich stark dem Grenzwert an. 
+Die Werte für $K$ bewegen sich dieses Mal zwischen -0.8 und 0.6 und gehen damit teilweise in den negativen Bereich. Das Mindestmaß an Übereinstimmungsgüte wird nie erreicht. Nur wenige Suchterm-Bewertungen, insbesondere auf der aktuellen Springermedizin-Suche, nähern sich stark dem Grenzwert an. 

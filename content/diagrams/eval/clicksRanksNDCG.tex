@@ -1,22 +1,22 @@
 \begin{minipage}{0.40\linewidth}
-Auf der rechts dargestellten Abb. beschreibt die x-Achse die Anzahl der gefundenen Klicks, für die Berechnung des CTR mittels Reranking-Algorithmus. Die y-Achse beschreibt den nDCG-Wert, der aus dem Reranking-Algorithmus resultierenden Suchergebnisliste. Das Verhalten der nDCG-Werte abhängig der Anzahl Klicks, zeigt in den ersten 60 Klicks zum Suchterm, immer ein sehr ähnliches Verhalten. Die besten nDCG-Werte werden bei Suchtermen mit zwischen 20 und 40 Klicks erreicht. Ein stark negatives nDCG-Resultat wird bei einer Klickzahl zwischen 60 und 70 Klicks erreicht.
+Auf der rechts dargestellten Abb. beschreibt die x-Achse die Anzahl der gefundenen Klicks, für die Berechnung des CTR mittels Reranking-Algorithmus. Die y-Achse beschreibt den nDCG-Wert, der aus dem Reranking-Algorithmus resultierenden Suchergebnisliste. Das Verhalten der nDCG-Werte abhängig der Anzahl Klicks, zeigt ein sehr sprunghaftes Verhalten, wobei sich die nDCG-Werte in den meisten Fällen im Bereich zwischen 0.7 und 1 bewegen. Ein sehr schwacher nDCG-Wert ist die Ausnahme und nur bei der Klickanzahl 65 zu sehen.
 \end{minipage}
 \hfill
 \begin{minipage}{0.55\linewidth}
 \begin{figure}[H]
 \centering 
-\vspace{-1em}
+\vspace{-1.5em}
 \caption[Click-Through-Daten: Einfluss der Anzahl Klicks gesamt auf $nDCG$]{Click-Through-Daten: Einfluss der Anzahl Klicks gesamt auf $nDCG$}
 \label{fig:Evaluation:Auswertung:ClicksNDCG}
 
 \footnotesize
 \pgfplotstableread[col sep=semicolon]{content/diagrams/eval/clicksNDCG.csv}\clicks
-\pgfsetplotmarksize{.0pt}
+\pgfsetplotmarksize{.5pt}
   
 \begin{tikzpicture}
 \begin{axis}[
 	width=8cm,
-	height=4cm,
+	height=3.5cm,
 	scale only axis,
 	xmajorgrids,
 	xminorgrids,
@@ -29,7 +29,7 @@ Auf der rechts dargestellten Abb. beschreibt die x-Achse die Anzahl der gefunden
     ylabel shift = 1in,
     y label style={yshift=-4mm},
     legend style={font=\tiny},
-    legend style={at={(axis cs:100,0.05)},anchor=south east}
+    legend style={at={(axis cs:100,0)},anchor=south east}
 ]
 \addplot table [
     y=AVG,
@@ -49,7 +49,7 @@ Auf der rechts dargestellten Abb. beschreibt die x-Achse die Anzahl der gefunden
 
 
 \begin{minipage}{0.40\linewidth}
-Bei der rechts folgenden Abb. werden wir wie in der oben sichtbaren Analyse, die Einflüsse der Click-Through-Daten messen. Nur dieses Mal vergleichen wir die Diversität der angeklickten Positionen mit deren Einfluss auf den nDCG. Wie wir an der roten Linie erkennen, haben die ersten 20 Positionen den besten Einfluss. Die Positionszahlen haben verhalten sich sehr sprunghaft und enthalten viele schwache nDCG-Werte.
+Bei der rechts folgenden Abb. werden wir wie in der oberen Abb. \ref{fig:Evaluation:Auswertung:ClicksNDCG}, die Einflüsse der Click-Through-Daten messen. Nur dieses Mal vergleichen wir die Diversität der angeklickten Positionen, mit deren Einfluss auf den nDCG. Wie wir an der roten Linie erkennen, haben die Click-Through-Daten mit weniger als 20 unterschiedlichen Positionen, tendenziell die besten nDCG-Werte. Die Positionszahlen dahinter verhalten sich sehr sprunghaft und weisen viele schwache nDCG-Werte auf.
 \end{minipage}
 \hfill
 \begin{minipage}{0.55\linewidth}
@@ -61,12 +61,12 @@ Bei der rechts folgenden Abb. werden wir wie in der oben sichtbaren Analyse, die
 
 \footnotesize
 \pgfplotstableread[col sep=semicolon]{content/diagrams/eval/ranksNDCG.csv}\ranks
-\pgfsetplotmarksize{.0pt}
+\pgfsetplotmarksize{.5pt}
   
 \begin{tikzpicture}
 \begin{axis}[
 	width=8cm,
-	height=4cm,
+	height=3.5cm,
 	scale only axis,
 	xmajorgrids,
 	xminorgrids,
@@ -79,7 +79,7 @@ Bei der rechts folgenden Abb. werden wir wie in der oben sichtbaren Analyse, die
     ylabel shift = 1in,
     y label style={yshift=-4mm},
     legend style={font=\tiny},
-    legend style={at={(axis cs:80,0.05)},anchor=south east}
+    legend style={at={(axis cs:80,0)},anchor=south east}
 ]
 \addplot table [
     y=AVG,
@@ -93,6 +93,6 @@ Bei der rechts folgenden Abb. werden wir wie in der oben sichtbaren Analyse, die
 \end{axis}
 \end{tikzpicture}
 
-\vspace{-1.5em}
+\vspace{-2em}
 \end{figure}
 \end{minipage}

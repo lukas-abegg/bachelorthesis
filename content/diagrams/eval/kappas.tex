@@ -2,7 +2,7 @@
 \begin{figure}[H]
 \centering 
 \vspace{-1.5em}
-\caption[Kappa-Auswertung der Suchterm-Bewertungen]{Kappa-Auswertung der Suchterm-Bewertungen}
+\caption[Auswertungen des gewichteten Kappa $K_w$ der Suchterm-Bewertungen]{Auswertungen des gewichteten Kappa $K_w$ der Suchterm-Bewertungen}
 \label{fig:Evaluation:Auswertung:Kappas}
 
 \footnotesize
@@ -25,8 +25,9 @@
     y label style={yshift=-4mm},
     xlabel shift = 1in,
     ylabel shift = 1in,
-   	legend pos= south west,
-    legend style={font=\tiny}
+   	legend style={at={(axis cs:1,0.325)},anchor=south west},
+    legend style={font=\tiny},
+    legend style={cells={align=left}}
 ]
 \addplot table [
     y=Normal,
@@ -41,13 +42,13 @@
     x=Index,
     no marks
 ] {\kappas};
-\legend{aktuelle Springermedizin-Suche, Suche mit Reranking-Algorithmus, Grenzwert ($0.60$)}
+\legend{aktuelle Springermedizin-Suche, Suche mit Reranking-Algorithmus, {Grenzwert für Mindestmaß an $K_w$\\  (Übereinstimmungsgüte $\geq 0.60$)}}
 \end{axis}
 \end{tikzpicture}
 
 \vspace{-2.5em}
 \end{figure}
 
-Die oben dargestellte Abb. \ref{fig:Evaluation:Auswertung:Kappas} zeigt ein Linien-Diagramm des Übereinstimmungsmaßes $K_w$ für die Relevanz-Bewertungen der Suchterme. Auf der x-Achse sehen wir die indexierte Reihenfolge der in der Evaluation verwendeten Suchterme, beginnend mit dem Index 0. Diese Suchterme können im Anhang unter \ref{sec:Anhang:VerwendeteSuchtermeEvaluation} nachgelesen werden. Die y-Achse zeigt die vertikale Messskala des gewichteten Kappa-Wertes $K_w$ und bewegt sich im Bereich zwischen 0 und 1. Die beiden Linien rot und blau stellen die miteinander verglichenen Such-Implementierungen dar. Die blaue ist hierbei die aktuelle Springemedizin-Suche und die rote stellt die Suche mit dem neu implementierten Reranking-Algorithmus dar. Die parallel zur x-Achse verlaufende, braune Linie stellt das Mindestmaß an Übereinstimmungsgüte $K_w$ dar. Aus diesem Diagramm können wir lesen, wie sich das Übereinstimmungsmaß zu einem Suchterm, zwischen den beiden Such-Implementierungen verändert. 
+Die oben dargestellte Abb. \ref{fig:Evaluation:Auswertung:Kappas} zeigt ein Linien-Diagramm des Übereinstimmungsmaßes $K_w$ für die Relevanz-Bewertungen der Suchterme. Auf der x-Achse sehen wir die indexierte Reihenfolge der in der Evaluation verwendeten Suchterme, beginnend mit dem Index 0. Diese Suchterme können im Anhang unter \ref{sec:Anhang:VerwendeteSuchtermeEvaluation} nachgelesen werden. Die y-Achse zeigt die vertikale Messskala des gewichteten Kappa-Wertes $K_w$ und bewegt sich im Bereich zwischen 0 und 1. Die beiden Linien rot und blau stellen die $K_w$-Werte der Bewertungen der Suchterme der x-Achse in den zu vergleichenden Such-Implementierungen dar. Die blaue beschreibt hierbei die aktuelle Springemedizin-Suche und die rote stellt die Suche mit dem neu implementierten Reranking-Algorithmus dar. Die parallel zur x-Achse verlaufende, braune Linie stellt das Mindestmaß des $K_w$ dar. Aus diesem Diagramm können wir lesen, wie sich das Übereinstimmungsmaß eines Suchterms, zwischen den beiden Such-Implementierungen verändert. 
 
-\paragraph{Beide Suchen zeigen ein sehr ähnliches Verhaltenmuster der Übereinstimmungsgüte} Wie wir sehen können, haben die Linien beider Such-Implementierungen mit Ausnahme vereinzelter Abweichungen ein sehr ähnliches Verhaltensmuster. Diese Abweichung der beiden Linien bewegen sich in den meisten Fällen im Bereich von unter zehn Prozentpunkten. Die größten Abweichungen sind in den Suchtermen mit einem Index zwischen 50 und 60 sowie zwischen 70 und 80 auszumachen. Das Mindestmaß an Übereinstimmung haben in beiden Such-Implementierungen 90 Prozent der Bewertungen erreicht. Bei der aktuellen Springermedizin-Suche waren die Resultate noch ein bisschen besser. Da haben nur 7 der 80 Bewertungen das Mindestmaß nicht erreicht. Vereinzelt nähern sich die Kappa-Werte beider Suchen stark, dem Maximum von 1 an. 
+\paragraph{Beide Suchen zeigen ein sehr ähnliches Verhaltenmuster der Übereinstimmungsgüte} Wie wir sehen können, haben die Linien beider Such-Implementierungen mit Ausnahme vereinzelter Abweichungen, ein sehr ähnliches Verhaltensmuster. Die Abweichung der beiden Linien bewegen sich in den meisten Fällen, im Bereich von unter zehn Prozentpunkten. Die größten Abweichungen sind in den Suchtermen mit einem Index zwischen 50 und 60 sowie zwischen 70 und 80 zu erkennen. Das Mindestmaß an Übereinstimmung haben in beiden Such-Implementierungen 90 Prozent der Bewertungen erreicht. Bei der aktuellen Springermedizin-Suche waren die Resultate noch ein bisschen besser. Da haben nur sieben der 80 Bewertungen, das Mindestmaß nicht erreicht. Vereinzelt nähern sich die Kappa-Werte beider Suchen, stark dem maximalen Übereinstimmungswert von 1 an. 
