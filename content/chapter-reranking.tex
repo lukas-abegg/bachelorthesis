@@ -6,7 +6,7 @@
 \chapter{Reranking mittels CTR}
 \label{sec:Reranking}
 
-Aufgrund der Diskussionen zu den Problemstellungen des Lösungsansatzes im vorhergehenden Kapitel \ref{sec:Grundlagen}, kennen wir verschiedene Varianten der Lösungsansätze und deren Eigenschaften. In diesem Kapitel geht es nun darum, aus diesem Wissen unseren detaillierten Lösungsansatz des Reranking-Algorithmus zusammenzubauen. Dazu werden wir uns zuerst den Prozess des neuen Reranking-Algorithmus anschauen. Wie wir zu diesem Prozessbild kommen, lernen wir anschließend in der Methodik kennen. Diese baut auf der Methodik aus Kapitel \ref{sec:Einfuehrung:Methodik} auf. Dabei werden wir ausführlich die Beweggründe zum gewählten Lösungsansatz kennenlernen und die theoretische Umsetzung diskutieren. Im nächsten Kapitel folgt dann die praktische Umsetzung des hier ausgearbeiteten Lösungsansatzes.
+Aufgrund der Diskussionen zu den Problemstellungen des Lösungsansatzes im vorhergehenden Kapitel \ref{sec:Grundlagen}, kennen wir verschiedene Varianten der Lösungsansätze und deren Eigenschaften. In diesem Kapitel geht es nun darum, aus diesem Wissen unseren detaillierten Lösungsansatz des Reranking-Algorithmus zusammenzubauen. Dazu werden wir uns zuerst den Prozess des neuen Reranking-Algorithmus anschauen. Wie wir zu diesem Prozessbild kommen, erfahren wir anschließend in der Methodik. Diese baut auf der Methodik aus Kapitel \ref{sec:Einfuehrung:Methodik} auf. Dabei werden wir ausführlich die Beweggründe zum gewählten Lösungsansatz kennenlernen und die theoretische Umsetzung diskutieren. Im nächsten Kapitel folgt dann die praktische Umsetzung des hier ausgearbeiteten Lösungsansatzes.
 
 %Prozessaufbau des Lösungsansatzes
 %----------------------------------------------------------------
@@ -32,7 +32,7 @@ Aufgrund der Diskussionen zu den Problemstellungen des Lösungsansatzes im vorhe
 \section{Methodik}
 \label{sec:Reranking:Methodik}
 
-Wie bereits in der Einführung zu diesem Kapitel besprochen, haben wir gelernt wie Click-Through-Daten entstehen, wie sie zu lesen sind und wie wir Aussagen zu ihnen treffen können. Nun werden wir mithilfe dieses Wissens, die CTR der Dokumente berechnen. Mithilfe der berechneten Click-Through-Daten werden wir dann ein \textit{Reranking} der Suchresultate durchführen, bevor diese dem User präsentiert werden. So wollen wir die Userrelevanz mittels CTR in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
+Wie bereits in der Einführung zu diesem Kapitel besprochen, haben wir gelernt wie Click-Through-Daten entstehen, wie sie zu lesen sind und wie wir Aussagen zu ihnen treffen können. Nun werden wir mithilfe dieses Wissens die CTR der Dokumente berechnen. Mithilfe der berechneten Click-Through-Daten werden wir dann ein \textit{Reranking} der Suchresultate durchführen, bevor diese dem User präsentiert werden. So wollen wir die Userrelevanz mittels CTR in die Suche einbinden. Die Vorgehensweise dazu sieht wie folgt aus.
 
 \subsection{Suchterm Segmentierung}
 \label{sec:Reranking:Methodik:SuchtermSegmentierung}
@@ -89,12 +89,12 @@ Wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Click-Through-Daten:Userverhalt
 \vspace{-2em}
 \end{table}
 
-Wie wir sehen, ist unser Feature-Set im Vergleich zu dem in \cite{IWUSBI} beschriebenen, sehr stark eingeschränkt und enthält keine Relevanz-Informationen um ein Relevanz-Feedback zu den Klick-Häufigkeiten daraus ableiten zu können. Wir müssen wir darum davon ausgehen, dass jeder Klick auf ein Dokument relevant ist.
+Wie wir sehen, ist unser Feature-Set im Vergleich zu dem in \cite{IWUSBI} beschriebenen, sehr stark eingeschränkt und enthält keine Relevanz-Informationen um ein Relevanz-Feedback zu den Klick-Häufigkeiten daraus ableiten zu können. Wir müssen darum davon ausgehen, dass jeder Klick auf ein Dokument \textit{relevant} ist.
 
 \subsubsection{Gewichtung der Click-Through-Daten}
 \label{sec:Reranking:Methodik:Click-Through-Daten:Gewichtung}
 
-Durch die semantische Aufschlüsselung des Suchterms haben wir verschieden starke Relationen zwischen Click-Through-Daten und dem Suchterm. Die Gewichtung der Stärke dieser Relation ist aber nicht Kern dieser Arbeit. Wir gehen darum davon aus, dass unabhängig der stärke der Relation zum Suchterm, alle Click-Through-Daten eine gleiche Relevanz besitzen.
+Durch die semantische Aufschlüsselung des Suchterms haben wir verschieden starke Relationen zwischen Click-Through-Daten und dem Suchterm. Die Gewichtung der Stärke dieser Relation ist aber nicht Kern dieser Arbeit. Wir gehen darum davon aus, dass unabhängig der Stärke der Relation zum Suchterm, alle Click-Through-Daten eine gleiche Relevanz besitzen.
 
 \subsubsection{Berechnung der CTR}
 \label{sec:Reranking:Methodik:Click-Through-Daten:Gewichtung}
@@ -107,7 +107,7 @@ Klick-Modelle versuchen die Click-Through-Daten zu interpretieren und aus ihnen 
 
 \pagebreak
 
-\subsection{Result-Reranking mittels PBM basiertem Algorithmus}
+\subsection{Result-Reranking mittels PBM basierten Algorithmus}
 \label{sec:Reranking:Methodik:Result-RerankingPBM}
 
 \subsubsection{Click-Through-Daten für Positions- und Dokument-Wahrscheinlichkeit abfragen}
@@ -190,7 +190,7 @@ Das machen wir, indem wir für die Berechnung der CTR des Dokumentes, den Smooth
 \vspace{-2em}
 \end{table}
 
-Für die Suchresultate mit einer Position über 20, verstärken wir die Gewichtung der Klick-Wahrscheinlichkeit des Dokumentes erheblich. Wir gehen davon aus, dass bei Klicks auf Dokumente mit einer solch hohen Position, die suchende Person die Suchresultate genau analysierte, bevor sie ein Dokument angeklickt hat.
+Für die Suchresultate mit einer Position über 20 verstärken wir die Gewichtung der Klick-Wahrscheinlichkeit des Dokumentes erheblich. Wir gehen davon aus, dass bei Klicks auf Dokumente mit einer solch hohen Position, die suchende Person die Suchresultate genau analysiert, bevor sie ein Dokument anklickt.
 
 \subsection{Vergessen der alten Daten}
 \label{sec:Reranking:Methodik:Vergessen}
@@ -200,12 +200,12 @@ Ein Algorithmus zur Berechnung von Wahrscheinlichkeiten muss sich ein gewisses G
 \subsubsection{Durch Webtrekk ist kein komplexer Lern-Algorithmus notwendig}
 \label{sec:Reranking:Methodik:Vergessen:Lern-Algorithmus}
 
-Durch Webtrekk haben wir eine Wissensbasis, die sich stetig und zeitnah aktualisiert. So muss der Algorithmus nicht ständig neues Wissen lernen und altes vergessen, sondern er kann direkt auf diese Wissensbasis zugreifen. Dies geschieht, indem zur Laufzeit\footnote{Unter Laufzeit wird in diesem Fall der Zeitpunkt der direkte Abfrage während der Suchanfrage bezeichnet} Analysen gegen Webtrekk über eine frei definierbare Periode gemacht werden. Dadurch kann \textit{Overfitting} durch veraltete Daten vermieden werden. Deshalb verwenden wir keinen komplexen Lern-Algorithmen wie in \cite{IWUSBI} vorgestellt.
+Durch Webtrekk haben wir eine Wissensbasis, die sich stetig und zeitnah aktualisiert. So muss der Algorithmus nicht ständig neues Wissen lernen und Altes vergessen, sondern er kann direkt auf diese Wissensbasis zugreifen. Dies geschieht indem zur Laufzeit\footnote{Unter Laufzeit wird in diesem Fall der Zeitpunkt der direkte Abfrage während der Suchanfrage bezeichnet} Analysen gegen Webtrekk über eine frei definierbare Periode gemacht werden. Dadurch kann \textit{Overfitting} durch veraltete Daten vermieden werden. Deshalb verwenden wir keinen komplexen Lern-Algorithmen wie in \cite{IWUSBI} vorgestellt.
 
 \subsubsection{Die Klick-Wahrscheinlichkeit ist kein absoluter Wert für die Userrelevanz}
 \label{sec:Reranking:Methodik:Vergessen:Relevanzfeedback}
 
-Nun könnten wir die Klick-Wahrscheinlichkeit als absoluten Wert für die \textit{Userrelevanz} betrachten. Dies wäre jedoch falsch, wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination} analysiert, müssen wir davon ausgehen, dass viele User der Qualität der Suchmaschine vertrauen. Diese betrachten die \glqq Top-Suchresultate\grqq{} als die relevanten Suchresultate. Denkbar wäre auch, dass User unabsichtlich das falsche Dokument anklicken und dadurch die CTR eines Dokumentes verfälschen. Dadurch kann ein \textit{Overfitting} des Algorithmus durch nicht relevante Click-Through-Daten entstehen.
+Nun könnten wir die Klick-Wahrscheinlichkeit als absoluten Wert für die \textit{Userrelevanz} betrachten. Dies wäre jedoch falsch, wie in Kapitel \ref{sec:Grundlagen:Grundbegriffe:SemantikUserInteraktionen:RankExamination} analysiert, da wir davon ausgehen müssen, dass viele User der Qualität der Suchmaschine vertrauen. Diese betrachten die \glqq Top-Suchresultate\grqq{} als die relevanten Suchresultate. Denkbar wäre auch, dass User unabsichtlich das falsche Dokument anklicken und dadurch die CTR eines Dokumentes verfälschen. Dadurch kann ein \textit{Overfitting} des Algorithmus durch nicht relevante Click-Through-Daten entstehen.
 
 \subsubsection{Overfitting vermeiden}
 \label{sec:Reranking:Methodik:Vergessen:Overfitting}
@@ -213,7 +213,7 @@ Nun könnten wir die Klick-Wahrscheinlichkeit als absoluten Wert für die \texti
 Um das angesprochene Overfitting zu vermeiden, darf der Algorithmus nicht immer anschlagen. Wir müssen sicherstellen, dass vereinzelt \textit{zufällige Dokumente} in den \glqq Top-Suchresultaten\grqq{} angezeigt werden. So können auch andere Dokumente in den Fokus des Users gerückt werden. Das System fährt sich dadurch nicht auf falschen Annotationen fest. 
 
 \paragraph{Zusätzliche Varianz durch Zufallsfaktor} 
-Mithilfe eines Zufallsfaktors kann eine solche Varianz\footnote{Mit Varianz bezeichnen wir hierbei eine Abweichung vom berechneten Erfahrungswert} in den Klick-Modell basierten Algorithmus gebracht werden. Konkret wollen wir den Reranking-Algorithmus beeinflussen, indem wir mithilfe eines Zufallsfaktors, Abweichungen von der berechneten Klick-Wahrscheinlichkeit eines Dokumentes provozieren. Den dazu verwendeten Zufallswert $X_{u}$,  lassen wir uns als positive ganze Zahl generieren. Er soll eine Zufallsposition im Suchergebnis darstellen:
+Mithilfe eines Zufallsfaktors kann eine solche Variable\footnote{Mit Variable bezeichnen wir hierbei eine Abweichung vom berechneten Erfahrungswert} in den Klick-Modell basierten Algorithmus gebracht werden. Konkret wollen wir den Reranking-Algorithmus beeinflussen, indem wir mithilfe eines Zufallsfaktors, Abweichungen von der berechneten Klick-Wahrscheinlichkeit eines Dokumentes provozieren. Den dazu verwendeten Zufallswert $X_{u}$,  lassen wir uns als positive ganze Zahl generieren. Er soll eine Zufallsposition im Suchergebnis darstellen:
 
 \vspace{-1.75em}
 \begin{equation}	
@@ -258,7 +258,7 @@ Mithilfe dieser Berechnung erzeugen wir eine Liste von Tupeln mit zwei Komponent
 \label{sec:Reranking:Zusammenfassung}
 
 \paragraph{Stark modifizierter Reranking-Algorithmus}
-Mithilfe des PBM können wir trotz stark begrenzter Click-Trough-Informationen ein relativ gutes Relevanz-Feedback gewinnen, welches wir im Reranking-Algorithmus verwenden können. Das Grundgerüst der ausgearbeiteten Algorithmus basiert immer noch auf dem PBM. Wir mussten jedoch einige Modifikationen vornehmen, um den Algorithmus zu erhalten, mit welchem wir nun im nächsten Kapitel die Implementierung durchführen wollen. Diese Modifikationen sind auf die vielen identifizierten Problemstellungen und den daraus folgenden Einarbeitungen der Lösungsansätze in den Algorithmus zurückzuführen. Einige der Modifikationen sind sicherlich der Implementierung im Springermedizin-Umfeld geschuldet. Wir sollten aber davon ausgehen, dass in jedem anderen realistischen Umfeld, ähnliche Problemstellungen auftreten können. Diese praxisnahe Ausarbeitung des Algorithmus ist daher ein guter Test, um die praktische Einsatzfähigkeit des in diesem Kapitel vorgestellten, theoretischen Ansatz zu evaluieren. 
+Mithilfe des PBM können wir trotz stark begrenzter Click-Through-Informationen ein relativ gutes Relevanz-Feedback gewinnen, welches wir im Reranking-Algorithmus verwenden können. Das Grundgerüst der ausgearbeiteten Algorithmus basiert immer noch auf dem PBM. Wir müssen jedoch einige Modifikationen vornehmen, um den Algorithmus zu erhalten, mit welchem wir nun im nächsten Kapitel die Implementierung durchführen wollen. Diese Modifikationen sind auf die vielen identifizierten Problemstellungen und den daraus folgenden Einarbeitungen der Lösungsansätze in den Algorithmus zurückzuführen. Einige der Modifikationen sind sicherlich der Implementierung im Springermedizin-Umfeld geschuldet. Wir sollten aber davon ausgehen, dass in jedem anderen realistischen Umfeld, ähnliche Problemstellungen auftreten können. Diese praxisnahe Ausarbeitung des Algorithmus ist daher ein guter Test, um die praktische Einsatzfähigkeit des in diesem Kapitel vorgestellten, theoretischen Ansatz zu evaluieren. 
 
 \paragraph{Mittels Smoothing-Faktor Maximum an Informationen verwerten}
 Ein wichtiges Hilfsmittel bei der Einarbeitung der Lösungsansätze in der Algorithmus, war der in diesem Kapitel eingeführte Smoothing-Faktor. Mithilfe des Smoothing-Faktors konnten wir die Nullwert-Problematik der Wahrscheinlichkeitsberechnung lösen und die Einflüsse der verschiedenen Faktoren in den Algorithmus besser kontrollieren. Dadurch konnten wir das Maximum an Informationen aus unserem PBM basierten Algorithmus herausholen. 

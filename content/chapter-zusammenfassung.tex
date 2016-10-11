@@ -6,26 +6,39 @@
 \chapter{Zusammenfassung und Ausblick}
 \label{sec:ZusammenfassungAusblick}
 
-Im letzten Kapitel haben 
+Im letzten Kapitel haben wir mit der Evaluation des Reranking-Algorithmus, den Kern unserer Untersuchung abgeschlossen und wollen diese nun abrunden. In der Zusammenfassung werden wir nochmals die Ausgangslage und die Zielstellung schildern. Wir werden zeigen, wie wir das Problem lösen wollten und die Erkenntnisse zusammenfassen, die wir dabei gewonnen haben. Zum Schluss werden wir einen Ausblick geben, in welche Richtung dieses Untersuchungen weitergehen könnten.
 
 \section{Zusammenfassung}
 \label{sec:ZusammenfassungAusblick:Zusammenfassung}
 
-\paragraph{Ausgangspunkt}
+\paragraph{Ausgangspunkt: Keine Userrelevanz in der Suche}
+Ausgangspunkt der Arbeit war die Betrachtung der Userrelevanz in der Suche des Fortbildungs- und Informationsportal Springermedizin.de. Wir haben festgestellt dass Springermedizin viel Wissen über das Verhalten der User auf der Suche in ihrem Portal sammelt, diese jedoch nicht in der Suche einsetzt. 
 
-\paragraph{Das Ziel der Arbeit}
+\paragraph{Das Ziel der Arbeit: Suchoptimierung durch Click-Through-Daten}
+Ziel dieser Arbeit war es darum eine Möglichkeit zur Optimierung der Springermedizin-Suche, mithilfe der von Springermedizin gesammelten Click-Through-Daten zu finden. Wir haben dazu einen Algorithmus zur Berechnung der Klick-Wahrscheinlichkeit eines Suchergebnisses zu einem Suchterm vorgestellt, den Position-Based Modell basierten Algorithmus. Für die Anwendung im Springermedizin-Umfeld, wollten wir ein Reranking der Suchresultate mithilfe dieses Algorithmus auf die Suche abbilden.
 
-\paragraph{Das Ergebnis}
+\paragraph{Die Analyse: Unterscheidung zwischen lösbaren Problemstellungen und nicht beeinflussbaren Faktoren und die Einarbeitung in Lösungsansatz}
+Um den Lösungsansatz ausarbeiten zu können, haben wir zunächst die Voraussetzungen des Springermedizin Contents und der bisherigen Suche analysiert. Dabei haben wir festgestellt, dass wir bedingt durch den Springermedizin-Content, zwischen lösbaren Problemstellungen der Suche und nicht beeinflussbaren Faktoren im Content unterscheiden müssen. Bei der Analyse der Anwendbarkeit des Algorithmus auf die resultierenden Problemstellungen haben wir festgestellt, dass der Stand der Technik für den angestrebten Lösungsansatz nicht reicht und wir einige Modifikationen am Algorithmus vornehmen müssen. Zudem ist uns aufgefallen, dass das PBM dazu neigt, die Positionsabhängigkeit zu stark zu priorisieren und der Content des Springermedizin-Umfeldes dafür eine schlechte Basis bietet. Wir versuchten Lösungsansätze dafür zu erarbeiten.
 
+\paragraph{Die Umsetzung: Reranking mittels CTR}
+Herausgekommen ist dabei ein stark modifizierter Reranking-Algorithmus. Diesen haben wir direkt in der Springermedizin-Applikation, nach dem Suchvorgang der Solr und vor der Aufbereitung der Suchresultate eingebaut. Unser neu implementierter Lösungsansatz nimmt die Suchergebnisliste der Solr entgegennehmen, sortiert diese mit unserem Reranking-Algorithmus neu und gibt die resultierende Ergebnisliste dann der Springermedizin-Suche zurück. 
+\\
+\\
+Der Reranking-Algorithmus selbst besteht aus drei Teilschritten. Im ersten Teilschritt wird die Suchanfrage entgegengenommen und mithilfe des UMLS-Thesaurus semantisch erweitert, bevor wir mit dieser die relevanten Click-Through-Daten ermitteln. Im zweiten Schritt lesen wir die relevanten Click-Through-Daten aus Webtrekk und berechnen daraus im dritten Schritt mithilfe des PBM die CTR der einzelnen Dokumente der Suchergebnisliste, welche wir dann durch Klickwahrscheinlichkeit $P(C_{u})$ ausdrücken. Um zufällige Dokumente in den Fokus des Users zu rücken und eine zusätzliche Variable in den Algorithmus zu bringen, haben wir den Zufallswert $X_u$ eingeführt. Ein wichtiges Hilfsmittel hierbei war der eingeführte Smoothing-Faktor $\lambda$. Mithilfe des Smoothing-Faktors konnten wir zudem die Nullwert-Problematik der Wahrscheinlichkeitsberechnung des PBM lösen und die Einflüsse der verschiedenen Faktoren in den Algorithmus besser kontrollieren. Daraus resultierte die Formel zur Berechnung des effektiven Relevanz-Wertes  $R_u$ eines Dokumentes $u$. Mithilfe der $R_u$-Werte der Dokumente haben wir dann das Reranking der Suchresultate durchgeführt.
 
-\paragraph{Die Erkenntnisse}
+\paragraph{Die Evaluation: Evaluation der verschiedenen Suchvarianten des Reranking-Algorithmus mithilfe von Relevanz-Bewertungen}
+Um herauszufinden wie gut die Ranking-Qualität des implementierten Reranking-Algorithmus ist und wie viel Verbesserung der neue Lösungsansatz bringt, haben wir eine Evaluation der Suche mit Redakteuren von Springermedizin durchgeführt. Die Suchphrasen wurden von jeweils zwei Redakteuren nach Relevanz bewertet. Wir haben dabei verschiedene Varianten des Reranking-Algorithmus getestet, um die beste Konstellation herauszufinden. 
+
+\paragraph{Die Erkenntnisse: Die Verwertung der Click-Through-Daten zur Suchoptimierung funktioniert, der Lösungsansatz besitzt allerdings Verbesserungspotenzial}
+Aus den Relevanz-Bewertungen konnten wir anhand der Kappa-Werte $K_w$ herauslesen, dass die Redakteure sehr zuverlässige Bewertungen der Suchergebnisse abgaben und dadurch eine gute Grundlage für die nDCG-Auswertung schafften.
+\\
+\\
+Anhand dieser nDCG-Auswertung konnten wir erkennen, dass die Suche mithilfe unseres Algorithmus leicht optimiert werden konnte und dies psychologisch sehr wertvoll für den Endnutzer der Suche ist. Als Gründe für die nur sehr leichten Verbesserungen der Ranking-Qualität, haben wir vor allem die nicht beeinflussbaren Faktoren des Contents und das sehr beschränkte Feature-Set der Click-Through-Daten identifiziert. Ein anderer Grund könnte die zu starke Positionsabhängigkeit des PBM sein, welche wir in den Algorithmus-Grundlagen in Kapitel \ref{sec:Grundlagen:Grundbegriffe:Result-RerankingPBM:Grundlagen} identifiziert haben. Wir haben daraus die Schlussfolgerung gezogen, dass unser Lösungsansatz noch nicht die optimale Lösung für das Relevanz-Ranking der Suchergebnisse ist. Würden wir den Algorithmus dennoch in dieser Form einsetzen wollen, wäre die beste Konstellation des Reranking-Algorithmus mit einem Einflusswert $\lambda$ von 0.05 für den Zufallswert $X_u$ und der CTR aller angemeldeten. Welche Möglichkeiten es geben würde um das Verbesserungspotenzial des Lösungsansatzes mehr auszuschöpfen, werden wir nun kurz im Ausblick erläutern.
 
 \section{Ausblick}
 \label{sec:ZusammenfassungAusblick:Ausblick}
 
-
-
-
-
-
-Grundsätzlich konnten wir feststellen dass die Verwertung der Click-Through-Daten tendenziell ein guter Weg zur Optimierung der Suche sein kann, vorausgesetzt deren Relevanz-Feedback ist aussagekräftig. 
+Um das Verbesserungspotenzial des Algorithmus auszuschöpfen, müssten weitere Schritte unternommen werden. Einer der entscheidenden Faktoren hierbei sind die Click-Through-Daten. In den Grundlagen haben wir das Feature-Set für Click-Through-Daten und dadurch viele zusätzliche Relevanz-Informationen kennengelernt. Würden wir mehr dieser Informationen tracken, könnten wir die Click-Through-Daten besser filtern und hätten ein gutes User-Feedback, ohne Kosten und Aufwand in User-Evaluationen investiert zu haben. Dieses Relevanz-Feedback könnte ebenfalls bei weiteren Suchfunktionen eingesetzt werden. Wir könnten daraus eine Autovervollständigungs-Funktion bauen und dem User interessante Suchbegriffe anhand der Click-Through-Daten präsentieren. Ebenfalls können wir versuchen Such-Intentionen besser zu erkennen und passende Springermedizin-Produkte oder auch Autoren von Publikationen anhand der Click-Through-Daten vorzuschlagen. Mit dem gleichen Ansatz können wir den Usern des Springermedizin-Portals bessere Selektionen der Click-Through-Daten mithilfe ihrer Profile bieten.
+\\
+\\
+Unser Lösungsansatz ist jedoch nicht für den Einsatz bei einer größeren Suchmaschine wie Google gemacht. Die Suchmaschine wäre zu sehr auf die Click-Through-Daten fokussiert und ist zu Content-spezifisch ausgelegt. Suchmaschinen wie Google würden dadurch viele relevante Dokumente ignorieren.

@@ -6,7 +6,7 @@
 \chapter{Implementierung}
 \label{sec:Implementierung}
 
-Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er nun implementiert werden kann. In diesem Kapitel geht es nun darum, diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren.Wir werden in diesem Kapitel nicht den Code der Lösung vorstellen. Wir werden aber beschreiben, wo wir in die Suche eingreifen, wie wir eingreifen und was wir genau machen, um dadurch einen Überblick über den implementierten Lösungsansatz schaffen zu können.
+Im letzen Kapitel haben wir unseren Reranking-Algorithmus so detailliert ausgearbeitet, dass er implementiert werden kann. In diesem Kapitel geht es nun darum diesen Algorithmus in der Springermedizin-Suche einzubauen. Mit der Implementierung wollen wir herausfinden, ob der theoretische Ansatz praktisch umgesetzt werden kann und die Gedankengänge bei der Ausarbeitung des Lösungsansatzes korrekt waren.Wir werden in diesem Kapitel nicht den Code der Lösung vorstellen. Wir werden aber beschreiben, wo wir in die Suche eingreifen, wie wir eingreifen und was wir genau machen, um dadurch einen Überblick über den implementierten Lösungsansatz schaffen zu können.
 
 \section{Architektur der Implementierung}
 \label{sec:Implementierung:Architektur}
@@ -22,7 +22,7 @@ Um zu verdeutlichen, an welcher Stelle des Suchprozesses der Springermedizin-Suc
 \vspace{-3em}
 \end{figure}
 
-Wie wir in der Abbildung sehen können, wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben dann der Suche als Suchresultat zurück. 
+Wie wir in der Abbildung sehen können wird zuerst der Suchvorgang auf der Solr durchgeführt, bevor wir die Suchergebnisliste entgegennehmen, verarbeiten und mit unserem Reranking-Algorithmus neu sortieren. Die daraus resultierende Ergebnisliste geben wir dann der Suche als Suchresultat zurück. 
 
 \paragraph{Verwendeter Technologiestack} 
 Die Springermedizin-Suche ist ein Teil der White Label Applikation von Springer Nature. Diese baut auf dem MVC-Framework \textit{Play}~\cite{Play} auf und verwendet \textit{Scala}~\cite{Scala} als Programmiersprache. Unsere Implementierung wird daher in Scala geschrieben und direkt in der White Label Applikation integriert.
@@ -30,7 +30,7 @@ Die Springermedizin-Suche ist ein Teil der White Label Applikation von Springer 
 \section{Highlight: PBM basierter Reranking-Algorithmus}
 \label{sec:Implementierung:PBM}
 
-Der grafisch dargestellte Prozess in Abb. \ref{fig:ProzessbildImplementierung} entspricht hier nicht nicht der Reihenfolge, wie die Komponenten in der Suche aufgerufen werden, sondern der Reihenfolge der Verarbeitungsschritte im Prozess. In der effektiven Implementierung, übernimmt die Reranking-Komponente die Koordination der Verarbeitungsschritte. Sie wird im Suchprozess direkt \textit{vor der Aufbereitung} der Suchergebnisse aufgerufen und nimmt die Liste der Suchergebnisse der Solr entgegen. Sind alle Schritte des Reranking-Algorithmus verarbeitet, gibt die Reranking-Komponente die \textit{neu sortierte Liste} der Suchergebnisse zurück. Diese wird dann wieder von der Springermedizin-Suche für die Ausgabe als Suchergebnisse aufbereitet.
+Der grafisch dargestellte Prozess in Abb. \ref{fig:ProzessbildImplementierung} entspricht hier nicht nicht der Reihenfolge, wie die Komponenten in der Suche aufgerufen werden, sondern der Reihenfolge der Verarbeitungsschritte im Prozess. In der effektiven Implementierung übernimmt die Reranking-Komponente die Koordination der Verarbeitungsschritte. Sie wird im Suchprozess direkt \textit{vor der Aufbereitung} der Suchergebnisse aufgerufen und nimmt die Liste der Suchergebnisse der Solr entgegen. Sind alle Schritte des Reranking-Algorithmus verarbeitet, gibt die Reranking-Komponente die \textit{neu sortierte Liste} der Suchergebnisse zurück. Diese wird dann wieder von der Springermedizin-Suche für die Ausgabe als Suchergebnisse aufbereitet.
 
 \subsubsection{Pseudo-Code der Reranking-Komponente}
 \label{sec:Implementierung:PBM:Pseudocode}
@@ -40,7 +40,7 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 \begin{figure}[H]
 \centering
 \vspace{-1em}
-\caption[Pseudcode Reranking-Algorithmus]{Pseudcode Reranking-Algorithmus}
+\caption[Pseudo-Code Reranking-Algorithmus]{Pseudo-Code Reranking-Algorithmus}
 \label{fig:PseudcodeRerankingAlgorithmus}
 \vspace{.5em}
 \DontPrintSemicolon
@@ -72,14 +72,14 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 				\BlankLine
     			$P(C_{u}) \leftarrow \lambda\cdot P(E_{r_{u}}) + (1 - \lambda)\cdot P(A_{u})$\; 
 			}
-			$ranksByClickProbability \leftarrow$ Sortiere Liste $searchResult$ anhand der $P(C_{u})$ Werte
+			$ranksByClickProbability \leftarrow$ Sortiere Liste $searchResult$ anhand der $P(C_{u})$-Werte
 			
 			\BlankLine
 			\tcc{Berechne Zufallswert $X_{u}$ aller Dokumente $u$}
 			\For{ $u \in searchResult$}{
     			$X_{u} \leftarrow$ Berechne Zufallswert zwischen 1 und $maxPosition(searchResult)$\; 
 			}
-			$ranksByRandomValue \leftarrow$ Sortiere Liste $searchResult$ anhand der $X_{u}$ Werte
+			$ranksByRandomValue \leftarrow$ Sortiere Liste $searchResult$ anhand der $X_{u}$-Werte
 			
 			\BlankLine
 			\tcc{Berechne effektiven Relevanz-Wert $R_{u}$ aller Dokumente $u$}
@@ -90,17 +90,17 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 				\BlankLine
     			$R_{u} \leftarrow 1 / \left(\lambda\cdot r_{X_{u}} + (1 - \lambda)\cdot r_{P(C_{u})}\right)$\;
 			}
-			$rerankedSearchResult \leftarrow$ Sortiere Liste $searchResult$ anhand der $R_{u}$ Werte\;
+			$rerankedSearchResult \leftarrow$ Sortiere Liste $searchResult$ anhand der $R_{u}$-Werte\;
 			\tcc{Rückgabe der durch den Reranking-Algorithmus umsortierten Suchergebnisse}
 			\KwRet{die ersten 20 Elemente von $rerankedSearchResult$}
 		}{	
 			\tcc{Keine Click-Through-Daten für die angeklickten Positionen gefunden $\Rightarrow$\\
-			Keine Umsortierung der Suchergebnisse mit Reranking-Algorithmus}
+			Keine Umsortierung der Suchergebnisse mit dem Reranking-Algorithmus}
 			\KwRet{die ersten 20 Elemente von $searchResult$}
 		}
 	}{
 		\tcc{Keine Click-Through-Daten für Suchterm gefunden $\Rightarrow$\\
-		Keine Umsortierung der Suchergebnisse mit Reranking-Algorithmus}
+		Keine Umsortierung der Suchergebnisse mit dem Reranking-Algorithmus}
 		\KwRet{die ersten 20 Elemente von $searchResult$}
 	}
 }
@@ -110,7 +110,7 @@ Um den angesprochenen Vorgang des Rerankings der Suchergebnisse besser zu verste
 \section{Highlight: Webtrekk-Analysen}
 \label{sec:Implementierung:Webtrekk}
 
-Wie in der Einführung dieser Arbeit in \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk} angesprochen, speichert Springermedizin seine Tracking-Daten auf Webtrekk. Für die Implementierung des Reranking-Algorithmus müssen wir die Click-Trough-Daten für die Wahrscheinlichkeits-Berechnungen, wie in \ref{sec:Reranking:Methodik:Result-RerankingPBM} besprochen, mithilfe von Analysen aus Webtrekk abfragen und auswerten. Wie wir diese Analysen abfragen, sehen wir folgend.
+Wie in der Einführung dieser Arbeit in \ref{sec:Einfuehrung:AufbauSucheBeiSpringerNature:Webtrekk} angesprochen, speichert Springermedizin seine Tracking-Daten auf Webtrekk. Für die Implementierung des Reranking-Algorithmus müssen wir die Click-Through-Daten für die Wahrscheinlichkeits-Berechnungen, wie in \ref{sec:Reranking:Methodik:Result-RerankingPBM} besprochen, mithilfe von Analysen aus Webtrekk abfragen und auswerten. Wie wir diese Analysen abfragen, sehen wir folgend.
 
 \subsubsection{Abfrage von Analysen}
 \label{sec:Implementierung:Webtrekk:AnalysenAbfragen}
@@ -173,4 +173,4 @@ In der Antwort für diese Analysen werden die Click-Through-Daten als JSON-Array
 \section{Zusammenfassung}
 \label{sec:Implementierung:Zusammenfassung}
 
-In diesem Kapitel haben wir eine Übersicht über die Architektur und die wichtigsten Highlights der Implementierung gekriegt. Wir wissen nun \textit{wie} der Lösungsansatz des Reranking-Algorithmus implementiert werden kann. Verknüpfen wir dieses Wissen mit dem aus Kapitel \ref{sec:Reranking}, könnten wir den Reranking-Algorithmus nun auch auf eine andere Suche adaptieren. Im nächsten Kapitel wollen wir nun mithilfe der implementierten Suche evaluieren, welche Verbesserung für das Qualitätsmaß der Suche von Springermedizin, der Lösungsansatz bringt.
+In diesem Kapitel haben wir eine Übersicht über die Architektur und die wichtigsten Highlights der Implementierung gekriegt. Wir wissen nun \textit{wie} der Lösungsansatz des Reranking-Algorithmus implementiert werden kann. Verknüpfen wir dieses Wissen mit dem aus Kapitel \ref{sec:Reranking}, könnten wir den Reranking-Algorithmus nun auch auf eine andere Suche adaptieren. Im nächsten Kapitel wollen wir nun, mithilfe der implementierten Suche evaluieren, welche Verbesserung für das Qualitätsmaß der Suche von Springermedizin der Lösungsansatz bringt.
